@@ -1,0 +1,11 @@
+{
+  "name": "wp1092_final",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/jjjune0304/wp1092_final.git",
+  "license": "MIT",
+  "scripts": {    
+    "start": "cd frontend && yarn start",    
+    "server": "cd backend && yarn server" 
+  }
+}
