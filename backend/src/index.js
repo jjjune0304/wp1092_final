@@ -5,7 +5,7 @@ import db from './db';
 import mongo from './mongo';
 import Query from './resolvers/Query';
 import Mutation from './resolvers/Mutation';
-// import Subscription from './resolvers/Subscription';
+import Subscription from './resolvers/Subscription';
 import User from './resolvers/User';
 import Question from './resolvers/Question';
 import Answer from './resolvers/Answer';

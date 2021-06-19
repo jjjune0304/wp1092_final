@@ -11,8 +11,9 @@ type Mutation {
   createComment(text: String!, postID: String!, postType: String!): Comment!
 }
 
-# type Subscription {
-# }
+type Subscription {
+  comment(commentID: String!): Comment!
+}
 
 type Token {
   token: String!

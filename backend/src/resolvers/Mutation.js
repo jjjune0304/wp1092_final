@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { ForbiddenError } from 'apollo-server';
+import isAuthenticated from '../authentication';
 
 // 定義 bcrypt 加密所需 saltRounds 次數
 const SALT_ROUNDS = 2;
@@ -10,12 +10,12 @@ const SECRET = 'epistemologyet';
 /* -------------------------------------------------------------------------- */
 /*                                  UTILITIES                                 */
 /* -------------------------------------------------------------------------- */
-const isAuthenticated = resolverFunc => async (parent, args, context) => {
-  if (!context.user) throw new ForbiddenError('Please log in first.');
-  const user = await context.db.UserModel.findById(context.user.id)
-  if(!user) throw new Error(`Email account ${context.user.email} not found`);
-  return resolverFunc.apply(null, [parent, args, { ...context, user}]);
-};
+// const isAuthenticated = resolverFunc => async (parent, args, context) => {
+//   if (!context.user) throw new ForbiddenError('Please log in first.');
+//   const user = await context.db.UserModel.findById(context.user.id)
+//   if(!user) throw new Error(`Email account ${context.user.email} not found`);
+//   return resolverFunc.apply(null, [parent, args, { ...context, user}]);
+// };
 
 const hash = text => bcrypt.hash(text, SALT_ROUNDS);
 
