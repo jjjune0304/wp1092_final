@@ -1,39 +1,58 @@
 type Query {
-  chatboxes(boxkey: String): ChatBox!
+  user(username: String!): User!
 }
 
 type Mutation {
-  createChatBox(name1: String!, name2: String!): ChatBox!
-  createMessage(boxkey: String!, name:String!, body: String!): Message!
+  signup(email: String!, username: String!, password:String!): User!
+  login(email: String!, password:String!): Token!
+  logout: User!
+  createQuestion(title: String!, body: String!): Question!
+  createAnswer(body: String!, postID: String!): Answer!
+  createComment(text: String!, postID: String!, postType: String!): Comment!
 }
 
 type Subscription {
-  chatboxes(boxkey:String!): ChatBoxSubscriptionPayload!
+  comment(commentID: String!): Comment!
+}
+
+type Token {
+  token: String!
 }
 
 type User {
   id: ID!
-  name: String!
+  username: String!
+  points: Int!
+  email: String!
+  createdAt: String!
 }
 
-type ChatBox {
+type Question {
   id: ID!
-  name: String!  
-  messages: [Message!]
-}
-
-type Message {
-  id: ID!
-  sender: User!
+  author: User!
+  title: String!
   body: String!
+  updatedAt: String!
+}
+
+type Answer {
+  id: ID!
+  question: Question! # remove if unness
+  author: User!
+  body: String!
+  best: Boolean!
+  updatedAt: String!
+}
+
+type Comment {
+  id: ID!
+  author: User!
+  postType: String!
+  text: String!
+  updatedAt: String!
 }
 
 enum MutationType {
   CREATED
   UPDATED
 }
-
-type ChatBoxSubscriptionPayload {
-  message: Message!
-}
-

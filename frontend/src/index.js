@@ -1,3 +1,5 @@
+import client, {ApolloProvider} from './hooks/appolloClient.js'
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
@@ -5,9 +7,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <React.StrictMode>
+  <ApolloProvider client={client}>
     <App />
-  </React.StrictMode>,
+  </ApolloProvider>,
   document.getElementById('root')
 );
 

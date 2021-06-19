@@ -1,7 +1,7 @@
-const User = {
+const Question = {
   id(parent, args, { db }) {
     return parent._id.toString();
   }
 };
 
-export { User as default };
+export { Question as default };
