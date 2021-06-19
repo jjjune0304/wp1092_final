@@ -6,16 +6,16 @@ type Mutation {
   signup(email: String!, username: String!, password:String!): User!
   login(email: String!, password:String!): Token!
   logout: User!
-  createQuestion(data: QuestionInput!): Question!
-  createAnswer(data: AnswerInput!): Answer!
-  createComment(data: CommentInput!): Comment!
+  createQuestion(title: String!, body: String!): Question!
+  createAnswer(body: String!, postID: String!): Answer!
+  createComment(text: String!, postID: String!, postType: String!): Comment!
 }
 
 # type Subscription {
 # }
 
 type Token {
-  token: String
+  token: String!
 }
 
 type User {
@@ -24,7 +24,6 @@ type User {
   points: Int!
   email: String!
   createdAt: String!
-  password: String!
 }
 
 type Question {
@@ -32,50 +31,27 @@ type Question {
   author: User!
   title: String!
   body: String!
-  lastupdate: String!
+  updatedAt: String!
 }
 
 type Answer {
   id: ID!
+  question: Question! # remove if unness
   author: User!
   body: String!
   best: Boolean!
-  lastupdate: String!
+  updatedAt: String!
 }
 
 type Comment {
   id: ID!
   author: User!
-  body: String!
-  lastupdate: String!
+  postType: String!
+  text: String!
+  updatedAt: String!
 }
 
 enum MutationType {
   CREATED
   UPDATED
-}
-
-# input UserInput {
-#   email: String!
-#   username: String!
-#   password: String!
-# }
-
-input QuestionInput {
-  title: String!
-  body: String!
-  author: ID!
-}
-
-input AnswerInput {
-  body: String!
-  author: ID!
-  postID: ID!
-}
-
-input CommentInput {
-  text: String!
-  author: ID!
-  postID: ID!
-  postType: String!
 }

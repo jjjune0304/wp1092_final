@@ -28,7 +28,7 @@ const questionSchema = new Schema({
 }, schemaOptions);
 
 const answerSchema = new Schema({
-  questionID: { type: mongoose.Types.ObjectId, ref: 'Question' },
+  question: { type: mongoose.Types.ObjectId, ref: 'Question' },
   author: { type: mongoose.Types.ObjectId, ref: 'User' },
   body: { type: String, required: true },
   best: {type: Boolean, required: true},
@@ -37,7 +37,7 @@ const answerSchema = new Schema({
 
 const commentSchema = new Schema({
   author: { type: mongoose.Types.ObjectId, ref: 'User' },
-  postID: { type: mongoose.Types.ObjectId, required: true },
+  post: { type: mongoose.Types.ObjectId, required: true },
   postType: { type: String, required: true }, // question, answer
   text: { type: String, required: true },
 }, schemaOptions);
