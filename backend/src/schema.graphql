@@ -1,31 +1,53 @@
 type Query {
-  chatboxes(boxkey: String): ChatBox!
+  user(username: String!): User!
 }
 
 type Mutation {
-  createChatBox(name1: String!, name2: String!): ChatBox!
-  createMessage(boxkey: String!, name:String!, body: String!): Message!
+  signup(email: String!, username: String!, password:String!): User!
+  login(email: String!, password:String!): Token!
+  logout: User!
+  createQuestion(data: QuestionInput!): Question!
+  createAnswer(data: AnswerInput!): Answer!
+  createComment(data: CommentInput!): Comment!
 }
 
-type Subscription {
-  chatboxes(boxkey:String!): ChatBoxSubscriptionPayload!
+# type Subscription {
+# }
+
+type Token {
+  token: String
 }
 
 type User {
   id: ID!
-  name: String!
+  username: String!
+  points: Int!
+  email: String!
+  createdAt: String!
+  password: String!
 }
 
-type ChatBox {
+type Question {
   id: ID!
-  name: String!  
-  messages: [Message!]
-}
-
-type Message {
-  id: ID!
-  sender: User!
+  author: User!
+  title: String!
   body: String!
+  lastupdate: String!
+}
+
+type Answer {
+  id: ID!
+  author: User!
+  body: String!
+  best: Boolean!
+  lastupdate: String!
+}
+
+type Comment {
+  id: ID!
+  author: User!
+  body: String!
+  lastupdate: String!
 }
 
 enum MutationType {
@@ -33,7 +55,27 @@ enum MutationType {
   UPDATED
 }
 
-type ChatBoxSubscriptionPayload {
-  message: Message!
+# input UserInput {
+#   email: String!
+#   username: String!
+#   password: String!
+# }
+
+input QuestionInput {
+  title: String!
+  body: String!
+  author: ID!
 }
 
+input AnswerInput {
+  body: String!
+  author: ID!
+  postID: ID!
+}
+
+input CommentInput {
+  text: String!
+  author: ID!
+  postID: ID!
+  postType: String!
+}

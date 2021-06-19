@@ -1,34 +1,24 @@
-import uuidv4 from 'uuid/v4';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
+// 定義 bcrypt 加密所需 saltRounds 次數
+const SALT_ROUNDS = 2;
+// 定義 jwt 所需 secret (隨意)
+const SECRET = 'epistemologyet';
 
 /* -------------------------------------------------------------------------- */
 /*                                  UTILITIES                                 */
 /* -------------------------------------------------------------------------- */
+const hash = text => bcrypt.hash(text, SALT_ROUNDS);
 
-// const checkUser = async (db, name, info) => {
-//   const existing = await db.UserModel.findOne({ name });
-//   if (existing) return true;
-//   return false;
-// };
-
-// const newUser = async (db, name) => {
-//   new db.UserModel({ name }).save();
-// };
-
-const makeName = (name1, name2) => {
-  return [name1, name2].sort().join('_');
+const addUser = async ({ db, username, email, password }) => {
+  const points = 100;
+  return new db.UserModel({ username, email, password, points }).save();
 };
 
-const validateUser = async (db, name) => {
-  const existing = await db.UserModel.findOne({ name });
-  if (existing) return existing;
-  console.log("User does not exist for CreateChatBox: " + name);
-  return new db.UserModel({ name }).save();
-};
-
-const validateChatBox = async (db, name, participants=null) => {
-  let box = await db.ChatBoxModel.findOne({ name });
-  if (!box && participants) box = await new db.ChatBoxModel({ name, users: participants }).save();
-  return box;
+const createToken = ({ _id, email, username }) => { 
+  const id = _id.toString();
+  return jwt.sign({ id, email, username }, SECRET, { expiresIn: '1d' });
 };
 
 /* -------------------------------------------------------------------------- */
@@ -36,35 +26,62 @@ const validateChatBox = async (db, name, participants=null) => {
 /* -------------------------------------------------------------------------- */
 
 const Mutation = {
-  async createChatBox(parent, { name1, name2 }, { db }, info) {
-    if (!name1 || !name2)
-      throw new Error("Missing chatBox name for CreateChatBox");
-    const chatBoxName = makeName(name1, name2);
-    const user1 = await validateUser(db, name1);
-    const user2 = await validateUser(db, name2);
-    const chatBox = await validateChatBox(db, chatBoxName, [user1, user2]);
-    return chatBox;
+  async signup(parent, { username, password, email }, { db }, info) {
+    if (!username || !password || !email)
+      throw new Error("Missing some information for sign up");
+    const existing = await db.UserModel.findOne({ email });
+    if (existing) {
+      console.log(`Email account ${email} has been registered.`);
+      return existing;
+    }
+      // throw new Error(`Email account ${email} has been registered.`);
+    // encrypt password
+    const hashedPassword = await hash(password, SALT_ROUNDS);
+    return await addUser({ db, username, email, password: hashedPassword });
   },
-  async createMessage(parent, { boxkey, name, body }, { db, pubsub }, info) {
-    const chatBox = await validateChatBox(db, boxkey);
-    if(!chatBox)
-      throw new Error(`chatBox ${boxkey} not found`);
-    const sender = await validateUser(db, name);
+
+  async login(parent, { email, password }, { db }, info) {
+    if (!password || !email)
+      throw new Error("Missing some information for log in");
     
-    const newMessage = new db.MessageModel({ sender, body });
-    await newMessage.save();
+    const user = await db.UserModel.findOne({ email });
+    if (!user)
+      throw new Error(`Email account ${email} has not been registered.`);
+    
+    const passwordIsValid = await bcrypt.compare(password, user.password);
+    if (!passwordIsValid) 
+      throw new Error('Wrong Password');
+    
+    return { token: await createToken(user) };
+  },
 
-    chatBox.messages.push(newMessage);
-    await chatBox.save();
+  async logout(parent, args, { db }, info) {
+   
+  },
 
-    pubsub.publish(`chatbox ${boxkey}`, {
-      chatboxes: {
-        message: newMessage,
+  async createQuestion(parent, { title, body, author }, { db, pubsub }, info) {
+    const user = await db.UserModel.findById(author)
+    if(!user)
+      throw new Error(`UserID ${author} not found`);
+    const newQuestion = new db.QuestionModel({ title, body, author, views: 0 });
+    await newQuestion.save();
+
+    user.questions.push(newQuestion);
+    await user.save();
+
+    const questionID = newQuestion._id.toString();
+    pubsub.publish(`question ${questionID}`, {
+      questions: {
+        title, 
+        author: user.username,
       },
     });
-
-    return newMessage;
-  }
+    return newQuestion;
+  },
+  async createAnswer(parent, { body, author, postID }, { db, pubsub }, info) {
+  },
+  async createComment(parent, { text, author, postID, postType }, { db, pubsub }, info) {
+  },
 };
 
 export { Mutation as default };
