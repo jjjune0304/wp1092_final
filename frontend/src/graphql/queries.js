@@ -1,18 +1,17 @@
 import { gql } from '@apollo/client';
 
-export const CHATBOX_QUERY = gql`
-  query chatboxes($boxkey: String!) {
-    chatboxes(
-      boxkey: $boxkey
+export const USER_QUERY = gql`
+  query user(
+    $email: String!
+    $password: String!
+  ) {
+    user (
+      email: $email
+      password: $password
     ) {
-      id
-      name
-      messages {
-        sender {
-          name
-        }
-        body
-      }
+      token
+      email
+      username
     }
   }
 `;

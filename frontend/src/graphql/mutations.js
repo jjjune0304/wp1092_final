@@ -1,41 +1,33 @@
 import { gql } from '@apollo/client';
 
-export const CREATE_CHATBOX_MUTATION = gql`
-  mutation createChatBox(
-    $name1: String!
-    $name2: String!
+
+export const LOGIN_MUTATION = gql`
+  mutation Login( 
+    $email: String!, 
+    $password: String! 
   ) {
-    createChatBox(
-      name1: $name1
-      name2: $name2
+    login(
+        email: $email,
+        password: $password
     ) {
-      id
-      name
-      messages {
-        sender {
-          name
-        }
-        body
-      }
+      token
     }
   }
 `;
 
-export const CREATE_MESSAGE_MUTATION = gql`
-  mutation createMessage(
-    $boxkey: String!
-    $sender: String!
-    $body: String!
+export const SIGNUP_MUTATION = gql`
+  mutation Signup(
+      $email: String! 
+      $username: String! 
+      $password: String! 
   ) {
-    createMessage(
-      boxkey: $boxkey
-      name: $sender
-      body: $body
+    signup(
+      email: $email
+      username: $username
+      password: $password 
     ) {
-        sender {
-          name
-        }
-        body
+      email
+      username
     }
   }
 `;

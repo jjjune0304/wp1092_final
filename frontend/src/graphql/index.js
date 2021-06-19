@@ -1,3 +1,3 @@
-export { CHATBOX_QUERY } from './queries';
-export { CREATE_CHATBOX_MUTATION, CREATE_MESSAGE_MUTATION } from './mutations';
+export { USER_QUERY } from './queries';
+export { SIGNUP_MUTATION, LOGIN_MUTATION } from './mutations';
 export { CHATBOX_SUBSCRIPTION } from './subscriptions';

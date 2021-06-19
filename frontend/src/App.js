@@ -1,23 +1,31 @@
+import LoginPage from './container/login.js';
+
+import react, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
+
+  let oldTokenTimestamp = localStorage.getItem('token_timestamp');
+  let nowTimestamp = new Date().getTime();
+
+  const [token, setToken] = useState((nowTimestamp-oldTokenTimestamp)>60*60 ? "" : localStorage.getItem('token')); //token有1小時quota
+  
+  localStorage.setItem('token_timestamp', nowTimestamp);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      { token ? 
+          (
+            <>
+              Home page
+            </>
+          )
+          :
+          (
+            <LoginPage setToken={setToken} />
+          )
+      }
     </div>
   );
 }
