@@ -9,23 +9,23 @@ import 'antd/dist/antd.css'
 
 const { TabPane } = Tabs;
 
-const LoginPage = ({setToken}) => {
+const LoginPage = ({setToken, activeKey, setActiveKey}) => {
 
-    const [ activeKey, setActiveKey ] = useState("1");
+    // const [ activeKey, setActiveKey ] = useState("1");
 
     return (
         <Row align="center">
-            <Col span={8}>
+            <Col span={14}>
                 <Tabs activeKey={activeKey} 
                     animated={{tabPane: true}} 
                     centered="true" 
                     size="large" 
-                    type="card"
+                    type="line"
                     onChange={(key) => setActiveKey(key)}> 
-                    <TabPane tab={ <> <LoginOutlined/>Login </> } key="1">
-                        <LoginPanel setToken={setToken}/>
+                    <TabPane tab={ <> <LoginOutlined/>Login </> } key="login">
+                        <LoginPanel setActiveKey={setActiveKey} setToken={setToken}/>
                     </TabPane>
-                    <TabPane tab={ <> <UsergroupAddOutlined/>SignUp</> } key="2">
+                    <TabPane tab={ <> <UsergroupAddOutlined/>SignUp</> } key="signup">
                         <SignUpPanel setActiveKey={setActiveKey} />
                     </TabPane>
                 </Tabs>

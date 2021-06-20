@@ -1,32 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import 'antd/dist/antd.css';
-import { Layout, Menu, Input, Image, Button, Row, Col } from 'antd';
+import { Layout, Menu, Input, Image, Button } from 'antd';
 import { LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
-import LoginPage from './Login';
-import LoginPanel from '../component/login/LoginPanel'
-import SignUpPanel from '../component/login/SignUpPanel'
+import { LoginOutlined, LogoutOutlined, UsergroupAddOutlined } from '@ant-design/icons';
+import LoginPage from './Login.js';
 
 const { SubMenu } = Menu;
 const { Header, Content, Footer, Sider } = Layout;
 const { Search } = Input;
 
+const getToken = () => localStorage.getItem('token');
+
+const checkToken = () => {
+    let old_time = localStorage.getItem('Epistemology_token_timestamp');
+    let now_time = new Date().getTime();
+    if ((now_time - old_time) > 5 * 1000) // 10分鐘，把token清掉(需重新登入)
+        localStorage.setItem('token', '');
+    return getToken();
+}
+
 const onSearch = value => console.log(value);
 
 const Home = () => {
-    let oldTokenTimestamp = localStorage.getItem('token_timestamp');
-    let nowTimestamp = new Date().getTime();
 
-    const [ token, setToken ] = useState((nowTimestamp-oldTokenTimestamp)>60*60 ? "" : localStorage.getItem('token')); //token有1小時quota
-    const [ activeKey, setActiveKey ] = useState("home");
-
-    localStorage.setItem('token_timestamp', nowTimestamp);
+    const [token, setToken] = useState(checkToken());
+    const [activeKey, setActiveKey] = useState("home");
 
     const HomePage = <div>home page</div>
     const HomePageLogin = <div>welcome</div>
 
+    useEffect(() => {
+        if (token != '')
+            localStorage.setItem('Epistemology_token_timestamp', new Date().getTime());
+        localStorage.setItem('token', token);
+    }, [token]);
+
     return (
-        <Layout>
-            <Header className="header">
+        <Layout style={{minHeight: "100vh"}}>
+            <Header className="header" style={{ position: 'fixed' , zIndex: 1, width: '100%' }}>
                 <a type="text" href='/' className="logo" style={{ float:'left', padding: '0 24px' }}>
                     <h2 style={{ color: '#00CCCC' }}>
                         Epistemology+
@@ -45,12 +56,17 @@ const Home = () => {
                 />
                 <div style={{ float:'right', display: 'inline' }}>
                     {token==='' ? 
-                    <Button type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('login')}}>Log in</Button> : 
-                    <Button type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('home'); setToken('')}}>Log out</Button>}
-                    <Button type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('signup')}}>Sign up</Button>
+                        <>  
+                        <Button danger type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('login')}}><LoginOutlined/>Log in</Button> 
+                        <Button type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('signup')}}><UsergroupAddOutlined/>Sign up</Button> 
+                        </>
+                        : 
+                        <Button type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('home'); setToken('')}}><LogoutOutlined />Log out</Button>
+                    }
+                    
                 </div>
             </Header>
-            <Content style={{ padding: '0 50px' }}>
+            <Content style={{ padding: '64px 50px' }}>
                 <Layout className="site-layout-background" style={{ padding: '24px 0'}}>
                     <Sider className="site-layout-background" width={200}>
                         <Menu
@@ -72,11 +88,12 @@ const Home = () => {
                             </SubMenu>
                         </Menu>
                     </Sider>
-                    <Content style={{ padding: '0 24px', minHeight: 280 }}>
-                        {token==='' ?
-                        (activeKey==='login' ? <Row align="center"><Col span={14}><LoginPanel setToken={setToken}/></Col></Row> : 
-                        activeKey==='signup' ? <Row align="center"><Col span={14}><SignUpPanel setActiveKey={setActiveKey}/></Col></Row> : 
-                        HomePage) : HomePageLogin}
+                    <Content style={{ padding: '0 24px' }}>
+                        {activeKey==='login' || activeKey==='signup'?
+                            <LoginPage activeKey={activeKey} setActiveKey={setActiveKey} setToken={setToken} />
+                            :
+                            <></>
+                        }
                     </Content>
                     <div style={{ width: 200 }}>
                         <Image

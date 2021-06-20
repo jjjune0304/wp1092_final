@@ -29,16 +29,16 @@ const SignUpPanel = ({setActiveKey}) => {
         // signup success
         if ( signUpData ) {
             setAlertion("New account registered success !");
-            setTimeout(()=>{setActiveKey("login");},1300);
+            setTimeout(()=>{setActiveKey("login");}, 1000);
             
             const newUser = signUpData.signup;
-            console.log(newUser);
+            // console.log(newUser);
         }
 
     }, [ signUpData, signUpError ])
 
     const onFinish = async (values) => {
-        console.log(values);
+        // console.log(values);
 
         try {
             await signUp({

@@ -8,30 +8,30 @@ import { FacebookOutlined, GoogleOutlined, GithubOutlined,
 import { useLazyQuery, useMutation } from "@apollo/client";
 
 
-const LoginPanel = ({setToken}) => {
+const LoginPanel = ({setToken, setActiveKey}) => {
 
   const handleGithubLogin = (user) => {
-    console.log(user)
+    // console.log(user)
   };
 
   const handleGithubFailure = (err) => {
-    console.error(err)
+    // console.error(err)
   };
 
   const handleGoogleLogin = (user) => {
-    console.log(user)
+    // console.log(user)
   };
 
   const handleGoogleFailure = (err) => {
-    console.error(err)
+    // console.error(err)
   };
 
   const handleFacebookLogin = (user) => {
-    console.log(user)
+    // console.log(user)
   };
 
   const handleFacebookFailure = (err) => {
-    console.error(err)
+    // console.error(err)
   };
 
   const validatePassword = (passowrd) => {
@@ -54,14 +54,15 @@ const LoginPanel = ({setToken}) => {
       const token = tokenData.login.token;
 
       setToken(token);
-      console.log("token: " + token + "\n Success Login");
+      setActiveKey('home')
+      // console.log("token: " + token + "\n Success Login");
     }
   }, [tokenData, loginError]);
 
   const onFinish = async (values) => {
 
     // set email/password cache
-    console.log('Received values of form: ', values);
+    // console.log('Received values of form: ', values);
     if (values.remember) {
       localStorage.setItem('email', values.email);
       localStorage.setItem('password', values.password);
@@ -71,7 +72,7 @@ const LoginPanel = ({setToken}) => {
     }
 
     // get login token
-    console.log({ email: values.email, password: values.password });
+    // console.log({ email: values.email, password: values.password });
     try {
       await getToken({ variables: { email: values.email, password: values.password } });
     } catch(error) {}
@@ -89,7 +90,7 @@ const LoginPanel = ({setToken}) => {
               onFinish={onFinish}
             >   
 
-              <Divider plain>Third-part Login</Divider>
+              <Divider plain>Third-party Account</Divider>
 
               <Form.Item>
                 <div className="site-button-ghost-wrapper">
@@ -126,7 +127,7 @@ const LoginPanel = ({setToken}) => {
                 </div>
               </Form.Item>
 
-              <Divider plain>Epistemology+ Account Login</Divider>  
+              <Divider plain>Epistemology+ Account</Divider>  
 
               {alertion?(
                   <Form.Item>

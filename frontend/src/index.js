@@ -1,15 +1,21 @@
-import client, {ApolloProvider} from './hooks/appolloClient.js'
-
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { HashRouter, Route, Link, Switch } from 'react-router-dom';
+
+import App from './App.js';
+import client, { ApolloProvider } from './hooks/appolloClient.js'
+
+import './index.css';
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
+    <ApolloProvider client={client}>
+        <HashRouter>
+            <Route path="/" component={App}>
+            </Route>
+        </HashRouter>
     <App />
-  </ApolloProvider>,
+</ApolloProvider>,
   document.getElementById('root')
 );
 
