@@ -1,4 +1,4 @@
-import SocialButton from './socialButton.js'
+import SocialButton from './SocialButton'
 import { USER_QUERY, LOGIN_MUTATION } from '../../graphql'
 
 import { useState, useEffect } from 'react'

@@ -1,7 +1,6 @@
-import LoginPage from './container/login.js';
+import Home from './container/Home'
 
 import react, { useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 function App() {
@@ -15,17 +14,7 @@ function App() {
 
   return (
     <div className="App">
-      { token ? 
-          (
-            <>
-              Home page
-            </>
-          )
-          :
-          (
-            <LoginPage setToken={setToken} />
-          )
-      }
+      <Home />
     </div>
   );
 }

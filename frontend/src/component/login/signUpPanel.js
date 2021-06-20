@@ -29,7 +29,7 @@ const SignUpPanel = ({setActiveKey}) => {
         // signup success
         if ( signUpData ) {
             setAlertion("New account registered success !");
-            setTimeout(()=>{setActiveKey("1");},1300);
+            setTimeout(()=>{setActiveKey("login");},1300);
             
             const newUser = signUpData.signup;
             console.log(newUser);

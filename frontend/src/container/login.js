@@ -1,6 +1,6 @@
-import LoginPanel from '../component/login/loginPanel.js'
-import SignUpPanel from '../component/login/signUpPanel.js'
-import './login.css'
+import LoginPanel from '../component/login/LoginPanel'
+import SignUpPanel from '../component/login/SignUpPanel'
+import './Login.css'
 
 import React, { useState } from 'react';
 import { Row, Col, Tabs  } from 'antd';
@@ -15,21 +15,21 @@ const LoginPage = ({setToken}) => {
 
     return (
         <Row align="center">
-        <Col span={8}>
-        <Tabs activeKey={activeKey} 
-              animated={{tabPane: true}} 
-              centered="true" 
-              size="large" 
-              type="card"
-              onChange={(key) => setActiveKey(key)}> 
-            <TabPane tab={ <> <LoginOutlined/>Login </> } key="1">
-                <LoginPanel setToken={setToken}/>
-            </TabPane>
-            <TabPane tab={ <> <UsergroupAddOutlined/>SignUp</> } key="2">
-                <SignUpPanel setActiveKey={setActiveKey} />
-            </TabPane>
-        </Tabs>
-        </Col>
+            <Col span={8}>
+                <Tabs activeKey={activeKey} 
+                    animated={{tabPane: true}} 
+                    centered="true" 
+                    size="large" 
+                    type="card"
+                    onChange={(key) => setActiveKey(key)}> 
+                    <TabPane tab={ <> <LoginOutlined/>Login </> } key="1">
+                        <LoginPanel setToken={setToken}/>
+                    </TabPane>
+                    <TabPane tab={ <> <UsergroupAddOutlined/>SignUp</> } key="2">
+                        <SignUpPanel setActiveKey={setActiveKey} />
+                    </TabPane>
+                </Tabs>
+            </Col>
         </Row>
     );
 
