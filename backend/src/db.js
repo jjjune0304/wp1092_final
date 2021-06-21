@@ -24,6 +24,7 @@ const questionSchema = new Schema({
   body: { type: String, required: true },
   answers: [{ type: mongoose.Types.ObjectId, ref: 'Answer' }],
   comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
+  subscribers: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
   views: {type: Number, required: true},
 }, schemaOptions);
 

@@ -68,19 +68,20 @@ const Mutation = {
     if (!title || !body)
       throw new Error("Missing some information for a valid question");
     const author = user;
-    const newQuestion = new db.QuestionModel({ title, body, author, views: 0 });
+    const newQuestion = new db.QuestionModel({ title, body, author, views: 0, subscribers: [author] });
     await newQuestion.save();
 
     author.questions.push(newQuestion);
     await author.save();
 
-    // const questionID = newQuestion._id.toString();
-    // pubsub.publish(`question ${questionID}`, {
-    //   question: {
-    //     mutation: 'CREATED',
-    //     data: newQuestion,
-    //   },
-    // });
+    pubsub.publish(`user ${author._id}`, {
+      inbox: {
+        type: 'ASK', 
+        message: `You just asked a question: ${newQuestion.title}`,
+        time: newQuestion.createAt,
+        refID: newQuestion._id,
+      },
+    });
     return newQuestion;
   }),
 
@@ -98,14 +99,35 @@ const Mutation = {
     await author.save();
 
     question.answers.push(newAnswer);
+    if(question.subscribers.findIndex(sub => author._id.equals(sub._id)) === -1) {
+      question.subscribers.push(author);
+      console.log(`Add ${author.email} to subscriber list`);
+    }
     await question.save();
+    
+    // author
+    pubsub.publish(`user ${author._id}`, {
+      inbox: {
+        type: 'ANSWER',
+        message: `You just answered the question: ${question.title}`,
+        time: newAnswer.createAt,
+        refID: question._id,
+      },
+    });
 
-    // pubsub.publish(`answer ${postID}`, {
-    //   answer: {
-    //     mutation: 'CREATED',
-    //     data: newAnswer,
-    //   },
-    // });
+    // subscriber
+    question.subscribers.forEach(sub => {
+      if (!author._id.equals(sub._id))
+        pubsub.publish(`user ${sub._id}`, {
+          inbox: {
+            type: 'NOTIFICATION', 
+            message: `Somebody just answered the question: ${question.title}`,
+            time: newAnswer.createAt,
+            refID: question._id,
+          },
+        });
+    });
+
     return newAnswer;
   }),
   createComment: isAuthenticated(async (parent, { text, postID, postType }, { db, pubsub, user }) => {
@@ -128,14 +150,54 @@ const Mutation = {
     post.comments.push(newComment);
     await post.save();
 
-    // pubsub.publish(`comment ${postID}`, {
-    //   comment: {
-    //     mutation: 'CREATED',
-    //     data: newComment,
-    //   },
-    // });
+    const question = (postType == 'question'? post : 
+        await db.QuestionModel.findById(post.question));
+
+    if(question.subscribers.findIndex(sub => author._id.equals(sub._id)) === -1) {
+      question.subscribers.push(author);
+      console.log(`Add ${author.email} to subscriber list`);
+      await question.save();
+    }
+
+    // author
+    pubsub.publish(`user ${author._id}`, {
+      inbox: {
+        type: 'REPLY',
+        message: `You just replied a question: ${question.title}`,
+        time: newComment.createAt,
+        refID: question._id,
+      },
+    });
+    
+    // subscriber
+    question.subscribers.forEach(sub => {
+      if (!author._id.equals(sub._id))
+        pubsub.publish(`user ${sub._id}`, {
+          inbox: {
+            type: 'NOTIFICATION', 
+            message: `Somebody just replied the question: ${question.title}`,
+            time: newComment.createAt,
+            refID: question._id,
+          },
+        });
+    });
+
     return newComment;
   }),
+
+  reset: async(parent, args, { db }) => {
+    try {
+      await db.UserModel.deleteMany();
+      await db.QuestionModel.deleteMany();
+      await db.AnswerModel.deleteMany();
+      await db.CommentModel.deleteMany();
+      console.log('All Data successfully deleted');
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  }
 };
 
 export { Mutation as default };
