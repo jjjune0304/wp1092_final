@@ -68,7 +68,11 @@ const Mutation = {
     if (!title || !body)
       throw new Error("Missing some information for a valid question");
     const author = user;
-    const newQuestion = new db.QuestionModel({ title, body, author, views: 0, subscribers: [author] });
+    const newQuestion = new db.QuestionModel({ 
+      title, body, author, 
+      views: 0, reward: 10, like: 0,
+      subscribers: [author] 
+    });
     await newQuestion.save();
 
     author.questions.push(newQuestion);
@@ -130,6 +134,7 @@ const Mutation = {
 
     return newAnswer;
   }),
+
   createComment: isAuthenticated(async (parent, { text, postID, postType }, { db, pubsub, user }) => {
     if (!text || !postID || !postType)
       throw new Error("Missing some information for a valid comment");
@@ -183,6 +188,12 @@ const Mutation = {
     });
 
     return newComment;
+  }),
+
+  updateUser: isAuthenticated(async (parent, { profile }, { db, user }) => {
+    if(profile) user.profile = profile;
+    await user.save();
+    return user;
   }),
 
   reset: async(parent, args, { db }) => {

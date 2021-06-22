@@ -16,6 +16,7 @@ const userSchema = new Schema({
   questions: [{ type: mongoose.Types.ObjectId, ref: 'Question' }],
   answers: [{ type: mongoose.Types.ObjectId, ref: 'Answer' }],
   comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
+  profile: { type: String },
 }, schemaOptions);
 
 const questionSchema = new Schema({
@@ -26,6 +27,8 @@ const questionSchema = new Schema({
   comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
   subscribers: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
   views: {type: Number, required: true},
+  reward: {type: Number, required: true},
+  like: {type: Number, required: true},
 }, schemaOptions);
 
 const answerSchema = new Schema({

@@ -12,6 +12,7 @@ type Mutation {
   createQuestion(title: String!, body: String!): Question!
   createAnswer(body: String!, postID: String!): Answer!
   createComment(text: String!, postID: String!, postType: String!): Comment!
+  updateUser(profile: String!): User!
   reset: Boolean
 }
 
@@ -28,6 +29,7 @@ type User {
   username: String!
   points: Int!
   email: String!
+  profile: String
   createdAt: String!
   questions: [Question!]
   answers: [Answer!]
@@ -38,6 +40,9 @@ type Question {
   author: User!
   title: String!
   body: String!
+  views: Int!
+  reward: Int!
+  like: Int!
   createdAt: String!
   updatedAt: String!
   answers: [Answer!]
