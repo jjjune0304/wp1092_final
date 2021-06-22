@@ -1,12 +1,11 @@
-import SocialButton from './SocialButton'
-import { USER_QUERY, LOGIN_MUTATION } from '../../graphql'
-
 import { useState, useEffect } from 'react'
 import { Form, Input, Button, Checkbox, Divider, Alert, Spin, Space } from 'antd';
 import { FacebookOutlined, GoogleOutlined, GithubOutlined, 
          UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useLazyQuery, useMutation } from "@apollo/client";
 
+import { LOGIN_MUTATION } from '../../graphql'
+import SocialButton from './SocialButton.js'
 
 const LoginPanel = ({setToken, setActiveKey}) => {
 
@@ -79,7 +78,7 @@ const LoginPanel = ({setToken, setActiveKey}) => {
 
   };
 
-  return ( <>
+  return ( <Spin spinning={tokenDataLoading} tip="Loading..." size="large">
             <Form
               name="normal_login"
               className="login-form"
@@ -172,11 +171,10 @@ const LoginPanel = ({setToken, setActiveKey}) => {
                   <Button type="primary" htmlType="submit" className="login-form-button">
                    &nbsp; Log in &nbsp;
                   </Button>
-                  {tokenDataLoading? (<Spin />):(<></>)}
                 </Space>
               </Form.Item>
             </Form>
-          </>
+            </Spin>
   );
 };
 

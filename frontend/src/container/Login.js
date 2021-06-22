@@ -1,17 +1,31 @@
-import LoginPanel from '../component/login/LoginPanel'
-import SignUpPanel from '../component/login/SignUpPanel'
-import './Login.css'
+import { Row, Col, Tabs, Spin  } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { LoginOutlined, UsergroupAddOutlined, HomeOutlined } from '@ant-design/icons';
+import { Link, useHistory } from "react-router-dom";
 
-import React, { useState } from 'react';
-import { Row, Col, Tabs  } from 'antd';
-import { LoginOutlined, UsergroupAddOutlined } from '@ant-design/icons';
+import LoginPanel from '../component/login/LoginPanel.js'
+import SignUpPanel from '../component/login/SignUpPanel.js'
+
 import 'antd/dist/antd.css'
+import './Login.css'
 
 const { TabPane } = Tabs;
 
-const LoginPage = ({setToken, activeKey, setActiveKey}) => {
+const LoginPage = ({token, setToken, activeKey, setActiveKey}) => {
 
-    // const [ activeKey, setActiveKey ] = useState("1");
+    const history = useHistory();
+
+    // redirect to home page (w/ login)
+    useEffect(()=>{
+            if (token!="")
+                history.push('/home');
+        },[token]);
+
+    // redirect to home page (w/o login)
+    useEffect(()=>{
+            if (activeKey=='home')
+                setTimeout(()=>history.push('/home'), 500);
+        },[activeKey])
 
     return (
         <Row align="center">
@@ -27,6 +41,9 @@ const LoginPage = ({setToken, activeKey, setActiveKey}) => {
                     </TabPane>
                     <TabPane tab={ <> <UsergroupAddOutlined/>SignUp</> } key="signup">
                         <SignUpPanel setActiveKey={setActiveKey} />
+                    </TabPane>
+                    <TabPane tab={ <> <HomeOutlined />Home</> } key="home">
+                        <br/><br/><Spin tip="Loading..." size="large" /><br/><br/>
                     </TabPane>
                 </Tabs>
             </Col>
