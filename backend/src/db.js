@@ -16,7 +16,7 @@ const userSchema = new Schema({
   questions: [{ type: mongoose.Types.ObjectId, ref: 'Question' }],
   answers: [{ type: mongoose.Types.ObjectId, ref: 'Answer' }],
   comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
-  profile: { type: String },
+  avatar: { type: String },
 }, schemaOptions);
 
 const questionSchema = new Schema({

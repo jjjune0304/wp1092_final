@@ -190,8 +190,8 @@ const Mutation = {
     return newComment;
   }),
 
-  updateUser: isAuthenticated(async (parent, { profile }, { db, user }) => {
-    if(profile) user.profile = profile;
+  updateUser: isAuthenticated(async (parent, { avatar }, { db, user }) => {
+    if(avatar) user.avatar = avatar;
     await user.save();
     return user;
   }),
