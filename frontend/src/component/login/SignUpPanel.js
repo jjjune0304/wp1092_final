@@ -1,15 +1,16 @@
-import { SIGNUP_MUTATION } from '../../graphql'
-
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete, Alert, Spin, Space } from 'antd';
+import { Form, Input, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete, Alert, Spin, Space, Modal } from 'antd';
 import { MailOutlined } from '@ant-design/icons';
 import { useMutation } from "@apollo/client";
+
+import { SIGNUP_MUTATION } from '../../graphql'
 
 const { Option } = Select;
 
 const SignUpPanel = ({setActiveKey}) => {
 
     const [alertion, setAlertion] = useState("");
+    const [agreementVisible, setAgreementVisible] = useState(false);
     const [signUp, {loading: signUpLoading, data: signUpData, error: signUpError}] = useMutation(SIGNUP_MUTATION)
 
     const confirmPassword = (_, confirm, getFieldValue) => {
@@ -29,16 +30,16 @@ const SignUpPanel = ({setActiveKey}) => {
         // signup success
         if ( signUpData ) {
             setAlertion("New account registered success !");
-            setTimeout(()=>{setActiveKey("1");},1300);
+            setTimeout(()=>{setActiveKey("login");}, 1000);
             
             const newUser = signUpData.signup;
-            console.log(newUser);
+            // console.log(newUser);
         }
 
     }, [ signUpData, signUpError ])
 
     const onFinish = async (values) => {
-        console.log(values);
+        // console.log(values);
 
         try {
             await signUp({
@@ -105,6 +106,7 @@ const SignUpPanel = ({setActiveKey}) => {
     ];
 
     return (
+        <Spin spinning={signUpLoading} tip="Loading..." size="large">
         <Form
             {...formItemLayout}
             name="register"
@@ -206,7 +208,16 @@ const SignUpPanel = ({setActiveKey}) => {
                 {...tailFormItemLayout}
             >
                 <Checkbox>
-                    I have read the <a href="http://google.com">agreement</a>
+                    I have read the <a href="#" onClick={()=>{
+                            Modal.warning({
+                                title: 'Disclaimer & Participant Agreement',
+                                content: (<>
+                                        <p>some messages...some messages... </p>
+                                        <p>Best Reguard,<br/>
+                                        @epistemologyplus.com</p>
+                                    </>),
+                              });
+                        }}>agreement</a>
                 </Checkbox>
             </Form.Item>
 
@@ -215,10 +226,10 @@ const SignUpPanel = ({setActiveKey}) => {
                     <Button type="primary" htmlType="submit">
                         Register
                     </Button>
-                    {(signUpLoading)?(<Spin />):(<></>)}
                 </Space>
             </Form.Item>
         </Form>
+        </Spin>
     );
 };
 
