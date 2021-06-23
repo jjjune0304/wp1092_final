@@ -10,12 +10,6 @@ const SECRET = 'epistemologyet';
 /* -------------------------------------------------------------------------- */
 /*                                  UTILITIES                                 */
 /* -------------------------------------------------------------------------- */
-// const isAuthenticated = resolverFunc => async (parent, args, context) => {
-//   if (!context.user) throw new ForbiddenError('Please log in first.');
-//   const user = await context.db.UserModel.findById(context.user.id)
-//   if(!user) throw new Error(`Email account ${context.user.email} not found`);
-//   return resolverFunc.apply(null, [parent, args, { ...context, user}]);
-// };
 
 const hash = text => bcrypt.hash(text, SALT_ROUNDS);
 
@@ -61,7 +55,7 @@ const Mutation = {
   },
 
   logout: async (parent, args, { db }, info) => {
-   
+    return true;
   },
 
   createQuestion: isAuthenticated(async (parent, { title, body }, { db, pubsub, user }) => {
@@ -194,6 +188,15 @@ const Mutation = {
     if(avatar) user.avatar = avatar;
     await user.save();
     return user;
+  }),
+
+  likeAnswer: isAuthenticated(async (parent, { aID }, { db, user }) => {
+    const answer = await db.AnswerModel.findById(aID);
+    if(!answer)
+      throw new Error(`AnswerID ${aID} is not found.`)
+    answer.like = answer.like + 1;
+    await answer.save();
+    return answer.like;
   }),
 
   reset: async(parent, args, { db }) => {

@@ -28,7 +28,6 @@ const questionSchema = new Schema({
   subscribers: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
   views: {type: Number, required: true},
   reward: {type: Number, required: true},
-  like: {type: Number, required: true},
 }, schemaOptions);
 
 const answerSchema = new Schema({
@@ -37,6 +36,7 @@ const answerSchema = new Schema({
   body: { type: String, required: true },
   best: {type: Boolean, required: true},
   comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
+  like: {type: Number, required: true},
 }, schemaOptions);
 
 const commentSchema = new Schema({

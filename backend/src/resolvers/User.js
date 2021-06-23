@@ -2,6 +2,12 @@ const User = {
   id(parent, args, { db }) {
     return parent._id.toString();
   },
+  createdAt(parent, args, { db }) {
+    return parent.createdAt.toISOString();
+  },
+  updatedAt(parent, args, { db }) {
+    return parent.updatedAt.toISOString();
+  },
   questions(parent, args, { db }) {
     if(!parent.questions) return [];
     return Promise.all(

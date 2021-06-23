@@ -2,17 +2,19 @@ type Query {
   me: User!
   user(email: String!): User!
   latest(num: Int!): [Question!]!
+  hottest(num: Int!): [Question!]!
   question(questionID: String!): Question!
 }
 
 type Mutation {
   signup(email: String!, username: String!, password:String!): User!
   login(email: String!, password:String!): Token!
-  logout: User!
+  logout: Boolean
   createQuestion(title: String!, body: String!): Question!
   createAnswer(body: String!, postID: String!): Answer!
   createComment(text: String!, postID: String!, postType: String!): Comment!
   updateUser(avatar: String!): User!
+  likeAnswer(aID: String!): Int!
   reset: Boolean
 }
 
@@ -31,6 +33,7 @@ type User {
   email: String!
   avatar: String
   createdAt: String!
+  updatedAt: String!
   questions: [Question!]
   answers: [Answer!]
 }
@@ -42,10 +45,10 @@ type Question {
   body: String!
   views: Int!
   reward: Int!
-  like: Int!
   createdAt: String!
   updatedAt: String!
   answers: [Answer!]
+  comments: [Comment!]
 }
 
 type Answer {
@@ -56,6 +59,8 @@ type Answer {
   best: Boolean!
   createdAt: String!
   updatedAt: String!
+  comments: [Comment!]
+  like: Int!
 }
 
 
@@ -64,6 +69,7 @@ type Comment {
   author: User!
   postType: String!
   text: String!
+  createdAt: String!
   updatedAt: String!
 }
 
