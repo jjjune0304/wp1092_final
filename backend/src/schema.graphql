@@ -10,7 +10,7 @@ type Mutation {
   signup(email: String!, username: String!, password:String!): User!
   login(email: String!, password:String!): Token!
   logout: Boolean
-  createQuestion(title: String!, body: String!): Question!
+  createQuestion(title: String!, body: String!, reward: Int!): Question!
   createAnswer(body: String!, postID: String!): Answer!
   createComment(text: String!, postID: String!, postType: String!): Comment!
   updateUser(avatar: String!): User!

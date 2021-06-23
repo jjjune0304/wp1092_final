@@ -58,13 +58,13 @@ const Mutation = {
     return true;
   },
 
-  createQuestion: isAuthenticated(async (parent, { title, body }, { db, pubsub, user }) => {
-    if (!title || !body)
+  createQuestion: isAuthenticated(async (parent, { title, body, reward }, { db, pubsub, user }) => {
+    if (!title || !body || !reward)
       throw new Error("Missing some information for a valid question");
     const author = user;
     const newQuestion = new db.QuestionModel({ 
-      title, body, author, 
-      views: 0, reward: 10, like: 0,
+      title, body, author, reward
+      views: 0,
       subscribers: [author] 
     });
     await newQuestion.save();
