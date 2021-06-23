@@ -3,11 +3,13 @@ import { gql } from '@apollo/client';
 export const CREATE_QUESTION_MUTATION = gql`
   mutation CreateQuestion(
       $title: String!,
-      $body: String!
+      $body: String!,
+      $reward: Int!
   ) {
     createQuestion(
         title: $title,
-        body: $body
+        body: $body,
+        reward: $reward
     ){
       title
       body

@@ -22,6 +22,18 @@ var refreshCount=0;
 
 const Home = ({ token, setToken, activeKey, setActiveKey, authClient }) => {
 
+    // Test
+
+    // const [makeQ, {loading:createQuesutionLoading, error:createQuesutionError, data:createQuesutionData}] = useMutation(CREATE_QUESTION_MUTATION);
+
+    // if (token!="")
+    //     makeQ({
+    //         variables: {title: "請問今天台灣總共有幾個人", body: "現金台灣有23000個人口", reward: 3},
+    //         client: authClient
+    //     });
+
+    // Test
+
     const history = useHistory();
 
     const [colorMode, setColorMode] = useState('dark');

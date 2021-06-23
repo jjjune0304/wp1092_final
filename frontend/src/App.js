@@ -26,7 +26,7 @@ function App() {
     const [activeKey, setActiveKey] = useState("login");
     const [authClient, setAuthClient] = useState(newAppolloClient());
 
-    useEffect( ()=>setAuthClient(newAppolloClient(token)), [token]);
+    useEffect( ()=>{setAuthClient(newAppolloClient(token))}, [token]);
 
     return (
         <div className="App">

@@ -19,7 +19,7 @@ const QuestionsPage = () => {
     return (<Spin tip="Loading..." size="large"></Spin>);
 
   // render questions
-  let questions = latestQuestionsData.latest;
+  let questions = latestQuestionsData ? latestQuestionsData.latest : [] ;
   questions = questions.map((q)=>({...q, href: "/question/"+q.id }))
 
   const IconLink = ({ src, text }) => (

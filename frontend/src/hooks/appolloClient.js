@@ -26,7 +26,7 @@ const newAppolloClient = (token="") => {
         return {
             headers: {
                 ...headers,
-                authentication: token ? token : "",
+                authorization: token ? token : "",
             }
         }
     });
