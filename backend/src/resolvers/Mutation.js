@@ -90,7 +90,7 @@ const Mutation = {
     const question = await db.QuestionModel.findById(postID);
     if(!question) throw new Error(`QuestionID ${postID} not found`);
 
-    const newAnswer = new db.AnswerModel({ question, author, body, best: false });
+    const newAnswer = new db.AnswerModel({ question, author, body, best: false, like: 0 });
     await newAnswer.save();
     
     author.answers.push(newAnswer);
