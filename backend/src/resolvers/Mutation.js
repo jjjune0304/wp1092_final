@@ -63,7 +63,7 @@ const Mutation = {
       throw new Error("Missing some information for a valid question");
     const author = user;
     const newQuestion = new db.QuestionModel({ 
-      title, body, author, reward
+      title, body, author, reward,
       views: 0,
       subscribers: [author] 
     });
