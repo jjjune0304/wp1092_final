@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { Switch, Link, Route, useHistory, BrowserRouter } from "react-router-dom";
-import { Layout, Menu, Input, Image, Button, Empty, Row, Col } from 'antd';
+import { Layout, Menu, Input, Image, Button, Empty, Row, Col, Avatar, BackTop } from 'antd';
 import { LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 import { LoginOutlined, LogoutOutlined, UsergroupAddOutlined, MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 
 import { USER_QUERY, CREATE_QUESTION_MUTATION } from '../graphql'
+import { standardAvatar } from '../utils'
 import LoginPage from './Login.js';
 import QuestionsPage from '../component/questions/questionsPage.js'
 
@@ -17,6 +18,7 @@ const { Search } = Input;
 
 const onSearch = value => console.log(value);
 
+var refreshCount=0;
 
 const Home = ({ token, setToken, activeKey, setActiveKey, authClient }) => {
 
@@ -25,6 +27,7 @@ const Home = ({ token, setToken, activeKey, setActiveKey, authClient }) => {
     const [colorMode, setColorMode] = useState('dark');
 
     const [leftSliderCollapsed, setLeftSliderCollapsed] = useState(false);
+    setTimeout(()=>{if(refreshCount<2)setLeftSliderCollapsed(true); refreshCount+=1;}, 2000);
 
     // 這邊不能刪!!! (刷新頁面才能繼續登入)
     useEffect(() => {
@@ -39,11 +42,12 @@ const Home = ({ token, setToken, activeKey, setActiveKey, authClient }) => {
         <Layout >
 
             <Sider collapsible collapsed={leftSliderCollapsed} onCollapse={()=>{setLeftSliderCollapsed(!leftSliderCollapsed)}}
-                    onMouseLeave={()=>setTimeout(()=>setLeftSliderCollapsed(true),1000)}>
+                    onMouseLeave={()=>setTimeout(()=>setLeftSliderCollapsed(true),1500)}>
                 <div className="logo">
                     <Image
                         height={"54px"}
-                        src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
+                        // src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
+                        src="https://www.educarepk.com/wp-content/uploads/2020/07/Epistemology.png"
                     />
                 </div>
                 <Menu
@@ -58,7 +62,7 @@ const Home = ({ token, setToken, activeKey, setActiveKey, authClient }) => {
                             onClick={()=>{setLeftSliderCollapsed(!leftSliderCollapsed)}}
                             ></Menu.Item>
                     <SubMenu key="sub1" icon={<NotificationOutlined />} title="最新的討論串" >
-                        <Menu.Item key="1">hack1</Menu.Item>
+                        <Menu.Item key="1">hack1hack1hack1hack1hack1hack1hack1hack1hack1hack1hack1hack1hack1hack1</Menu.Item>
                         <Menu.Item key="2">hack2</Menu.Item>
                         <Menu.Item key="3">hack3</Menu.Item>
                         <Menu.Item key="4">hack4</Menu.Item>
@@ -74,20 +78,20 @@ const Home = ({ token, setToken, activeKey, setActiveKey, authClient }) => {
 
 
             {/* Header + Main */}
-            <Layout className="site-layout" style={{padding: '0px 0px 0px 0px', width:'100vw'}}>
+            <Layout className="site-layout" style={{padding: '0px 0px 0px 0px', width:'100%'}}>
 
                 {/* Header */}
-                <Header theme="light" className="header" style={{position:'fixed', padding: '0px  80px', width:'100%', zIndex:100}}>
+                <Header theme="light" className="header" style={{ width:'100%', zIndex:100}}>
                     <div className="logo" style={{ float:'left'}}>
                         <Link to="/">
-                            <h2 style={{ color: '#00CCCC' }}>
+                            <h2 style={{ color: '#00CCCC' }} className="Bigger">
                                 Epistemology+
                             </h2>
                         </Link>
                     </div>
                     <div style={{ float:'left', padding: '0 24px' }}>
                         <Link to="/ask">
-                            <Button type="primary" shape="round" style={{ color: 'white' }}>Ask</Button>
+                            <Button type="primary" shape="round" style={{ color: 'white' }} className="AskButton">Ask</Button>
                         </Link>
                     </div>
                     <Search
@@ -102,20 +106,25 @@ const Home = ({ token, setToken, activeKey, setActiveKey, authClient }) => {
                         {token==='' ? 
                             <>  
                             <Link to="/login">
-                                <Button danger type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('login')}}>
+                                <Button danger type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('login')}} className="Bigger">
                                     <LoginOutlined/>Log in
                                 </Button> 
                             </Link>
                             <Link to="/login">
-                                <Button type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('signup')}}>
+                                <Button type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('signup')}} className="Bigger">
                                     <UsergroupAddOutlined/>Sign up
                                 </Button> 
                             </Link>
                             </>
                             : 
+                            <>
+                            <Avatar size="middle" src={standardAvatar} draggable={true} />
                             <Link to="/home">
-                                <Button type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('home'); setToken('')}}><LogoutOutlined />Log out</Button>
+                                <Button type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('home'); setToken(''); localStorage.setItem('token',"");}} className="Bigger">
+                                    Log out<LogoutOutlined />
+                                </Button>
                             </Link>
+                            </>
                         }
                         
                     </div>
@@ -124,7 +133,7 @@ const Home = ({ token, setToken, activeKey, setActiveKey, authClient }) => {
 
 
                     {/* Main Panel */}
-                    <Content style={{padding: '80px 0px 0px 0px'}}>
+                    <Content style={{padding: '0px 0px 0px 0px'}}>
                     <Row>
                         {/* Center Content */}
                         <Col span={18} style={{padding: "10px 10px"}} >
@@ -159,7 +168,11 @@ const Home = ({ token, setToken, activeKey, setActiveKey, authClient }) => {
                     </Row>
                     </Content>
                 </Layout>
+            
+            <BackTop />
+
         </Layout>
+
     );
 };
 export default Home;

@@ -1,31 +1,34 @@
+import { Link  } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
-import { List, Avatar, Space, Popover, Button, Tag } from 'antd';
-import { MessageOutlined, LikeOutlined, StarOutlined, EyeOutlined, QuestionOutlined } from '@ant-design/icons';
+import { gql, useQuery, useMutation } from '@apollo/client';
+import { List, Avatar, Space, Popover, Button, Tag, Spin, Image, BackTop } from 'antd';
+import { MessageOutlined, LikeOutlined, StarOutlined, EyeOutlined, QuestionOutlined, AntDesignOutlined } from '@ant-design/icons';
 
-const makeShorter = (s, max_len=10) => {
-  return (s.length<max_len) ? s : s.substring(0, max_len)+'...';
-}
+import { LATEST_QUESTIONS_QUERY } from '../../graphql'
+import { avatars, standardAvatar, isNull, makeShorter, getMoment } from '../../utils'
+
 
 const QuestionsPage = () => {
 
-  const listData = [];
+  const {loading: latestQuestionsLoading, error: latestQuestionsError, data: latestQuestionsData} = useQuery(LATEST_QUESTIONS_QUERY,{
+    variables: {num: 100}
+  })
 
-  for (let i = 0; i < 23; i++) {
-    listData.push({
-      href: 'question/<id>',
-      // avatar: 'https://avatars1.githubusercontent.com/u/8186664?s=460&v=4',
-      avatar: 'https://www.fountain.org.tw/upload/repository/74a7f73b7f18d193ddebff71c0b8afeaimage_normal.jpg',
-      title: 'ant design part ${i} ant design partant design partant design partaaaaaaaaaaaaaaaaaaant design partaaaaaaaaaaaa',
-      body:
-        'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-    });
-  }
+  // if loading
+  if (latestQuestionsLoading)
+    return (<Spin tip="Loading..." size="large"></Spin>);
+
+  // render questions
+  let questions = latestQuestionsData.latest;
+  questions = questions.map((q)=>({...q, href: "/question/"+q.id }))
+
   const IconLink = ({ src, text }) => (
-    <a className="example-link">
+    <div className="example-link">
       <img className="example-link-icon" src={src} alt={text} />
       {text}
-    </a>
+    </div>
   );
+
   const IconText = ({ icon, text }) => (
     <Space>
       {React.createElement(icon)}
@@ -33,61 +36,61 @@ const QuestionsPage = () => {
     </Space>
   );
 
-  console.log(listData);
-
   return (
     <List
-        style={{"background-color":"white"}}
+        style={{"backgroundColor":"white"}}
         itemLayout="vertical"
         size="small"
         pagination={{
           onChange: page => {
             console.log(page);
+            window.scroll({top: 0, behavior: 'smooth' })
           },
-          pageSize: 6,
+          pageSize: 10,
         }}
-        dataSource={listData}
+        dataSource={questions}
         footer={
-          <div>
-            <b>ant design</b> footer part
-          </div>
+          <></>
         }
         renderItem={item => (
           <List.Item
-            key={item.title}
+            key={item.id}
             actions={[
-              <a href={item.href}>
-              <IconLink
-                src="https://gw.alipayobjects.com/zos/rmsportal/MjEImQtenlyueSmVEfUD.svg"
-                text=" Go challenge"
-              /></a>,
-              <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
-              <IconText icon={EyeOutlined} text="156" key="list-vertical-star-o" />,
-              <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
+
+              <Link to={item.href} target="_blank">
+                <IconLink
+                  src="https://gw.alipayobjects.com/zos/rmsportal/MjEImQtenlyueSmVEfUD.svg"
+                  text=" View"
+                />
+              </Link>,
+              // <IconText icon={LikeOutlined} text={isNull(item.like, 0)} key="list-vertical-like-o" />,
+              <IconText icon={EyeOutlined} text={isNull(item.views, 0)} key="list-vertical-star-o" />,
+              <IconText icon={MessageOutlined} text={item.answers.length} key="list-vertical-message" />,
+              <Space>💰{isNull(item.reward, "-")}</Space>
             ]}
             extra={
               <>
-              <p>
-                <Popover content={<div>The arrow points to the center of the target element, which set</div>} title="Title" trigger="hover">
-                    <Button>@wubin's reply</Button>
-                </Popover>
-              </p>
-              <p>
-                <Popover content={<div>The arrow points to the center of the target element, which set</div>} title="Title" trigger="hover">
-                    <Button>@wubin's reply</Button>
-                </Popover>
-              </p>
-              <p>
-                <Popover content={<div>The arrow points to the center of the target element, which set</div>} title="Title" trigger="hover">
-                    <Button>@wubin's reply</Button>
-                </Popover>
-              </p>
+              {item.answers.slice(3).map((ans)=>(
+                  <p>
+                    <Popover content={<div>{makeShorter(ans.body,50)}</div>} title="Title" trigger="hover">
+                        <Button>@{makeShorter(ans.username,20)}'s reply</Button>
+                    </Popover>
+                  </p>
+                ))}
               </>
             }
+            className="Shadow"
           >
+
             <List.Item.Meta
-              avatar={<Avatar src={item.avatar} />}
-              title={<a href={item.href}>{"Question: "+makeShorter(item.title, 100)}</a>}
+              avatar={
+                <>
+                  <Avatar size="large" src={isNull(item.author.avatar, standardAvatar)} draggable={true} /> <br/>
+                  {item.author.username}
+                </>
+              }
+              title={<Link to={item.href} target="_blank">{ "Question: " + makeShorter(item.title, 100) }</Link>}
+              description={<>created {item.createdAt===null? "-" : getMoment(item.createdAt)}</>}
             />
             { makeShorter(item.body, 200) }
           </List.Item>

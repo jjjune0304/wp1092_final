@@ -5,6 +5,7 @@ import newAppolloClient from './hooks/appolloClient.js'
 import LoginPage from './container/Login.js';
 import Home from './container/Home.js'
 import QuestionsPage from './component/questions/questionsPage.js'
+import SingleQuestionPage from './component/questions/SingleQuestionPage.js'
 
 import './App.css';
 
@@ -31,21 +32,33 @@ function App() {
         <div className="App">
             <BrowserRouter>
                 <Switch>
+                    <Redirect exact from="/" to="/home" />
                     <Route path="/login" render={(props)=>
                         <LoginPage {...props} 
                             token={token} setToken={setToken} 
                             activeKey={activeKey} setActiveKey={setActiveKey} />
                     } />
-                    <Redirect exact from="/" to="/home" />
+                    <Route path="/home" render={(props)=>
+                        <Home {...props} 
+                            token={token} setToken={setToken} 
+                            activeKey={activeKey} setActiveKey={setActiveKey} 
+                            authClient={authClient}/>
+                    } />
+                    {/*<Route path="/questions"><QuestionsPage/></Route>*/}
+                    <Route path="/question/:id" render={(props)=>
+                        <SingleQuestionPage {...props} 
+                            token={token} setToken={setToken}
+                            activeKey={activeKey} setActiveKey={setActiveKey} 
+                            authClient={authClient}/>
+                    } />
+                    <Route path="/ask" render={(props)=>
+                        <Home {...props} 
+                            token={token} setToken={setToken} 
+                            activeKey={activeKey} setActiveKey={setActiveKey} 
+                            authClient={authClient}/>
+                    } />
                 </Switch>
-                <Route path={["/home","/ask"]} render={(props)=>
-                    <Home {...props} 
-                        token={token} setToken={setToken} 
-                        activeKey={activeKey} setActiveKey={setActiveKey} 
-                        authClient={authClient}/>
-                } />
-                <Route path="/"><> Copyright © 2021 epistemologyplus.com </></Route>
-                <Route path={["/questions"]}><QuestionsPage/></Route>
+                <Route path={["/home","/ask","/question/:id"]}><> Copyright © 2021 epistemologyplus.com </></Route>
             </BrowserRouter>
         </div>
     );

@@ -20,7 +20,7 @@ const newAppolloClient = (token="") => {
 
     const authLink = setContext((_, { headers }) => {
 
-        if ( token=="" )
+        if ( token==="" )
             token = localStorage.getItem('token');
         
         return {
