@@ -5,10 +5,11 @@ export const USER_QUERY = gql`
     $email: String!
   ) {
     user (
-      username: $email
+      email: $email
     ) {
-      email
       username
+      points
+      email
     }
   }
 `;
@@ -22,7 +23,6 @@ export const LATEST_QUESTIONS_QUERY = gql`
     ) {
       id
       reward
-      like
       views
       title
       body
@@ -51,7 +51,6 @@ export const QUESTION_QUERY = gql`
     ){
       id
       reward
-      like
       views
       title
       body

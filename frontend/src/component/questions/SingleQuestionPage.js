@@ -93,7 +93,7 @@ const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClien
     const content = (
       <>
         <Paragraph>
-            {questionData.question.body}
+            <div dangerouslySetInnerHTML={{__html: questionData.question.body}} className='innerhtml'></div>
         </Paragraph>
         <div>
               {/*<IconText icon={LikeOutlined} text={isNull(questionData.question.like, 0)} key="list-vertical-like-o" />, &ensp;&ensp;*/}
@@ -143,7 +143,7 @@ const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClien
                         </Link>
                         </>
                         : 
-                        <Link>
+                        <Link to="/home">
                             <Button type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('home'); setToken(''); localStorage.setItem('token',"");}} className="Bigger">
                                 <LogoutOutlined />Log out
                             </Button>

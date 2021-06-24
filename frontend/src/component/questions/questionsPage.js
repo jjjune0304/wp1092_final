@@ -21,6 +21,7 @@ const QuestionsPage = () => {
   // render questions
   let questions = latestQuestionsData ? latestQuestionsData.latest : [] ;
   questions = questions.map((q)=>({...q, href: "/question/"+q.id }))
+  console.log(questions)
 
   const IconLink = ({ src, text }) => (
     <div className="example-link">
@@ -92,7 +93,6 @@ const QuestionsPage = () => {
               title={<Link to={item.href} target="_blank">{ "Question: " + makeShorter(item.title, 100) }</Link>}
               description={<>created {item.createdAt===null? "-" : getMoment(item.createdAt)}</>}
             />
-            { makeShorter(item.body, 200) }
           </List.Item>
         )}
       />

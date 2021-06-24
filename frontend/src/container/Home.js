@@ -9,6 +9,7 @@ import { USER_QUERY, CREATE_QUESTION_MUTATION } from '../graphql'
 import { standardAvatar } from '../utils'
 import LoginPage from './Login.js';
 import QuestionsPage from '../component/questions/questionsPage.js'
+import Ask from '../component/AskQuestion'
 
 import 'antd/dist/antd.css';
 
@@ -102,9 +103,14 @@ const Home = ({ token, setToken, activeKey, setActiveKey, authClient }) => {
                         </Link>
                     </div>
                     <div style={{ float:'left', padding: '0 24px' }}>
-                        <Link to="/ask">
-                            <Button type="primary" shape="round" style={{ color: 'white' }} className="AskButton">Ask</Button>
-                        </Link>
+                        {token==='' ?
+                            <Link to="/login">
+                                <Button type="primary" shape="round" style={{ color: 'white' }} onClick={()=>{setActiveKey('login')}} className="AskButton">Ask</Button>
+                            </Link> :
+                            <Link to="/ask">
+                                <Button type="primary" shape="round" style={{ color: 'white' }} onClick={()=>{setActiveKey('ask')}} className="AskButton">Ask</Button>
+                            </Link>
+                        }
                     </div>
                     <Search
                         placeholder="input search text"
@@ -116,17 +122,17 @@ const Home = ({ token, setToken, activeKey, setActiveKey, authClient }) => {
                     />
                     <div style={{ float:'right' }}>
                         {token==='' ? 
-                            <>  
-                            <Link to="/login">
-                                <Button danger type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('login')}} className="Bigger">
-                                    <LoginOutlined/>Log in
-                                </Button> 
-                            </Link>
-                            <Link to="/login">
-                                <Button type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('signup')}} className="Bigger">
-                                    <UsergroupAddOutlined/>Sign up
-                                </Button> 
-                            </Link>
+                            <>
+                                <Link to="/login">
+                                    <Button danger type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('login')}} className="Bigger">
+                                        <LoginOutlined/>Log in
+                                    </Button>
+                                </Link>
+                                <Link to="/login">
+                                    <Button type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('signup')}} className="Bigger">
+                                        <UsergroupAddOutlined/>Sign up
+                                    </Button>
+                                </Link>
                             </>
                             : 
                             <>
@@ -157,7 +163,7 @@ const Home = ({ token, setToken, activeKey, setActiveKey, authClient }) => {
                                 </Route>
 
                                 {/* Ask content */}
-                                <Route path="/ask"> Ask! <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> </Route>
+                                <Route path="/ask"><Ask /></Route>
 
                             </Switch>
                         </Col>
