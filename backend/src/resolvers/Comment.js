@@ -8,6 +8,9 @@ const Comment = {
   updatedAt(parent, args, { db }) {
     return parent.updatedAt.toISOString();
   },
+  async author(parent, args, { db }) {
+    return await db.UserModel.findById(parent.author);
+  },
 };
 
 export { Comment as default };
