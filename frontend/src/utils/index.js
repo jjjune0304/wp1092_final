@@ -35,8 +35,11 @@ export const timeConverter = (UNIX_timestamp, date_only=false) => {
     return date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
 }
 
-export const getMoment = (timestamp) => {
-    return moment().subtract(parseInt(timestamp), 'secs').fromNow();
+export const getMoment = (timeString) => {
+    return moment(timeString).fromNow();
+    // console.log(moment(timestamp).fromNow());
+    // console.log(moment.unix(parseInt(timestamp)).fromNow())
+    // return moment().subtract(timestamp, 'secs').fromNow();
 }
 
 export const showQuestionCreateUpdateTime = (questionData) => {

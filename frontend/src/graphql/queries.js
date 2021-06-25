@@ -7,9 +7,10 @@ export const USER_QUERY = gql`
     user (
       email: $email
     ) {
-      username
-      points
       email
+      username
+      avatar
+      points
     }
   }
 `;
@@ -29,6 +30,9 @@ export const LATEST_QUESTIONS_QUERY = gql`
       author {
         username
         avatar
+      }
+      comments {
+        id 
       }
       answers {
         body
@@ -87,6 +91,28 @@ export const QUESTION_AUTHOR_QUERY = gql`
   }
 `;
 
+export const QUESTION_COMMENTS_QUERY = gql`
+  query question(
+    $questionID: String!
+  ){
+    question(
+      questionID: $questionID
+    ){
+      id
+      comments {
+        id
+        text
+        author {
+          username
+          avatar
+        }
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
 export const QUESTION_ANSWERS_QUERY = gql`
   query question(
     $questionID: String!
@@ -98,9 +124,19 @@ export const QUESTION_ANSWERS_QUERY = gql`
       answers {
         id
         body
+        like
         author {
           username
           avatar
+        }
+        comments {
+          text
+          author {
+            username
+            avatar
+          }
+          createdAt
+          updatedAt
         }
         createdAt
         updatedAt

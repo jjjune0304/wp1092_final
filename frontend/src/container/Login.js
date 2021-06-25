@@ -37,7 +37,7 @@ const LoginPage = ({token, setToken, activeKey, setActiveKey}) => {
                     type="line"
                     onChange={(key) => setActiveKey(key)}> 
                     <TabPane tab={ <> <LoginOutlined/>Login </> } key="login">
-                        <LoginPanel setActiveKey={setActiveKey} setToken={setToken}/>
+                        <LoginPanel setActiveKey={setActiveKey} setToken={setToken} />
                     </TabPane>
                     <TabPane tab={ <> <UsergroupAddOutlined/>SignUp</> } key="signup">
                         <SignUpPanel setActiveKey={setActiveKey} />

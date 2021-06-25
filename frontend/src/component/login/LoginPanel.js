@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import { Form, Input, Button, Checkbox, Divider, Alert, Spin, Space } from 'antd';
+import { Form, Input, Button, Checkbox, Divider, Alert, Spin, Space, message } from 'antd';
 import { FacebookOutlined, GoogleOutlined, GithubOutlined, 
          UserOutlined, LockOutlined } from '@ant-design/icons';
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 
-import { LOGIN_MUTATION } from '../../graphql'
+import { LOGIN_MUTATION, USER_QUERY } from '../../graphql'
 import SocialButton from './SocialButton.js'
 
 const LoginPanel = ({setToken, setActiveKey}) => {
@@ -39,29 +39,36 @@ const LoginPanel = ({setToken, setActiveKey}) => {
 
   const [alertion, setAlertion] = useState("");
   const [getToken, { loading: tokenDataLoading, data: tokenData, error: loginError }] = useMutation(LOGIN_MUTATION);
+  const [getUserData, {loading: userLoading, data: userData}] = useLazyQuery(USER_QUERY);
 
   useEffect(() => {
     // error message
     if ( loginError ) {
-      setAlertion(loginError.message.toString());
-      // console.log(JSON.stringify(loginError, null, 2));
+      // setAlertion(loginError.message.toString());
+      message.error(loginError.message.toString());
     }
 
-    // get token success
-    if ( tokenData ) {
-      setAlertion("");
+    // get token success (Success Login)
+    if ( tokenData && userData ) {
       const token = tokenData.login.token;
 
-      setToken(token);
-      setActiveKey('home')
-      // console.log("token: " + token + "\n Success Login");
+      localStorage.setItem('userProfile', JSON.stringify({
+        email:userData.user.email, 
+        username:userData.user.username,
+        points:userData.user.points,
+        avatar:userData.user.avatar
+      }))
+
+      localStorage.setItem('token', token);
+      localStorage.setItem('Epistemology_token_timestamp', new Date().getTime());
+      setActiveKey('home');
+
     }
   }, [tokenData, loginError]);
 
   const onFinish = async (values) => {
 
     // set email/password cache
-    // console.log('Received values of form: ', values);
     if (values.remember) {
       localStorage.setItem('email', values.email);
       localStorage.setItem('password', values.password);
@@ -71,8 +78,8 @@ const LoginPanel = ({setToken, setActiveKey}) => {
     }
 
     // get login token
-    // console.log({ email: values.email, password: values.password });
     try {
+      await getUserData({variables: { email: values.email } })
       await getToken({ variables: { email: values.email, password: values.password } });
     } catch(error) {}
 
