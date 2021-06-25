@@ -1,9 +1,9 @@
 import isAuthenticated from '../authentication';
 
 const Subscription = {
-  comment: {
-    subscribe: isAuthenticated(async (parent, { commentID }, { db, pubsub, user }, info) => {
-      return
+  inbox: {
+    subscribe: isAuthenticated(async (parent, args, { db, pubsub, user }, info) => {
+      return pubsub.asyncIterator(`user ${user._id}`);
     }),
   }
 };

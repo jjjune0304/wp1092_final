@@ -36,3 +36,17 @@
     transform: rotate(360deg);
   }
 }
+
+.Bigger:hover {
+  transform: scale(1.05);
+}
+
+.Shadow:hover{
+  box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+}
+
+.AskButton:hover {
+  transform: scale(1.5);
+  border-radius: 80%;
+  box-shadow: 15px 5px 5px rgba(0.1,0.1,0.1,0.8);
+}

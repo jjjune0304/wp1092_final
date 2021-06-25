@@ -16,6 +16,7 @@ const userSchema = new Schema({
   questions: [{ type: mongoose.Types.ObjectId, ref: 'Question' }],
   answers: [{ type: mongoose.Types.ObjectId, ref: 'Answer' }],
   comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
+  avatar: { type: String },
 }, schemaOptions);
 
 const questionSchema = new Schema({
@@ -24,7 +25,9 @@ const questionSchema = new Schema({
   body: { type: String, required: true },
   answers: [{ type: mongoose.Types.ObjectId, ref: 'Answer' }],
   comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
+  subscribers: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
   views: {type: Number, required: true},
+  reward: {type: Number, required: true},
 }, schemaOptions);
 
 const answerSchema = new Schema({
@@ -33,6 +36,7 @@ const answerSchema = new Schema({
   body: { type: String, required: true },
   best: {type: Boolean, required: true},
   comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
+  like: {type: Number, required: true},
 }, schemaOptions);
 
 const commentSchema = new Schema({

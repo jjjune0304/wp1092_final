@@ -1,18 +1,25 @@
 type Query {
-  user(username: String!): User!
+  me: User!
+  user(email: String!): User!
+  latest(num: Int!): [Question!]!
+  hottest(num: Int!): [Question!]!
+  question(questionID: String!): Question!
 }
 
 type Mutation {
   signup(email: String!, username: String!, password:String!): User!
   login(email: String!, password:String!): Token!
-  logout: User!
-  createQuestion(title: String!, body: String!): Question!
+  logout: Boolean
+  createQuestion(title: String!, body: String!, reward: Int!): Question!
   createAnswer(body: String!, postID: String!): Answer!
   createComment(text: String!, postID: String!, postType: String!): Comment!
+  updateUser(avatar: String!): User!
+  likeAnswer(aID: String!): Int!
+  reset: Boolean
 }
 
 type Subscription {
-  comment(commentID: String!): Comment!
+  inbox: InBoxPayload!
 }
 
 type Token {
@@ -24,7 +31,11 @@ type User {
   username: String!
   points: Int!
   email: String!
+  avatar: String
   createdAt: String!
+  updatedAt: String!
+  questions: [Question!]
+  answers: [Answer!]
 }
 
 type Question {
@@ -32,27 +43,46 @@ type Question {
   author: User!
   title: String!
   body: String!
+  views: Int!
+  reward: Int!
+  createdAt: String!
   updatedAt: String!
+  answers: [Answer!]
+  comments: [Comment!]
 }
 
 type Answer {
   id: ID!
-  question: Question! # remove if unness
+  question: Question! # remove if unnecessary
   author: User!
   body: String!
   best: Boolean!
+  createdAt: String!
   updatedAt: String!
+  comments: [Comment!]
+  like: Int!
 }
+
 
 type Comment {
   id: ID!
   author: User!
   postType: String!
   text: String!
+  createdAt: String!
   updatedAt: String!
 }
 
-enum MutationType {
-  CREATED
-  UPDATED
+enum MessageType {
+  ASK
+  ANSWER
+  REPLY
+  NOTIFICATION
+}
+
+type InBoxPayload {
+  type: MessageType!
+  message: String!
+  time: String!
+  refID: ID!
 }

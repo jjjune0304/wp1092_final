@@ -6,7 +6,7 @@ class SocialButton extends React.Component {
 
     render() {
       const { children, triggerLogin, ...props } = this.props
-      console.log(this.props);
+      // console.log(this.props);
       return (
           <Button block type="dashed" onClick={triggerLogin} {...props} size="large">
             {children}
