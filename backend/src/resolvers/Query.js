@@ -34,6 +34,14 @@ const Query = {
     return question;
   },
 
+  search: async (parent, { keyword }, { db }, info) => {
+    const regex = new RegExp(keyword, 'i') // i for case insensitive
+    const questions = await db.QuestionModel.find({ 
+        title: { $regex: regex }}).sort({ views: -1 });
+    if(!questions) return [];
+    return questions;
+  },
+
 };
 
 export { Query as default };

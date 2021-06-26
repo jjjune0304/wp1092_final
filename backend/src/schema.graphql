@@ -4,6 +4,7 @@ type Query {
   latest(num: Int!): [Question!]!
   hottest(num: Int!): [Question!]!
   question(questionID: String!): Question!
+  search(keyword: String!): [Question!]
 }
 
 type Mutation {
