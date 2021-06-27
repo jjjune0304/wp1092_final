@@ -211,6 +211,7 @@ const AnswerEditor = ({ questionID, authClient, makeAnswer, answersData, setAnsw
     </>);
 }
 
+let firsttime=0;
 
 const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClient, userProfile, logout }) => {
 
@@ -279,8 +280,6 @@ const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClien
         </div>
       </>
     ):(<></>);
-
-    window.scroll({top: 0, behavior: 'smooth' })
 
     return (
         <div style={{backgroundColor:"#EEEEEE", height:"100%", minHeight:"100vh", padding:"15px 0px"}}>
