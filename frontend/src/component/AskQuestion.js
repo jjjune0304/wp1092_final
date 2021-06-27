@@ -61,8 +61,6 @@ const Ask = ({ userProfile, authClient}) => {
         message.success("Success ask question");
     }
 
-    window.scroll({top: 0, behavior: 'smooth' })
-
     return (
         
         <div style={{backgroundColor:"white", height:"100%", minHeight:"100vh", padding:"15px 15px"}}>

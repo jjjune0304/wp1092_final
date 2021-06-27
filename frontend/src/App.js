@@ -7,6 +7,7 @@ import LoginPage from './container/Login.js'
 import QuestionsPage from './component/questions/questionsPage.js'
 import SingleQuestionPage from './container/SingleQuestionPage.js'
 import SearchPage from './container/SearchPage.js'
+import ScrollToTop from './container/ScrollToTop.js'
 
 import './App.css';
 
@@ -63,6 +64,7 @@ function App() {
     return (
         <div className="App">
             <BrowserRouter>
+                <ScrollToTop>
                 <Switch>
                     <Redirect exact from="/" to="/home" />
                     <Route path="/login" render={(props)=>
@@ -105,6 +107,7 @@ function App() {
                     } />
                 </Switch>
                 <Route path={["/home","/ask","/question/:id","/search/:searchtext"]}><> Copyright © 2021 epistemologyplus.com </></Route>
+                </ScrollToTop>
             </BrowserRouter>
         </div>
     );
