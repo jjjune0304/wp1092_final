@@ -25,6 +25,13 @@ const Query = {
     return questions;
   },
 
+  valuable: async (parent, { num }, { db }, info) => {
+    const questions = await db.QuestionModel.find().sort({ reward: -1 }).limit(num);
+    if(!questions)
+      throw new Error("Sorry. Nobody asks a question so far.");
+    return questions;
+  },
+
   question: async (parent, { questionID }, { db }, info) => {
     const question = await db.QuestionModel.findById(questionID);
     if(!question)

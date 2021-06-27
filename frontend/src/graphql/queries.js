@@ -1,5 +1,16 @@
 import { gql } from '@apollo/client';
 
+export const ME_QUERY = gql`
+  query me {
+    me {
+      email
+      username
+      avatar
+      points
+    }
+  }
+`;
+
 export const USER_QUERY = gql`
   query user(
     $email: String!
@@ -11,6 +22,65 @@ export const USER_QUERY = gql`
       username
       avatar
       points
+    }
+  }
+`;
+
+export const VALUABLE_QUESTIONS_QUERY = gql`
+  query valuable(
+    $num: Int!
+  ) {
+    valuable(
+      num: $num
+    ) {
+      id
+      reward
+      title
+    }
+  }
+`;
+
+export const HOTTEST_QUESTIONS_QUERY = gql`
+  query hottest(
+    $num: Int!
+  ) {
+    hottest(
+      num: $num
+    ) {
+      id
+      reward
+      title
+    }
+  }
+`;
+
+export const SEARCH_QUERY = gql`
+  query search(
+    $keyword: String!
+  ) {
+    search(
+      keyword: $keyword
+    ) {
+      id
+      reward
+      views
+      title
+      body
+      author {
+        username
+        avatar
+      }
+      comments {
+        id 
+      }
+      answers {
+        body
+        author {
+          username
+        }
+      }
+      createdAt
+      updatedAt
     }
   }
 `;

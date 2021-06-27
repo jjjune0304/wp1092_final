@@ -3,6 +3,7 @@ type Query {
   user(email: String!): User!
   latest(num: Int!): [Question!]!
   hottest(num: Int!): [Question!]!
+  valuable(num: Int!): [Question!]!
   question(questionID: String!): Question!
   search(keyword: String!): [Question!]
 }

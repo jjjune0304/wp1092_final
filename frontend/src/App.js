@@ -17,7 +17,7 @@ const checkToken = ({token, setToken}) => {
     let now_time = new Date().getTime();
     if ((now_time - old_time) > 10 * 60 * 1000 && old_token!="") // 10分鐘，把token清掉(需重新登入)
         localStorage.setItem('token', '');
-    else if (token!="")
+    else if (token!=="")
         localStorage.setItem('Epistemology_token_timestamp', new Date().getTime());
 
     // login page成功拿到token
@@ -43,7 +43,8 @@ function App() {
     const [token, setToken] = useState("");
     const [activeKey, setActiveKey] = useState("login");
     const [authClient, setAuthClient] = useState(newAppolloClient());
-    const [userProfile, setUserProfile] = useState({username:"", email:"", avatar:"", points:0})
+    const [userProfile, setUserProfile] = useState({username:"", email:"", avatar:"", points:0});
+    const [textSearch, setTextSearch] = useState("");
 
     checkToken({token, setToken});
     checkUserProfile({userProfile, setUserProfile});
@@ -75,6 +76,8 @@ function App() {
                             activeKey={activeKey} setActiveKey={setActiveKey} 
                             authClient={authClient}
                             userProfile={userProfile}
+                            textSearch={textSearch}
+                            setTextSearch={setTextSearch}
                             logout={logout} />
                     } />
                     {/*<Route path="/questions"><QuestionsPage/></Route>*/}
@@ -84,6 +87,7 @@ function App() {
                             activeKey={activeKey} setActiveKey={setActiveKey} 
                             authClient={authClient} 
                             userProfile={userProfile}
+                            setTextSearch={setTextSearch}
                             logout={logout} />
                     } />
                     <Route path="/ask" render={(props)=>
@@ -92,6 +96,8 @@ function App() {
                             activeKey={activeKey} setActiveKey={setActiveKey} 
                             authClient={authClient}
                             userProfile={userProfile}
+                            textSearch={textSearch}
+                            setTextSearch={setTextSearch}
                             logout={logout} />
                     } />
                 </Switch>

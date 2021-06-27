@@ -10,7 +10,6 @@ import { standardAvatar } from '../utils'
 import EplusHeader from '../component/EplusHeader.js'
 import EplusSider from '../component/EplusSider.js'
 import EplusRightContent from '../component/EplusRightContent.js'
-import LoginPage from './Login.js';
 import QuestionsPage from '../component/questions/questionsPage.js'
 import Ask from '../component/AskQuestion'
 
@@ -20,11 +19,7 @@ const { SubMenu } = Menu;
 const { Header, Content, Footer, Sider } = Layout;
 const { Search } = Input;
 
-const onSearch = value => console.log(value);
-
-var refreshCount=0;
-
-const Home = ({ token, setToken, activeKey, setActiveKey, userProfile, logout, authClient }) => {
+const Home = ({ token, setToken, activeKey, setActiveKey, userProfile, textSearch, setTextSearch, logout, authClient }) => {
 
     const history = useHistory();
 
@@ -38,7 +33,7 @@ const Home = ({ token, setToken, activeKey, setActiveKey, userProfile, logout, a
 
                 {/* Header */}
                 <EplusHeader token={token} setToken={setToken} activeKey={activeKey} setActiveKey={setActiveKey} 
-                             userProfile={userProfile} logout={logout}/>
+                             userProfile={userProfile} setTextSearch={setTextSearch} logout={logout}/>
                 
                 {/* Main Panel */}
                 <Content style={{padding: '0px 0px 0px 0px', minHeight: "100vh"}}>
@@ -48,7 +43,7 @@ const Home = ({ token, setToken, activeKey, setActiveKey, userProfile, logout, a
                             <Switch>
 
                                 {/* Questions content */}
-                                <Route exact path="/home"> <QuestionsPage /> </Route>
+                                <Route exact path="/home"> <QuestionsPage textSearch={textSearch} /> </Route>
 
                                 {/* Ask content */}
                                 <Route path="/ask"> <Ask token={token} userProfile={userProfile} authClient={authClient}/> </Route>

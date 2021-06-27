@@ -9,9 +9,11 @@ const { Paragraph, Text } = Typography;
 const { Search, TextArea } = Input;
 const { Header, Content, Footer, Sider } = Layout;
 
-const onSearch = (e)=>console.log(e);
+const EplusHeader = ({token, setToken, activeKey, setActiveKey, userProfile, setTextSearch, logout, position}) => {
 
-const EplusHeader = ({token, setToken, activeKey, setActiveKey, userProfile, logout, position}) => {
+    const onSearch = (e)=>{
+        setTextSearch(e);
+    };
 
     position = position? position:"relative";
 
@@ -21,7 +23,7 @@ const EplusHeader = ({token, setToken, activeKey, setActiveKey, userProfile, log
 
                 <div className="logo" style={{ float:'left'}}>
                     <Link to="/">
-                        <h2 style={{ color: '#00CCCC' }} className="Bigger">
+                        <h2  onClick={()=>{setTextSearch('')}} style={{ color: '#00CCCC' }} className="Bigger">
                             Epistemology+
                         </h2>
                     </Link>

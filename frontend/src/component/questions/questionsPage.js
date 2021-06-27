@@ -4,24 +4,32 @@ import { gql, useQuery, useMutation } from '@apollo/client';
 import { List, Avatar, Space, Popover, Button, Tag, Spin, Image, BackTop, Col, Typography } from 'antd';
 import { MessageOutlined, LikeOutlined, StarOutlined, EyeOutlined, QuestionOutlined, AntDesignOutlined, ApartmentOutlined } from '@ant-design/icons';
 
-import { LATEST_QUESTIONS_QUERY } from '../../graphql'
+import { LATEST_QUESTIONS_QUERY, SEARCH_QUERY } from '../../graphql'
 import { avatars, standardAvatar, isNull, makeShorter, getMoment } from '../../utils'
 
 const {Text} = Typography;
 
-const QuestionsPage = () => {
-
+const QuestionsPage = ({textSearch}) => {
   const {loading: latestQuestionsLoading, error: latestQuestionsError, data: latestQuestionsData} = useQuery(LATEST_QUESTIONS_QUERY,{
     variables: {num: 25}
-  })
+  });
+  const {loading: searchLoading, error: searchError, data: searchData} = useQuery(SEARCH_QUERY,{
+    variables: {keyword: textSearch}
+  });
 
   // if loading
-  if (latestQuestionsLoading)
+  if (latestQuestionsLoading || searchLoading)
     return (<Spin tip="Loading..." size="large"></Spin>);
 
-  // render questions
-  let questions = latestQuestionsData.latest;
-  questions = questions.map((q)=>({...q, href: "/question/"+q.id }))
+  let questions = {};
+  if(textSearch===''){ // home
+    // render questions
+    questions = latestQuestionsData.latest.map((q)=>({...q, href: "/question/"+q.id }))
+  } else { // someone searches
+    // render questions
+    questions = searchData.search.map((q)=>({...q, href: "/question/"+q.id }))
+  }
+
 
   const IconLink = ({ src, text }) => (
     <Space>
