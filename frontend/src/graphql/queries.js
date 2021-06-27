@@ -66,19 +66,6 @@ export const SEARCH_QUERY = gql`
       views
       title
       body
-      author {
-        username
-        avatar
-      }
-      comments {
-        id 
-      }
-      answers {
-        body
-        author {
-          username
-        }
-      }
       createdAt
       updatedAt
     }
@@ -97,19 +84,6 @@ export const LATEST_QUESTIONS_QUERY = gql`
       views
       title
       body
-      author {
-        username
-        avatar
-      }
-      comments {
-        id 
-      }
-      answers {
-        body
-        author {
-          username
-        }
-      }
       createdAt
       updatedAt
     }
@@ -161,6 +135,22 @@ export const QUESTION_AUTHOR_QUERY = gql`
   }
 `;
 
+export const QUESTION_AUTHOR_QUERY_LITE = gql`
+  query question(
+    $questionID: String!
+  ){
+    question(
+      questionID: $questionID
+    ){
+      id
+      author {
+        username
+        avatar
+      }
+    }
+  }
+`;
+
 export const QUESTION_COMMENTS_QUERY = gql`
   query question(
     $questionID: String!
@@ -207,6 +197,58 @@ export const QUESTION_ANSWERS_QUERY = gql`
           }
           createdAt
           updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+export const QUESTION_ANSWERS_COUNT_QUERY = gql`
+  query question(
+    $questionID: String!
+  ){
+    question(
+      questionID: $questionID
+    ){
+      id
+      answers {
+        id 
+      }
+    }
+  }
+`
+
+export const QUESTION_COMMENTS_COUNT_QUERY = gql`
+  query question(
+    $questionID: String!
+  ){
+    question(
+      questionID: $questionID
+    ){
+      id
+      comments {
+        id 
+      }
+    }
+  }
+`
+
+export const POPOVER_QUESTION_ANSWERS_QUERY = gql`
+  query question(
+    $questionID: String!
+  ){
+    question(
+      questionID: $questionID
+    ){
+      id
+      answers {
+        body
+        like
+        author {
+          username
+          avatar
         }
         createdAt
         updatedAt

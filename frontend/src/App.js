@@ -2,10 +2,11 @@ import react, { useState, useEffect } from 'react';
 import { BrowserRouter, Switch, Redirect, Route, Link } from 'react-router-dom';
 
 import newAppolloClient from './hooks/appolloClient.js'
-import LoginPage from './container/Login.js';
 import Home from './container/Home.js'
+import LoginPage from './container/Login.js'
 import QuestionsPage from './component/questions/questionsPage.js'
 import SingleQuestionPage from './container/SingleQuestionPage.js'
+import SearchPage from './container/SearchPage.js'
 
 import './App.css';
 
@@ -44,7 +45,6 @@ function App() {
     const [activeKey, setActiveKey] = useState("login");
     const [authClient, setAuthClient] = useState(newAppolloClient());
     const [userProfile, setUserProfile] = useState({username:"", email:"", avatar:"", points:0});
-    const [textSearch, setTextSearch] = useState("");
 
     checkToken({token, setToken});
     checkUserProfile({userProfile, setUserProfile});
@@ -76,8 +76,6 @@ function App() {
                             activeKey={activeKey} setActiveKey={setActiveKey} 
                             authClient={authClient}
                             userProfile={userProfile}
-                            textSearch={textSearch}
-                            setTextSearch={setTextSearch}
                             logout={logout} />
                     } />
                     {/*<Route path="/questions"><QuestionsPage/></Route>*/}
@@ -87,7 +85,14 @@ function App() {
                             activeKey={activeKey} setActiveKey={setActiveKey} 
                             authClient={authClient} 
                             userProfile={userProfile}
-                            setTextSearch={setTextSearch}
+                            logout={logout} />
+                    } />
+                    <Route path="/search/:searchtext" render={(props)=>
+                        <SearchPage {...props}
+                            token={token} setToken={setToken}
+                            activeKey={activeKey} setActiveKey={setActiveKey} 
+                            authClient={authClient} 
+                            userProfile={userProfile}
                             logout={logout} />
                     } />
                     <Route path="/ask" render={(props)=>
@@ -96,12 +101,10 @@ function App() {
                             activeKey={activeKey} setActiveKey={setActiveKey} 
                             authClient={authClient}
                             userProfile={userProfile}
-                            textSearch={textSearch}
-                            setTextSearch={setTextSearch}
                             logout={logout} />
                     } />
                 </Switch>
-                <Route path={["/home","/ask","/question/:id"]}><> Copyright © 2021 epistemologyplus.com </></Route>
+                <Route path={["/home","/ask","/question/:id","/search/:searchtext"]}><> Copyright © 2021 epistemologyplus.com </></Route>
             </BrowserRouter>
         </div>
     );

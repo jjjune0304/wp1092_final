@@ -19,7 +19,7 @@ const { SubMenu } = Menu;
 const { Header, Content, Footer, Sider } = Layout;
 const { Search } = Input;
 
-const Home = ({ token, setToken, activeKey, setActiveKey, userProfile, textSearch, setTextSearch, logout, authClient }) => {
+const Home = ({ token, setToken, activeKey, setActiveKey, userProfile, logout, authClient }) => {
 
     const history = useHistory();
 
@@ -33,7 +33,7 @@ const Home = ({ token, setToken, activeKey, setActiveKey, userProfile, textSearc
 
                 {/* Header */}
                 <EplusHeader token={token} setToken={setToken} activeKey={activeKey} setActiveKey={setActiveKey} 
-                             userProfile={userProfile} setTextSearch={setTextSearch} logout={logout}/>
+                             userProfile={userProfile} logout={logout}/>
                 
                 {/* Main Panel */}
                 <Content style={{padding: '0px 0px 0px 0px', minHeight: "100vh"}}>
@@ -43,7 +43,7 @@ const Home = ({ token, setToken, activeKey, setActiveKey, userProfile, textSearc
                             <Switch>
 
                                 {/* Questions content */}
-                                <Route exact path="/home"> <QuestionsPage textSearch={textSearch} /> </Route>
+                                <Route exact path="/home"> <QuestionsPage /> </Route>
 
                                 {/* Ask content */}
                                 <Route path="/ask"> <Ask token={token} userProfile={userProfile} authClient={authClient}/> </Route>

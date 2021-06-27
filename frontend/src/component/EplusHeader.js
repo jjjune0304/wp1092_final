@@ -9,10 +9,14 @@ const { Paragraph, Text } = Typography;
 const { Search, TextArea } = Input;
 const { Header, Content, Footer, Sider } = Layout;
 
-const EplusHeader = ({token, setToken, activeKey, setActiveKey, userProfile, setTextSearch, logout, position}) => {
+const EplusHeader = ({token, setToken, activeKey, setActiveKey, userProfile, logout, position}) => {
+
+    const history = useHistory();
 
     const onSearch = (e)=>{
-        setTextSearch(e);
+        if (e) {
+            history.push("/search/"+e.trim().replaceAll(' ', '_'));
+        }
     };
 
     position = position? position:"relative";
@@ -23,17 +27,19 @@ const EplusHeader = ({token, setToken, activeKey, setActiveKey, userProfile, set
 
                 <div className="logo" style={{ float:'left'}}>
                     <Link to="/">
-                        <h2  onClick={()=>{setTextSearch('')}} style={{ color: '#00CCCC' }} className="Bigger">
+                        <h2 style={{ color: '#00CCCC' }} className="Bigger">
                             Epistemology+
                         </h2>
                     </Link>
                 </div>
                 <div style={{ float:'left', padding: '0 24px' }}>
-                    <Button type="primary" shape="round" style={{ color: 'white' }} className="AskButton" onClick={()=>{window.open('/ask', "_blank")}}>Ask</Button>
-                    
+                    <Button type="primary" shape="round" style={{ color: 'white' }} className="AskButton" 
+                            onClick={()=>{history.push('/ask')}}>
+                        Ask
+                    </Button>
                 </div>
                 <Search
-                    placeholder="input search text"
+                    placeholder="search questions"
                     allowClear
                     enterButton
                     size="large"

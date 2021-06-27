@@ -23,13 +23,13 @@ const EplusSider = () => {
     });
 
     if (hottestQuestionsLoading || valuableQuestionsLoading)
-        return (<Spin tip="Loading..." size="large"></Spin>);
+        return (<></>);//<Spin tip="Loading..." size="large"></Spin>);
 
     let itemKey = 1;
     let hottestQuestions = hottestQuestionsData.hottest.map((q)=> <Link to={"/question/"+q.id}><Menu.Item key={'hot_'+(itemKey++)}>{q.title}</Menu.Item></Link>)
     let valuableQuestions = valuableQuestionsData.valuable.map((q)=> <Link to={"/question/"+q.id}><Menu.Item key={'value_'+(itemKey++)}>{q.title}</Menu.Item></Link>)
 
-    setTimeout(()=>{if(refreshCount<2)setLeftSliderCollapsed(false); refreshCount+=1;}, 2000);
+    setTimeout(()=>{if(refreshCount<2 || true)setLeftSliderCollapsed(false); refreshCount+=1;}, 300);
 
     return (<>
         <Sider collapsible collapsed={leftSliderCollapsed} onCollapse={()=>{setLeftSliderCollapsed(!leftSliderCollapsed); setAutoHide(!leftSliderCollapsed);}}

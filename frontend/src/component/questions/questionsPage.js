@@ -4,32 +4,24 @@ import { gql, useQuery, useMutation } from '@apollo/client';
 import { List, Avatar, Space, Popover, Button, Tag, Spin, Image, BackTop, Col, Typography } from 'antd';
 import { MessageOutlined, LikeOutlined, StarOutlined, EyeOutlined, QuestionOutlined, AntDesignOutlined, ApartmentOutlined } from '@ant-design/icons';
 
-import { LATEST_QUESTIONS_QUERY, SEARCH_QUERY } from '../../graphql'
+
+import { LATEST_QUESTIONS_QUERY } from '../../graphql'
 import { avatars, standardAvatar, isNull, makeShorter, getMoment } from '../../utils'
+import { PopoverAnswer, AnswerCount, CommentCount, QuestionAuthor } from './questionItems.js'
 
 const {Text} = Typography;
 
-const QuestionsPage = ({textSearch}) => {
+const QuestionsPage = () => {
   const {loading: latestQuestionsLoading, error: latestQuestionsError, data: latestQuestionsData} = useQuery(LATEST_QUESTIONS_QUERY,{
-    variables: {num: 25}
-  });
-  const {loading: searchLoading, error: searchError, data: searchData} = useQuery(SEARCH_QUERY,{
-    variables: {keyword: textSearch}
+    variables: {num: 100}
   });
 
   // if loading
-  if (latestQuestionsLoading || searchLoading)
+  if (latestQuestionsLoading)
     return (<Spin tip="Loading..." size="large"></Spin>);
 
   let questions = {};
-  if(textSearch===''){ // home
-    // render questions
-    questions = latestQuestionsData.latest.map((q)=>({...q, href: "/question/"+q.id }))
-  } else { // someone searches
-    // render questions
-    questions = searchData.search.map((q)=>({...q, href: "/question/"+q.id }))
-  }
-
+  questions = latestQuestionsData.latest.map((q)=>({...q, href: "/question/"+q.id }))
 
   const IconLink = ({ src, text }) => (
     <Space>
@@ -69,10 +61,10 @@ const QuestionsPage = ({textSearch}) => {
               <Text style={{color:"gray", minWidth:"16vw"}}>created {item.createdAt===null? "-" : getMoment(item.createdAt)}</Text>,
               // <IconText icon={LikeOutlined} text={isNull(item.like, 0)} key={"like"+item.id} />,
               <IconText icon={EyeOutlined} text={isNull(item.views, 0)} key={"view"+item.id} />,
-              <IconText icon={MessageOutlined} text={item.comments.length} key={"comments"+item.id} />,
-              <IconText icon={ApartmentOutlined} text={item.answers.length} key={"answers"+item.id} />,
+              <IconText icon={MessageOutlined} text={(<CommentCount questionID={item.id}/>)} key={"comments"+item.id} />,
+              <IconText icon={ApartmentOutlined} text={(<AnswerCount questionID={item.id}/>)} key={"answers"+item.id} />,
               <Space>🤑{isNull(item.reward, "-")}</Space>,
-              <Link to={item.href} target="_blank">
+              <Link to={item.href} >
                 <IconLink
                   src="https://gw.alipayobjects.com/zos/rmsportal/MjEImQtenlyueSmVEfUD.svg"
                   text=" View"
@@ -81,13 +73,7 @@ const QuestionsPage = ({textSearch}) => {
             ]}
             extra={
               <Col span={3}>
-              {item.answers.slice(0,2).map((ans)=>(
-                  <p>
-                    <Popover content={<div>{makeShorter(ans.body,50)}</div>} title="Ans" trigger="hover" placement="rightTop">
-                        <Button>@ {makeShorter(ans.author.username,7)}</Button>
-                    </Popover>
-                  </p>
-                ))}
+                <PopoverAnswer questionID={item.id} />
               </Col>
             }
             className="Shadow"
@@ -97,12 +83,11 @@ const QuestionsPage = ({textSearch}) => {
               avatar={
                 <>
                 <p style={{textAlign:"center", minWidth:"10vw"}}>
-                  <Avatar size="large" src={isNull(item.author.avatar, standardAvatar)}  /> <br/>
-                  <Text><strong>{makeShorter(item.author.username,10)}</strong></Text>
+                  <QuestionAuthor questionID={item.id} />
                 </p>
                 </> 
               }
-              title={<Link to={item.href} target="_blank">
+              title={<Link to={item.href}>
                         <Text><strong> { "Q : " + makeShorter(item.title, 100) } </strong></Text>
                     </Link>}
               // description={<>created {item.createdAt===null? "-" : getMoment(item.createdAt)}</>}

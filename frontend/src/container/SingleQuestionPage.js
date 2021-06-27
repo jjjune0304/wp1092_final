@@ -212,7 +212,7 @@ const AnswerEditor = ({ questionID, authClient, makeAnswer, answersData, setAnsw
 }
 
 
-const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClient, userProfile, setTextSearch, logout }) => {
+const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClient, userProfile, logout }) => {
 
     let { id } = useParams();
 
@@ -284,7 +284,7 @@ const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClien
         <div style={{backgroundColor:"#EEEEEE", height:"100%", minHeight:"100vh", padding:"15px 0px"}}>
             {/* Header */}
             <EplusHeader token={token} setToken={setToken} activeKey={activeKey} setActiveKey={setActiveKey} 
-                         userProfile={userProfile} setTextSearch={setTextSearch} logout={logout} position="fixed"/>
+                         userProfile={userProfile} logout={logout} position="fixed"/>
 
             {(questionData) ? (<>
 

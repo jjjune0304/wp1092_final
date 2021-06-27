@@ -19,7 +19,8 @@ const Ask = ({ userProfile, authClient}) => {
     if (meLoading)
         return (<Spin tip="Loading..." size="large"></Spin>);
 
-    const points = meData.me.points;
+    console.log(meData);
+    const points = (!meError)?meData.me.points:0;
 
     const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link', 'separator']
 
