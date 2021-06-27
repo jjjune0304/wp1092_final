@@ -10,7 +10,6 @@ import { standardAvatar } from '../utils'
 import EplusHeader from '../component/EplusHeader.js'
 import EplusSider from '../component/EplusSider.js'
 import EplusRightContent from '../component/EplusRightContent.js'
-import LoginPage from './Login.js';
 import QuestionsPage from '../component/questions/questionsPage.js'
 import Ask from '../component/AskQuestion'
 
@@ -19,10 +18,6 @@ import 'antd/dist/antd.css';
 const { SubMenu } = Menu;
 const { Header, Content, Footer, Sider } = Layout;
 const { Search } = Input;
-
-const onSearch = value => console.log(value);
-
-var refreshCount=0;
 
 const Home = ({ token, setToken, activeKey, setActiveKey, userProfile, logout, authClient }) => {
 

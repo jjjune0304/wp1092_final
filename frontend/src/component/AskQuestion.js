@@ -1,21 +1,26 @@
 import 'braft-editor/dist/index.css'
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import BraftEditor from 'braft-editor'
 import { gql, useQuery, useMutation } from '@apollo/client';
-import { USER_QUERY } from '../graphql'
+import { ME_QUERY } from '../graphql'
 import { CREATE_QUESTION_MUTATION } from '../graphql'
 import { Form, Button, Spin, Input, InputNumber, Space, Divider, message, Typography } from 'antd'
 
-const { Paragraph, Text } = Typography;
+const { Text } = Typography;
 
-const Ask = ({token, userProfile, authClient}) => {
+const Ask = ({ userProfile, authClient}) => {
     const [editorState, setEditorState] = useState(BraftEditor.createEditorState(null));
     const [reward, setReward] = useState(20);
     const [outputHTML, setOutputHTML] = useState('<p></p>');
 
+    const {loading: meLoading, error: meError, data: meData} = useQuery(ME_QUERY);
     const [createQuestion, { loading: createQuestionLoading, data: createQuestionData, error: createQuestionError }] = useMutation(CREATE_QUESTION_MUTATION);
 
-    const points = userProfile.points;
+    if (meLoading)
+        return (<Spin tip="Loading..." size="large"></Spin>);
+
+    console.log(meData);
+    const points = (!meError)?meData.me.points:0;
 
     const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link', 'separator']
 
@@ -28,16 +33,7 @@ const Ask = ({token, userProfile, authClient}) => {
         setReward(e)
     }
 
-    const layout = {
-        labelCol: { span: 4 },
-        wrapperCol: { span: 8 },
-    };
-
     const onFinish = async (values) => {
-        console.log(reward)
-        console.log(values.title)
-        console.log(outputHTML)
-
         try {
             var newQuestion = await createQuestion({
                 variables: {
@@ -65,9 +61,6 @@ const Ask = ({token, userProfile, authClient}) => {
         message.success("Success ask question");
     }
 
-    const validateMessages = {
-        required: 'Title is required!',
-    }
 
     return (
         

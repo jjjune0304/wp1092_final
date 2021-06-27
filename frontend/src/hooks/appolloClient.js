@@ -6,7 +6,7 @@ import { getMainDefinition } from 'apollo-utilities'
 
 // Create an http link:
 const httpLink = new HttpLink({
-    uri: 'http://localhost:5000/'
+    uri: 'http://localhost:5000/graphql'
 })
 
 // Create a WebSocket link:
@@ -52,5 +52,5 @@ const newAppolloClient = (token="") => {
 
     return client;
 }
-export {ApolloProvider};
+export { ApolloProvider };
 export default newAppolloClient;
