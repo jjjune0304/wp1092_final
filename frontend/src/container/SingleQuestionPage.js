@@ -280,6 +280,8 @@ const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClien
       </>
     ):(<></>);
 
+    window.scroll({top: 0, behavior: 'smooth' })
+
     return (
         <div style={{backgroundColor:"#EEEEEE", height:"100%", minHeight:"100vh", padding:"15px 0px"}}>
             {/* Header */}
