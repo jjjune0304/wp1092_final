@@ -61,6 +61,7 @@ const Ask = ({ userProfile, authClient}) => {
         message.success("Success ask question");
     }
 
+    window.scroll({top: 0, behavior: 'smooth' })
 
     return (
         
