@@ -21,7 +21,7 @@ const User = {
       parent.answers.map((aId) =>
       db.AnswerModel.findById(aId)),
     );
-  }
+  },
 };
 
 export { User as default };

@@ -32,6 +32,7 @@ type User {
   id: ID!
   username: String!
   points: Int!
+  feedback: Int!
   email: String!
   avatar: String
   createdAt: String!

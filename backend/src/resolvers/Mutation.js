@@ -14,8 +14,7 @@ const SECRET = 'epistemologyet';
 const hash = text => bcrypt.hash(text, SALT_ROUNDS);
 
 const addUser = async ({ db, username, email, password }) => {
-  const points = 100;
-  return new db.UserModel({ username, email, password, points }).save();
+  return new db.UserModel({ username, email, password }).save();
 };
 
 const createToken = ({ _id, email, username }) => { 
@@ -196,6 +195,11 @@ const Mutation = {
       throw new Error(`AnswerID ${aID} is not found.`)
     answer.like = answer.like + 1;
     await answer.save();
+    
+    const author = await db.UserModel.findById(answer.author);
+    author.feedback = author.feedback + 1;
+    await author.save();
+
     return answer.like;
   }),
 
