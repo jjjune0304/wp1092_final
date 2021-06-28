@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Layout, Menu, Image, Affix, Spin } from 'antd';
 import { gql, useQuery } from '@apollo/client';
 import { Link  } from "react-router-dom";
-import { MenuFoldOutlined, MenuUnfoldOutlined, NotificationOutlined, LaptopOutlined } from '@ant-design/icons';
+import { MenuFoldOutlined, MenuUnfoldOutlined, SketchOutlined, FireOutlined } from '@ant-design/icons';
 
 import { makeShorter } from '../utils'
 import { HOTTEST_QUESTIONS_QUERY, VALUABLE_QUESTIONS_QUERY } from '../graphql'
@@ -81,10 +81,10 @@ const EplusSider = () => {
                                 style={{position:"relative", top:0}}
                                 onClick={()=>{setLeftSliderCollapsed(!leftSliderCollapsed); setAutoHide(!leftSliderCollapsed)}}
                                 ></Menu.Item>*/}
-                        <SubMenu key="sub1" icon={<LaptopOutlined />} title="最熱燒的討論串">
+                        <SubMenu key="sub1" icon={<FireOutlined onClick={()=>{setLeftSliderCollapsed(false)}} style={{color:"red"}}/>} title="最熱燒的討論串" >
                             {hottestQuestions}
                         </SubMenu>
-                        <SubMenu key="sub2" icon={<NotificationOutlined />} title="高獎勵的討論串" >
+                        <SubMenu key="sub2" icon={<SketchOutlined onClick={()=>{setLeftSliderCollapsed(false)}} style={{color:"blue"}}/>} title="高獎勵的討論串" >
                             {valuableQuestions}
                         </SubMenu>
                     </Menu> 
