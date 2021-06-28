@@ -189,7 +189,7 @@ const Mutation = {
     return user;
   }),
 
-  likeAnswer: isAuthenticated(async (parent, { aID }, { db, user }) => {
+  likeAnswer: isAuthenticated(async (parent, { aID }, { db, user, pubsub }) => {
     const answer = await db.AnswerModel.findById(aID);
     if(!answer)
       throw new Error(`AnswerID ${aID} is not found.`)
@@ -199,6 +199,8 @@ const Mutation = {
     const author = await db.UserModel.findById(answer.author);
     author.feedback = author.feedback + 1;
     await author.save();
+
+    pubsub.publish(`userfeedback ${author._id}`, { feedback: author.feedback });
 
     return answer.like;
   }),

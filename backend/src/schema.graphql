@@ -22,6 +22,7 @@ type Mutation {
 
 type Subscription {
   inbox: InBoxPayload!
+  feedback: Int!
 }
 
 type Token {
