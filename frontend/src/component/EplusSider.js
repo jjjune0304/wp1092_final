@@ -3,6 +3,8 @@ import { Layout, Menu, Image, Affix, Spin } from 'antd';
 import { gql, useQuery } from '@apollo/client';
 import { Link  } from "react-router-dom";
 import { MenuFoldOutlined, MenuUnfoldOutlined, NotificationOutlined, LaptopOutlined } from '@ant-design/icons';
+
+import { makeShorter } from '../utils'
 import { HOTTEST_QUESTIONS_QUERY, VALUABLE_QUESTIONS_QUERY } from '../graphql'
 
 const { SubMenu } = Menu;
@@ -26,14 +28,17 @@ const EplusSider = () => {
         return (<></>);//<Spin tip="Loading..." size="large"></Spin>);
 
     let itemKey = 1;
-    let hottestQuestions = hottestQuestionsData.hottest.map((q)=> <Link to={"/question/"+q.id}><Menu.Item key={'hot_'+(itemKey++)}>{q.title}</Menu.Item></Link>)
-    let valuableQuestions = valuableQuestionsData.valuable.map((q)=> <Link to={"/question/"+q.id}><Menu.Item key={'value_'+(itemKey++)}>{q.title}</Menu.Item></Link>)
+    let hottestQuestions = hottestQuestionsData.hottest.map((q)=> <Link to={"/question/"+q.id}><Menu.Item key={'hot_'+(itemKey++)}>{makeShorter(q.title, 20)}</Menu.Item></Link>)
+    let valuableQuestions = valuableQuestionsData.valuable.map((q)=> <Link to={"/question/"+q.id}><Menu.Item key={'value_'+(itemKey++)}>{makeShorter(q.title, 20)}</Menu.Item></Link>)
 
-    setTimeout(()=>{if(refreshCount<2 || true)setLeftSliderCollapsed(false); refreshCount+=1;}, 300);
+    setTimeout(()=>{if(refreshCount<2)setLeftSliderCollapsed(false); refreshCount+=1;}, 300);
 
     return (<>
         <Sider collapsible collapsed={leftSliderCollapsed} onCollapse={()=>{setLeftSliderCollapsed(!leftSliderCollapsed); setAutoHide(!leftSliderCollapsed);}}
-                    onMouseLeave={()=>setTimeout(()=>setLeftSliderCollapsed(autoHide&&true),1000)}>
+                    // onMouseLeave={()=>setTimeout(()=>setLeftSliderCollapsed(autoHide&&true),1000)}
+                    scrollable
+                    style={{overflow: 'auto'}}
+                    >
 
             <Affix offsetTop={0} >
                 <div>
@@ -50,7 +55,7 @@ const EplusSider = () => {
                     <Menu
                         multiple
                         theme={"dark"}
-                        mode="inline"
+                        mode="vertical"
                         defaultSelectedKeys={["collapsed"]}
                         defaultOpenKeys={leftSliderCollapsed?[]:['sub1', 'sub2']}
                     >
