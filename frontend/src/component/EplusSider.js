@@ -39,11 +39,12 @@ const EplusSider = () => {
                 <div>
                     <div className="logo">
                         <Image
-                            height={"54px"}
+                            width={"auto"}
+                            height={"auto"}
                             preview={false}
                             // src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
                             // src="https://www.educarepk.com/wp-content/uploads/2020/07/Epistemology.png"
-                            src="http://lab.wubinray.com/logo.png"
+                            src="http://lab.wubinray.com/eplus/logo.png"
                         />
                     </div>
                     <Menu
