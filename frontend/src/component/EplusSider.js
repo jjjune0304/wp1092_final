@@ -24,14 +24,31 @@ const EplusSider = () => {
         variables: {num: numValuableQuestions}
     });
 
+    // submenu selection
+    var rootSubmenuKeys = ['sub1', 'sub2'];
+
+    const [openKeys, setOpenKeys] = React.useState(['subx']);
+
+    const onOpenChange = keys => {
+        const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1);
+        if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+            setOpenKeys(keys);
+        } else {
+            setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+        }
+    };
+
+    // load hot/valuable questions
     if (hottestQuestionsLoading || valuableQuestionsLoading)
-        return (<></>);//<Spin tip="Loading..." size="large"></Spin>);
+        return (<></>);
 
     let itemKey = 1;
     let hottestQuestions = hottestQuestionsData.hottest.map((q)=> <Link to={"/question/"+q.id}><Menu.Item key={'hot_'+(itemKey++)}>{makeShorter(q.title, 20)}</Menu.Item></Link>)
     let valuableQuestions = valuableQuestionsData.valuable.map((q)=> <Link to={"/question/"+q.id}><Menu.Item key={'value_'+(itemKey++)}>{makeShorter(q.title, 20)}</Menu.Item></Link>)
 
     setTimeout(()=>{if(refreshCount<2)setLeftSliderCollapsed(false); refreshCount+=1;}, 300);
+
+
 
     return (<>
         <Sider collapsible collapsed={leftSliderCollapsed} onCollapse={()=>{setLeftSliderCollapsed(!leftSliderCollapsed); setAutoHide(!leftSliderCollapsed);}}
@@ -55,14 +72,15 @@ const EplusSider = () => {
                     <Menu
                         multiple
                         theme={"dark"}
-                        mode="vertical"
-                        defaultSelectedKeys={["collapsed"]}
-                        defaultOpenKeys={leftSliderCollapsed?[]:['sub1', 'sub2']}
+                        mode="inline"
+                        // defaultSelectedKeys={["collapsed"]}
+                        // defaultOpenKeys={leftSliderCollapsed?[]:['sub1', 'sub2']}
+                        openKeys={openKeys} onOpenChange={onOpenChange}
                     >
-                        <Menu.Item key="collapsed" icon={leftSliderCollapsed?(<MenuUnfoldOutlined/>):(<MenuFoldOutlined/>)} 
+                        {/*<Menu.Item key="collapsed" icon={leftSliderCollapsed?(<MenuUnfoldOutlined/>):(<MenuFoldOutlined/>)} 
                                 style={{position:"relative", top:0}}
                                 onClick={()=>{setLeftSliderCollapsed(!leftSliderCollapsed); setAutoHide(!leftSliderCollapsed)}}
-                                ></Menu.Item>
+                                ></Menu.Item>*/}
                         <SubMenu key="sub1" icon={<LaptopOutlined />} title="最熱燒的討論串">
                             {hottestQuestions}
                         </SubMenu>
