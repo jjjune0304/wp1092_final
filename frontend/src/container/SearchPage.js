@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, useHistory } from "react-router-dom";
 import { Link  } from "react-router-dom";
-import { List, Avatar, Space, Popover, Button, Tag, Spin, Image, BackTop, Row, Col, Typography, Divider } from 'antd';
+import { List, Avatar, Space, Popover, Button, Tag, Spin, Image, BackTop, Row, Col, Typography, Divider, Tooltip } from 'antd';
 import { MessageOutlined, LikeOutlined, StarOutlined, EyeOutlined, QuestionOutlined, AntDesignOutlined, ApartmentOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -39,11 +39,13 @@ const SearchPage = ({ token, setToken, activeKey, setActiveKey, authClient, user
         </Space>
     );
 
-    const IconText = ({ icon, text }) => (
+    const IconText = ({ icon, text, tip }) => (
+        <Tooltip placement="top" title={tip}>
         <Space>
           {React.createElement(icon)}
           {text}
         </Space>
+        </Tooltip>
     );
 
     return (<>
@@ -88,11 +90,16 @@ const SearchPage = ({ token, setToken, activeKey, setActiveKey, authClient, user
                     style={{textAlign:"left"}}
                     actions={[
                       <Text style={{color:"gray", minWidth:"16vw"}}>created {item.createdAt===null? "-" : getMoment(item.createdAt)}</Text>,
-                      // <IconText icon={LikeOutlined} text={isNull(item.like, 0)} key={"like"+item.id} />,
-                      <IconText icon={EyeOutlined} text={isNull(item.views, 0)} key={"view"+item.id} />,
-                      <IconText icon={MessageOutlined} text={(<CommentCount questionID={item.id}/>)} key={"comments"+item.id} />,
-                      <IconText icon={ApartmentOutlined} text={(<AnswerCount questionID={item.id}/>)} key={"answers"+item.id} />,
-                      <Space><FontAwesomeIcon style={{color:"orange"}} icon={fas.faMoneyBillWave} />{isNull(item.reward, "-")}</Space>,
+                      // view 
+                      <IconText icon={EyeOutlined} tip="view" text={isNull(item.views, 0)} key={"view"+item.id} />,
+                      // comments
+                      <IconText icon={MessageOutlined} tip="comments" text={(<CommentCount questionID={item.id}/>)} key={"comments"+item.id} />,
+                      // answers
+                      <IconText icon={ApartmentOutlined} tip="answers" text={(<AnswerCount questionID={item.id}/>)} key={"answers"+item.id} />,
+                      // reward
+                      <Tooltip placement="top" title="reward" >
+                        <Space><FontAwesomeIcon style={{color:"orange"}} icon={fas.faMoneyBillWave} />{isNull(item.reward, "-")}</Space>
+                      </Tooltip>,
                       <Link to={item.href} >
                         <IconLink
                           src="https://gw.alipayobjects.com/zos/rmsportal/MjEImQtenlyueSmVEfUD.svg"
