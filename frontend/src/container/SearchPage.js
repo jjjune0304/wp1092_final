@@ -4,7 +4,9 @@ import { Link  } from "react-router-dom";
 import { List, Avatar, Space, Popover, Button, Tag, Spin, Image, BackTop, Row, Col, Typography, Divider } from 'antd';
 import { MessageOutlined, LikeOutlined, StarOutlined, EyeOutlined, QuestionOutlined, AntDesignOutlined, ApartmentOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMoneyBillAlt } from '@fortawesome/free-solid-svg-icons'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { far } from '@fortawesome/free-regular-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
 import { useQuery } from '@apollo/client';
 
 import { SEARCH_QUERY } from '../graphql'
@@ -90,7 +92,7 @@ const SearchPage = ({ token, setToken, activeKey, setActiveKey, authClient, user
                       <IconText icon={EyeOutlined} text={isNull(item.views, 0)} key={"view"+item.id} />,
                       <IconText icon={MessageOutlined} text={(<CommentCount questionID={item.id}/>)} key={"comments"+item.id} />,
                       <IconText icon={ApartmentOutlined} text={(<AnswerCount questionID={item.id}/>)} key={"answers"+item.id} />,
-                      <Space><FontAwesomeIcon style={{color:"orange"}} icon={faMoneyBillAlt} />{isNull(item.reward, "-")}</Space>,
+                      <Space><FontAwesomeIcon style={{color:"orange"}} icon={fas.faMoneyBillWave} />{isNull(item.reward, "-")}</Space>,
                       <Link to={item.href} >
                         <IconLink
                           src="https://gw.alipayobjects.com/zos/rmsportal/MjEImQtenlyueSmVEfUD.svg"
