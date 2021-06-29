@@ -75,7 +75,7 @@ const Mutation = {
       inbox: {
         type: 'ASK', 
         message: `You just asked a question: ${newQuestion.title}`,
-        time: newQuestion.createAt,
+        time: newQuestion.createdAt.toISOString(),
         refID: newQuestion._id,
       },
     });
@@ -107,7 +107,7 @@ const Mutation = {
       inbox: {
         type: 'ANSWER',
         message: `You just answered the question: ${question.title}`,
-        time: newAnswer.createAt,
+        time: newAnswer.createdAt.toISOString(),
         refID: question._id,
       },
     });
@@ -119,7 +119,7 @@ const Mutation = {
           inbox: {
             type: 'NOTIFICATION', 
             message: `Somebody just answered the question: ${question.title}`,
-            time: newAnswer.createAt,
+            time: newAnswer.createdAt.toISOString(),
             refID: question._id,
           },
         });
@@ -162,7 +162,7 @@ const Mutation = {
       inbox: {
         type: 'REPLY',
         message: `You just replied a question: ${question.title}`,
-        time: newComment.createAt,
+        time: newComment.createdAt.toISOString(),
         refID: question._id,
       },
     });
@@ -174,7 +174,7 @@ const Mutation = {
           inbox: {
             type: 'NOTIFICATION', 
             message: `Somebody just replied the question: ${question.title}`,
-            time: newComment.createAt,
+            time: newComment.createdAt.toISOString(),
             refID: question._id,
           },
         });
