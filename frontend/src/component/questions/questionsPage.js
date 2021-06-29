@@ -3,7 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import { List, Avatar, Space, Popover, Button, Tag, Spin, Image, BackTop, Col, Typography } from 'antd';
 import { MessageOutlined, LikeOutlined, StarOutlined, EyeOutlined, QuestionOutlined, AntDesignOutlined, ApartmentOutlined } from '@ant-design/icons';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { far } from '@fortawesome/free-regular-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
 
 import { LATEST_QUESTIONS_QUERY } from '../../graphql'
 import { avatars, standardAvatar, isNull, makeShorter, getMoment } from '../../utils'
@@ -63,7 +66,7 @@ const QuestionsPage = () => {
               <IconText icon={EyeOutlined} text={isNull(item.views, 0)} key={"view"+item.id} />,
               <IconText icon={MessageOutlined} text={(<CommentCount questionID={item.id}/>)} key={"comments"+item.id} />,
               <IconText icon={ApartmentOutlined} text={(<AnswerCount questionID={item.id}/>)} key={"answers"+item.id} />,
-              <Space>🤑{isNull(item.reward, "-")}</Space>,
+              <Space><FontAwesomeIcon style={{color:"orange"}} icon={fas.faMoneyBillWave} />{isNull(item.reward, "-")}</Space>,
               <Link to={item.href} >
                 <IconLink
                   src="https://gw.alipayobjects.com/zos/rmsportal/MjEImQtenlyueSmVEfUD.svg"

@@ -3,6 +3,10 @@ import { Layout, Menu, Image, Affix, Spin } from 'antd';
 import { gql, useQuery } from '@apollo/client';
 import { Link  } from "react-router-dom";
 import { MenuFoldOutlined, MenuUnfoldOutlined, SketchOutlined, FireOutlined } from '@ant-design/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { far } from '@fortawesome/free-regular-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
 
 import { makeShorter } from '../utils'
 import { HOTTEST_QUESTIONS_QUERY, VALUABLE_QUESTIONS_QUERY } from '../graphql'
@@ -82,14 +86,12 @@ const EplusSider = () => {
                                 style={{position:"relative", top:0}}
                                 onClick={()=>{setLeftSliderCollapsed(!leftSliderCollapsed); setOpenKeys(openKeys.map(k=>(k==="collapsed")?"":k))}}
                                 ></Menu.Item>
-                        <SubMenu key="sub1" icon={<FireOutlined onMouseOver={()=>{setLeftSliderCollapsed(false);}} 
-                                                                style={{color:"orange", fontSize:"20px"}}/>} 
-                                                                title="最熱燒的討論串" >
+                        <SubMenu key="sub1" title="最熱燒的討論串" onMouseOver={()=>{setLeftSliderCollapsed(false);}} 
+                                 icon={<FontAwesomeIcon icon={fab.faHotjar} style={{color:"orange", fontSize:"20px"}}/>} >
                             {hottestQuestions}
                         </SubMenu>
-                        <SubMenu key="sub2" icon={<SketchOutlined onMouseOver={()=>{setLeftSliderCollapsed(false);}} 
-                                                                  style={{color:"#0066FF", fontSize:"20px"}}/>} 
-                                                                  title="高獎勵的討論串" >
+                        <SubMenu key="sub2" title="高獎勵的討論串" onMouseOver={()=>{setLeftSliderCollapsed(false);}} 
+                                 icon={<FontAwesomeIcon icon={fas.faGem} style={{color:"#0066FF", fontSize:"16px"}}/>} >
                             {valuableQuestions}
                         </SubMenu>
                     </Menu> 
