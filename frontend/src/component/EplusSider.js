@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout, Menu, Image, Affix, Spin } from 'antd';
 import { gql, useQuery } from '@apollo/client';
 import { Link  } from "react-router-dom";
@@ -34,6 +34,8 @@ const EplusSider = () => {
     const [openKeys, setOpenKeys] = React.useState(['subx']);
 
     const onOpenChange = keys => {
+        console.log("OLDKEY", openKeys)
+        console.log("KEY", keys)
         const latestOpenKey = keys.find(key => openKeys.indexOf(key!="collapsed"?key:"") === -1);
         if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
             setOpenKeys(keys);
@@ -45,10 +47,9 @@ const EplusSider = () => {
     // load hot/valuable questions
     if (hottestQuestionsLoading || valuableQuestionsLoading)
         return (<></>);
-
     let itemKey = 1;
-    let hottestQuestions = hottestQuestionsData.hottest.map((q)=> <Link to={"/question/"+q.id}><Menu.Item key={'hot_'+(itemKey++)}>{makeShorter(q.title, 20)}</Menu.Item></Link>)
-    let valuableQuestions = valuableQuestionsData.valuable.map((q)=> <Link to={"/question/"+q.id}><Menu.Item key={'value_'+(itemKey++)}>{makeShorter(q.title, 20)}</Menu.Item></Link>)
+    let hottestQuestions = hottestQuestionsData.hottest.map((q, index)=> <Link key={'hot_'+index} to={"/question/"+q.id}><Menu.Item key={'hotItem_'+index}>{makeShorter(q.title, 20)}</Menu.Item></Link>)
+    let valuableQuestions = valuableQuestionsData.valuable.map((q, index)=> <Link key={'value_'+index} to={"/question/"+q.id}><Menu.Item key={'valueItem_'+index}>{makeShorter(q.title, 20)}</Menu.Item></Link>)
 
     setTimeout(()=>{if(refreshCount<2)setLeftSliderCollapsed(false); refreshCount+=1;}, 300);
 
@@ -57,7 +58,7 @@ const EplusSider = () => {
     return (<>
         <Sider collapsible collapsed={leftSliderCollapsed} onCollapse={()=>{setLeftSliderCollapsed(!leftSliderCollapsed); setAutoHide(!leftSliderCollapsed);}}
                     // onMouseLeave={()=>setTimeout(()=>setLeftSliderCollapsed(autoHide&&true),1000)}
-                    scrollable
+                    scrollable="true"
                     style={{overflow: 'auto'}}
                     >
 

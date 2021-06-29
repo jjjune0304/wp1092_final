@@ -2,7 +2,7 @@ import { Link  } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import { List, Avatar, Space, Popover, Button, Tag, Spin, Image, BackTop, Col, Typography, Tooltip } from 'antd';
-import { MessageOutlined, LikeOutlined, StarOutlined, EyeOutlined, QuestionOutlined, AntDesignOutlined, ApartmentOutlined } from '@ant-design/icons';
+import { DollarOutlined, MessageOutlined, LikeOutlined, StarOutlined, EyeOutlined, QuestionOutlined, AntDesignOutlined, ApartmentOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
@@ -71,11 +71,12 @@ const QuestionsPage = () => {
               // answers
               <IconText icon={ApartmentOutlined} tip="answers" text={(<AnswerCount questionID={item.id}/>)} key={"answers"+item.id} />,
               // reward
-              <Tooltip placement="top" title="reward" >
-                  <Space>
-                     <FontAwesomeIcon style={{color:"orange"}} icon={fas.faMoneyBillWave} />{isNull(item.reward, "-")}
-                  </Space>
-              </Tooltip>,
+              <IconText icon={DollarOutlined} tip="reward" text={isNull(item.reward, "-")} key={"reward"+item.id} />,
+              // <Tooltip placement="top" title="reward" >
+              //     <Space>
+              //        <FontAwesomeIcon style={{color:"orange"}} icon={fas.faMoneyBillWave} />{isNull(item.reward, "-")}
+              //     </Space>
+              // </Tooltip>,
               <Link to={item.href} >
                 <IconLink
                   src="https://gw.alipayobjects.com/zos/rmsportal/MjEImQtenlyueSmVEfUD.svg"

@@ -11,19 +11,20 @@ const newAppolloClient = (token="") => {
     const abc="aa";
     // Create a WebSocket link:
     const wsLink = new WebSocketLink({
-        uri: `ws://localhost:5000/graphql`,
+        // uri: `wss://13.213.47.0/graphql`,
+        // uri: `ws://13.213.47.0:8020`,
+        uri: `ws://epistemologyplus.com:8020`,
         options: { 
             reconnect: true,
             connectionParams: {
                 authorization: token
             }
         }
-
     })
     
     // Create an http link:
     const httpLink = new HttpLink({
-        uri: 'http://localhost:5000/graphql'
+        uri: 'https://epistemologyplus.com/api'
     })
 
     // auth http link

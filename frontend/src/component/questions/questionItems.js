@@ -19,8 +19,8 @@ const PopoverAnswer = ({questionID, showN}) => {
     (<></>)
     :
     (<>
-      {answersData.question.answers.slice(0,showN?showN:2).map((ans)=>(
-          <p>
+      {answersData.question.answers.slice(0,showN?showN:2).map((ans, index)=>(
+          <p key={"pop"+index+questionID}>
               <Popover content={<div>{makeShorter(ans.body,50)}</div>} title="Ans" trigger="hover" placement="rightTop">
                   <Button>@ {makeShorter(ans.author.username,7)}</Button>
               </Popover>

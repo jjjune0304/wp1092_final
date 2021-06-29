@@ -1,10 +1,10 @@
-import react, { useState, useEffect } from 'react';
-import { BrowserRouter, Switch, Redirect, Route, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { BrowserRouter, Switch, Redirect, Route } from 'react-router-dom';
 
 import newAppolloClient from './hooks/appolloClient.js'
 import Home from './container/Home.js'
 import LoginPage from './container/Login.js'
-import QuestionsPage from './component/questions/questionsPage.js'
+// import QuestionsPage from './component/questions/questionsPage.js'
 import SingleQuestionPage from './container/SingleQuestionPage.js'
 import SearchPage from './container/SearchPage.js'
 import ScrollToTop from './container/ScrollToTop.js'
@@ -17,7 +17,7 @@ const checkToken = ({token, setToken}) => {
     let old_token = localStorage.getItem('token');
     let old_time = localStorage.getItem('Epistemology_token_timestamp');
     let now_time = new Date().getTime();
-    if ((now_time - old_time) > 10 * 60 * 1000 && old_token!="") // 10分鐘，把token清掉(需重新登入)
+    if ((now_time - old_time) > 10 * 60 * 1000 && old_token!=="") // 10分鐘，把token清掉(需重新登入)
         localStorage.setItem('token', '');
     else if (token!=="")
         localStorage.setItem('Epistemology_token_timestamp', new Date().getTime());

@@ -3,7 +3,7 @@ import { gql, useQuery, useMutation } from '@apollo/client';
 import { useParams, Link, useHistory } from "react-router-dom";
 import { Layout, Menu, Input, Image, Button, Empty, Row, Col, Divider, message } from 'antd';
 import { PageHeader, Dropdown, Tag, Typography, Space, Spin, List, Comment, Tooltip, Form, BackTop } from 'antd';
-import { MessageOutlined, LikeOutlined, StarOutlined, EyeOutlined, LoginOutlined, LogoutOutlined, LikeFilled,
+import { DollarOutlined, MessageOutlined, LikeOutlined, StarOutlined, EyeOutlined, LoginOutlined, LogoutOutlined, LikeFilled,
     VerticalAlignMiddleOutlined, VerticalAlignBottomOutlined, 
     UsergroupAddOutlined, EllipsisOutlined, HeartOutlined, PlusCircleOutlined, ApartmentOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -281,7 +281,8 @@ const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClien
               <IconText icon={EyeOutlined} text={isNull(questionData.views, 0)} key={"view"+questionData.id} />, &ensp;&ensp;
               <IconText icon={MessageOutlined} text={!commentsData?"loading":commentsData.length} key={"comments"+questionData.id} />, &ensp;&ensp;
               <IconText icon={ApartmentOutlined} text={!answersData?"loading":answersData.length} key={"answers"+questionData.id} />, &ensp;&ensp;
-              <Space><FontAwesomeIcon style={{color:"orange"}} icon={far.faMoneyBillAlt} />{isNull(questionData.reward, '-')}</Space>
+              <IconText icon={DollarOutlined} tip="reward" text={isNull(questionData.reward, '-')} key={"reward"+questionData.id} />,
+              {/* <Space><FontAwesomeIcon style={{color:"orange"}} icon={far.faMoneyBillAlt} />{isNull(questionData.reward, '-')}</Space> */}
         </div>
       </>
     ):(<></>);
