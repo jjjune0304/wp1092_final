@@ -7,15 +7,15 @@ import { getMainDefinition } from 'apollo-utilities'
 
 // new Appollo Client Object (with token?)
 const newAppolloClient = (token="") => {
-
-    const abc="aa";
     // Create a WebSocket link:
     const wsLink = new WebSocketLink({
         // uri: `wss://13.213.47.0/graphql`,
-        // uri: `ws://13.213.47.0:8020`,
-        uri: `ws://epistemologyplus.com:8020`,
+        // uri: `wss://epistemologyplus.com:8020`,
+        uri: `wss://epistemologyplus.com/ws`,
         options: { 
             reconnect: true,
+            timeout: 20000,
+            lazy: true,
             connectionParams: {
                 authorization: token
             }

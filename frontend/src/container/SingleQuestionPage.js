@@ -84,11 +84,13 @@ const MyAnswer = ({id, author, avatar, content, _likeCount, timeString, _childre
                 >
                 {childrenComments?
                     (childrenComments.map((item)=>(
-                    <MyComment id={item.id} 
-                               author={item.author.username} 
-                               avatar={isNull(item.author.avatar, standardAvatar)} 
-                               content={item.text} 
-                               timeString={item.createdAt} />))
+                    <MyComment 
+                            key={item.id}
+                            id={item.id}                            
+                            author={item.author.username} 
+                            avatar={isNull(item.author.avatar, standardAvatar)} 
+                            content={item.text} 
+                            timeString={item.createdAt} />))
                     )
                     :
                     (<></>)
@@ -394,16 +396,18 @@ const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClien
                             itemLayout="horizontal"
                         >
                             {answersData.map((item)=>(
-                                <MyAnswer id={item.id}
-                                          author={item.author.username}
-                                          avatar={isNull(item.author.avatar, standardAvatar)}
-                                          content={item.body}
-                                          _likeCount={item.like}
-                                          timeString={item.createdAt}
-                                          _childrenComments={item.comments}
-                                          authClient={authClient}
-                                          makeComment={makeComment}
-                                          userProfile={userProfile}
+                                <MyAnswer 
+                                    key={item.id}
+                                    id={item.id}
+                                    author={item.author.username}
+                                    avatar={isNull(item.author.avatar, standardAvatar)}
+                                    content={item.body}
+                                    _likeCount={item.like}
+                                    timeString={item.createdAt}
+                                    _childrenComments={item.comments}
+                                    authClient={authClient}
+                                    makeComment={makeComment}
+                                    userProfile={userProfile}
                                 />
                             ))}
                         </List>
