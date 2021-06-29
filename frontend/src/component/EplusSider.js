@@ -30,7 +30,7 @@ const EplusSider = () => {
     const [openKeys, setOpenKeys] = React.useState(['subx']);
 
     const onOpenChange = keys => {
-        const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1);
+        const latestOpenKey = keys.find(key => openKeys.indexOf(key!="collapsed"?key:"") === -1);
         if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
             setOpenKeys(keys);
         } else {
@@ -61,8 +61,8 @@ const EplusSider = () => {
                 <div>
                     <div className="logo">
                         <Image
-                            width={"auto"}
                             height={"auto"}
+                            width={"70px"}
                             preview={false}
                             // src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
                             // src="https://www.educarepk.com/wp-content/uploads/2020/07/Epistemology.png"
@@ -76,15 +76,20 @@ const EplusSider = () => {
                         // defaultSelectedKeys={["collapsed"]}
                         // defaultOpenKeys={leftSliderCollapsed?[]:['sub1', 'sub2']}
                         openKeys={openKeys} onOpenChange={onOpenChange}
+                        selectable={false}
                     >
-                        {/*<Menu.Item key="collapsed" icon={leftSliderCollapsed?(<MenuUnfoldOutlined/>):(<MenuFoldOutlined/>)} 
+                        <Menu.Item key="collapsed" icon={leftSliderCollapsed?(<MenuUnfoldOutlined/>):(<MenuFoldOutlined/>)} 
                                 style={{position:"relative", top:0}}
-                                onClick={()=>{setLeftSliderCollapsed(!leftSliderCollapsed); setAutoHide(!leftSliderCollapsed)}}
-                                ></Menu.Item>*/}
-                        <SubMenu key="sub1" icon={<FireOutlined onClick={()=>{setLeftSliderCollapsed(false)}} style={{color:"red"}}/>} title="最熱燒的討論串" >
+                                onClick={()=>{setLeftSliderCollapsed(!leftSliderCollapsed); setOpenKeys(openKeys.map(k=>(k==="collapsed")?"":k))}}
+                                ></Menu.Item>
+                        <SubMenu key="sub1" icon={<FireOutlined onMouseOver={()=>{setLeftSliderCollapsed(false);}} 
+                                                                style={{color:"orange", fontSize:"20px"}}/>} 
+                                                                title="最熱燒的討論串" >
                             {hottestQuestions}
                         </SubMenu>
-                        <SubMenu key="sub2" icon={<SketchOutlined onClick={()=>{setLeftSliderCollapsed(false)}} style={{color:"blue"}}/>} title="高獎勵的討論串" >
+                        <SubMenu key="sub2" icon={<SketchOutlined onMouseOver={()=>{setLeftSliderCollapsed(false);}} 
+                                                                  style={{color:"#0066FF", fontSize:"20px"}}/>} 
+                                                                  title="高獎勵的討論串" >
                             {valuableQuestions}
                         </SubMenu>
                     </Menu> 

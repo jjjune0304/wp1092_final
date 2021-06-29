@@ -46,14 +46,14 @@ const Home = ({ token, setToken, activeKey, setActiveKey, userProfile, logout, a
                                 <Route exact path="/home"> <QuestionsPage /> </Route>
 
                                 {/* Ask content */}
-                                <Route path="/ask"> <Ask token={token} userProfile={userProfile} authClient={authClient}/> </Route>
+                                <Route path="/ask"> <Ask token={token} userProfile={userProfile} authClient={authClient} /> </Route>
 
                             </Switch>
                         </Col>
 
                         {/* Right Content */}
                         <Col span={6} style={{padding: "20px 20px 20px 10px"}}>
-                            <EplusRightContent />
+                            <EplusRightContent userProfile={userProfile} authClient={authClient} />
                         </Col>
                     </Row>
                 </Content>
