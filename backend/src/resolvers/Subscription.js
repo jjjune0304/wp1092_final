@@ -5,6 +5,11 @@ const Subscription = {
     subscribe: isAuthenticated(async (parent, args, { db, pubsub, user }, info) => {
       return pubsub.asyncIterator(`user ${user._id}`);
     }),
+  },
+  feedback: {
+    subscribe: isAuthenticated(async (parent, args, { db, pubsub, user }, info) => {
+      return pubsub.asyncIterator(`userfeedback ${user._id}`);
+    }),
   }
 };
 

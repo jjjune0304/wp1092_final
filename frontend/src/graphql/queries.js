@@ -7,6 +7,7 @@ export const ME_QUERY = gql`
       username
       avatar
       points
+      feedback
     }
   }
 `;
@@ -22,6 +23,7 @@ export const USER_QUERY = gql`
       username
       avatar
       points
+      feedback
     }
   }
 `;

@@ -13,8 +13,12 @@ const Ask = ({ userProfile, authClient}) => {
     const [reward, setReward] = useState(20);
     const [outputHTML, setOutputHTML] = useState('<p></p>');
 
-    const {loading: meLoading, error: meError, data: meData} = useQuery(ME_QUERY);
-    const [createQuestion, { loading: createQuestionLoading, data: createQuestionData, error: createQuestionError }] = useMutation(CREATE_QUESTION_MUTATION);
+    const {loading: meLoading, error: meError, data: meData} = useQuery(ME_QUERY,
+            {client: authClient}
+        );
+    const [createQuestion, { loading: createQuestionLoading, data: createQuestionData, error: createQuestionError }] = useMutation(CREATE_QUESTION_MUTATION,
+            {client: authClient}
+        );
 
     if (meLoading)
         return (<Spin tip="Loading..." size="large"></Spin>);

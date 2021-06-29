@@ -26,6 +26,8 @@ const checkToken = ({token, setToken}) => {
     if (token!=getToken())
         setToken(getToken());
 
+    // console.log(token);
+
     setTimeout(()=>checkToken({token, setToken}), 500);
 }
 
@@ -41,11 +43,13 @@ const checkUserProfile = ({userProfile, setUserProfile}) => {
 var othersLogout=0;
 
 function App() {
+    
+    useEffect(() => { document.title = "Epistemology+" }, [])
 
     const [token, setToken] = useState("");
     const [activeKey, setActiveKey] = useState("login");
     const [authClient, setAuthClient] = useState(newAppolloClient());
-    const [userProfile, setUserProfile] = useState({username:"", email:"", avatar:"", points:0});
+    const [userProfile, setUserProfile] = useState({username:"", email:"", avatar:"", points:0, feedback:0});
 
     checkToken({token, setToken});
     checkUserProfile({userProfile, setUserProfile});
@@ -56,7 +60,7 @@ function App() {
         setActiveKey('home'); 
         setToken(''); 
         localStorage.setItem('token',"");
-        localStorage.setItem('userProfile', JSON.stringify({username:"", email:"", avatar:"", points:0}));
+        localStorage.setItem('userProfile', JSON.stringify({username:"", email:"", avatar:"", points:0, feedback:0}));
     }
 
     // if (localStorage.getItem('token')==="" && othersLogout===0) {setToken(""); othersLogout+=1;}

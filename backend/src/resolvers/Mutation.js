@@ -75,7 +75,7 @@ const Mutation = {
       inbox: {
         type: 'ASK', 
         message: `You just asked a question: ${newQuestion.title}`,
-        time: newQuestion.createAt,
+        time: newQuestion.createdAt.toISOString(),
         refID: newQuestion._id,
       },
     });
@@ -107,7 +107,7 @@ const Mutation = {
       inbox: {
         type: 'ANSWER',
         message: `You just answered the question: ${question.title}`,
-        time: newAnswer.createAt,
+        time: newAnswer.createdAt.toISOString(),
         refID: question._id,
       },
     });
@@ -119,7 +119,7 @@ const Mutation = {
           inbox: {
             type: 'NOTIFICATION', 
             message: `Somebody just answered the question: ${question.title}`,
-            time: newAnswer.createAt,
+            time: newAnswer.createdAt.toISOString(),
             refID: question._id,
           },
         });
@@ -162,7 +162,7 @@ const Mutation = {
       inbox: {
         type: 'REPLY',
         message: `You just replied a question: ${question.title}`,
-        time: newComment.createAt,
+        time: newComment.createdAt.toISOString(),
         refID: question._id,
       },
     });
@@ -174,7 +174,7 @@ const Mutation = {
           inbox: {
             type: 'NOTIFICATION', 
             message: `Somebody just replied the question: ${question.title}`,
-            time: newComment.createAt,
+            time: newComment.createdAt.toISOString(),
             refID: question._id,
           },
         });
@@ -189,7 +189,7 @@ const Mutation = {
     return user;
   }),
 
-  likeAnswer: isAuthenticated(async (parent, { aID }, { db, user }) => {
+  likeAnswer: isAuthenticated(async (parent, { aID }, { db, user, pubsub }) => {
     const answer = await db.AnswerModel.findById(aID);
     if(!answer)
       throw new Error(`AnswerID ${aID} is not found.`)
@@ -199,6 +199,8 @@ const Mutation = {
     const author = await db.UserModel.findById(answer.author);
     author.feedback = author.feedback + 1;
     await author.save();
+
+    pubsub.publish(`userfeedback ${author._id}`, { feedback: author.feedback });
 
     return answer.like;
   }),
