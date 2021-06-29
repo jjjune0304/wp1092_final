@@ -58,6 +58,7 @@ const MyAnswer = ({id, author, avatar, content, _likeCount, timeString, _childre
                 if (like===true) return;
                 var likeReturn;
                 try {
+                    setLikeCount(likeCount+1);
                     likeReturn = await likeAnswer({
                         variables: {aID: id},
                         client: authClient
