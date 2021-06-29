@@ -43,6 +43,8 @@ const checkUserProfile = ({userProfile, setUserProfile}) => {
 var othersLogout=0;
 
 function App() {
+    
+    useEffect(() => { document.title = "Epistemology+" }, [])
 
     const [token, setToken] = useState("");
     const [activeKey, setActiveKey] = useState("login");
