@@ -67,6 +67,8 @@ const MyAnswer = ({id, author, avatar, content, _likeCount, timeString, _childre
                 } catch(error) {
                     if (error.message.toString().includes('log in')) {
                         message.error("Please login first");
+                        setLike(false);
+                        setLikeCount(likeCount);
                         setTimeout(()=>window.open("/login", "_blank"), 500);
                     }
                 }

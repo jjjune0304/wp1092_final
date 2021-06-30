@@ -98,6 +98,7 @@ export const QUESTION_QUERY = gql`
   ){
     question(
       questionID: $questionID
+      view: true
     ){
       id
       reward

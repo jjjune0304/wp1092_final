@@ -65,13 +65,14 @@ const EplusSider = () => {
             <Affix offsetTop={0} >
                 <div>
                     <div className="logo">
-                        <Image
+                        <img
                             height={"auto"}
                             width={"70px"}
                             preview={false}
                             // src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
                             // src="https://www.educarepk.com/wp-content/uploads/2020/07/Epistemology.png"
-                            src="http://lab.wubinray.com/eplus/logo.png"
+                            // src="http://lab.wubinray.com/eplus/logo.png"
+                            src={process.env.PUBLIC_URL+'/logo.png'}
                         />
                     </div>
                     <Menu

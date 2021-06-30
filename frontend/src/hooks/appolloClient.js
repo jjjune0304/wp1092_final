@@ -10,7 +10,7 @@ const newAppolloClient = (token="") => {
     // Create a WebSocket link:
     const wsLink = new WebSocketLink({
         // uri: `wss://13.213.47.0/graphql`,
-        // uri: `wss://epistemologyplus.com:8020`,
+        // uri: `ws://localhost:8000/graphql`,
         uri: `wss://epistemologyplus.com/ws`,
         options: { 
             reconnect: true,
@@ -21,10 +21,16 @@ const newAppolloClient = (token="") => {
             }
         }
     })
+
+    // window.addEventListener('beforeunload', () => {
+    //     // @ts-ignore - the function is private in typescript
+    //     wsLink.subscriptionClient.close();
+    // });
     
     // Create an http link:
     const httpLink = new HttpLink({
         uri: 'https://epistemologyplus.com/api'
+        // uri: `http://localhost:8000/`,
     })
 
     // auth http link
