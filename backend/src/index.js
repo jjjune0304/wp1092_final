@@ -19,7 +19,7 @@ import Comment from './resolvers/Comment';
 const SECRET = 'epistemologyet';
 
 const isProduction = process.env.NODE_ENV === 'production'
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 4000;
 
 const pubsub = new PubSub();
 const server = new ApolloServer({
