@@ -1,8 +1,8 @@
-// import { ApolloServer, PubSub, gql } from 'apollo-server';
+import { ApolloServer, PubSub, gql } from 'apollo-server';
+//import { ApolloServer, PubSub, gql } from 'apollo-server-express';
 import http from 'http';
 import express from 'express';
 import path from 'path';
-import { ApolloServer, PubSub, gql } from 'apollo-server-express';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import db from './db';
@@ -19,7 +19,7 @@ import Comment from './resolvers/Comment';
 const SECRET = 'epistemologyet';
 
 const isProduction = process.env.NODE_ENV === 'production'
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 
 const pubsub = new PubSub();
 const server = new ApolloServer({
@@ -33,9 +33,8 @@ const server = new ApolloServer({
     Answer,
     Comment
   },
-  playground: {
-    subscriptionEndpoint: `ws://localhost:${PORT}/graphql`,
-  },
+  playground: true,
+  introspection: true,	
   context: async ({ req, connection }) => {
     // Operation is a Subscription: 
     // Obtain connectionParams-provided token from connection.context
@@ -61,30 +60,43 @@ const server = new ApolloServer({
 
 mongo.connect();
 
-const app = express();
-server.start();
-server.applyMiddleware({ app });
+//const app = express();
+// Allow CORS
+//app.use((req, res, next) => {
+//	   res.header('Access-Control-Allow-Origin', '*');
+//	   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//	   next();
+//});
 
-const httpServer = http.createServer(app);
-server.installSubscriptionHandlers(httpServer);
+//
+
+// Setup for JSON and url encoded bodies
+//app.use(express.json());
+//app.use(express.urlencoded({ extended: true }));
+
+//server.start();
+//server.applyMiddleware({ app });
+
+//const httpServer = http.createServer(app);
+//server.installSubscriptionHandlers(httpServer);
 
 // frontend
-if (isProduction) {
+//if (isProduction) {
   // set static folder
-  const publicPath = path.resolve(__dirname, "../../frontend/build");
-  app.use(express.static(publicPath));
-  app.get("*", function (request, response) {
-    response.sendFile(path.resolve(publicPath, "index.html"));
-  });
-}
+//  const publicPath = path.resolve(__dirname, "../../frontend/build");
+//  app.use(express.static(publicPath));
+//  app.get("*", function (request, response) {
+//    response.sendFile(path.resolve(publicPath, "index.html"));
+//  });
+//}
 
-new Promise(resolve => httpServer.listen({ port: PORT }, resolve));
-console.log(`Server ready at http://localhost:${PORT}${server.graphqlPath}`);
-console.log(`Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`);
+//new Promise(resolve => httpServer.listen({ port: PORT }, resolve));
+//console.log(`Server ready at http://localhost:${PORT}${server.graphqlPath}`);
+//console.log(`Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`);
 
-// server.listen({ port: PORT }, () => {
-//   console.log(`The server is up on port ${PORT}!`);
-// }).then(({ url, subscriptionsUrl }) => {
-//   console.log(`Server ready at ${url}`);
-//   console.log(`Subscriptions ready at ${subscriptionsUrl}`);
-// });
+server.listen({ port: PORT }, () => {
+   console.log(`The server is up on port ${PORT}!`);
+}).then(({ url, subscriptionsUrl }) => {
+   console.log(`Server ready at ${url}`);
+   console.log(`Subscriptions ready at ${subscriptionsUrl}`);
+});

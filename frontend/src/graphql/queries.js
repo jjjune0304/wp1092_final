@@ -7,6 +7,7 @@ export const ME_QUERY = gql`
       username
       avatar
       points
+      feedback
     }
   }
 `;
@@ -22,6 +23,7 @@ export const USER_QUERY = gql`
       username
       avatar
       points
+      feedback
     }
   }
 `;
@@ -96,6 +98,7 @@ export const QUESTION_QUERY = gql`
   ){
     question(
       questionID: $questionID
+      view: true
     ){
       id
       reward

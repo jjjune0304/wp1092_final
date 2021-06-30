@@ -3,9 +3,13 @@ import { gql, useQuery, useMutation } from '@apollo/client';
 import { useParams, Link, useHistory } from "react-router-dom";
 import { Layout, Menu, Input, Image, Button, Empty, Row, Col, Divider, message } from 'antd';
 import { PageHeader, Dropdown, Tag, Typography, Space, Spin, List, Comment, Tooltip, Form, BackTop } from 'antd';
-import { MessageOutlined, LikeOutlined, StarOutlined, EyeOutlined, LoginOutlined, LogoutOutlined, LikeFilled,
+import { DollarOutlined, MessageOutlined, LikeOutlined, StarOutlined, EyeOutlined, LoginOutlined, LogoutOutlined, LikeFilled,
     VerticalAlignMiddleOutlined, VerticalAlignBottomOutlined, 
     UsergroupAddOutlined, EllipsisOutlined, HeartOutlined, PlusCircleOutlined, ApartmentOutlined } from '@ant-design/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { far } from '@fortawesome/free-regular-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
 import moment from 'moment';
 
 import EplusHeader from '../component/EplusHeader.js'
@@ -54,6 +58,7 @@ const MyAnswer = ({id, author, avatar, content, _likeCount, timeString, _childre
                 if (like===true) return;
                 var likeReturn;
                 try {
+                    setLikeCount(likeCount+1);
                     likeReturn = await likeAnswer({
                         variables: {aID: id},
                         client: authClient
@@ -62,6 +67,8 @@ const MyAnswer = ({id, author, avatar, content, _likeCount, timeString, _childre
                 } catch(error) {
                     if (error.message.toString().includes('log in')) {
                         message.error("Please login first");
+                        setLike(false);
+                        setLikeCount(likeCount);
                         setTimeout(()=>window.open("/login", "_blank"), 500);
                     }
                 }
@@ -79,11 +86,13 @@ const MyAnswer = ({id, author, avatar, content, _likeCount, timeString, _childre
                 >
                 {childrenComments?
                     (childrenComments.map((item)=>(
-                    <MyComment id={item.id} 
-                               author={item.author.username} 
-                               avatar={isNull(item.author.avatar, standardAvatar)} 
-                               content={item.text} 
-                               timeString={item.createdAt} />))
+                    <MyComment 
+                            key={item.id}
+                            id={item.id}                            
+                            author={item.author.username} 
+                            avatar={isNull(item.author.avatar, standardAvatar)} 
+                            content={item.text} 
+                            timeString={item.createdAt} />))
                     )
                     :
                     (<></>)
@@ -211,6 +220,7 @@ const AnswerEditor = ({ questionID, authClient, makeAnswer, answersData, setAnsw
     </>);
 }
 
+let firsttime=0;
 
 const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClient, userProfile, logout }) => {
 
@@ -275,12 +285,11 @@ const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClien
               <IconText icon={EyeOutlined} text={isNull(questionData.views, 0)} key={"view"+questionData.id} />, &ensp;&ensp;
               <IconText icon={MessageOutlined} text={!commentsData?"loading":commentsData.length} key={"comments"+questionData.id} />, &ensp;&ensp;
               <IconText icon={ApartmentOutlined} text={!answersData?"loading":answersData.length} key={"answers"+questionData.id} />, &ensp;&ensp;
-              <Space>🤑{isNull(questionData.reward, '-')}</Space>
+              <IconText icon={DollarOutlined} tip="reward" text={isNull(questionData.reward, '-')} key={"reward"+questionData.id} />,
+              {/* <Space><FontAwesomeIcon style={{color:"orange"}} icon={far.faMoneyBillAlt} />{isNull(questionData.reward, '-')}</Space> */}
         </div>
       </>
     ):(<></>);
-
-    window.scroll({top: 0, behavior: 'smooth' })
 
     return (
         <div style={{backgroundColor:"#EEEEEE", height:"100%", minHeight:"100vh", padding:"15px 0px"}}>
@@ -389,16 +398,18 @@ const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClien
                             itemLayout="horizontal"
                         >
                             {answersData.map((item)=>(
-                                <MyAnswer id={item.id}
-                                          author={item.author.username}
-                                          avatar={isNull(item.author.avatar, standardAvatar)}
-                                          content={item.body}
-                                          _likeCount={item.like}
-                                          timeString={item.createdAt}
-                                          _childrenComments={item.comments}
-                                          authClient={authClient}
-                                          makeComment={makeComment}
-                                          userProfile={userProfile}
+                                <MyAnswer 
+                                    key={item.id}
+                                    id={item.id}
+                                    author={item.author.username}
+                                    avatar={isNull(item.author.avatar, standardAvatar)}
+                                    content={item.body}
+                                    _likeCount={item.like}
+                                    timeString={item.createdAt}
+                                    _childrenComments={item.comments}
+                                    authClient={authClient}
+                                    makeComment={makeComment}
+                                    userProfile={userProfile}
                                 />
                             ))}
                         </List>

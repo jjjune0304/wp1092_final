@@ -32,12 +32,14 @@ const Query = {
     return questions;
   },
 
-  question: async (parent, { questionID }, { db }, info) => {
+  question: async (parent, { questionID, view }, { db }, info) => {
     const question = await db.QuestionModel.findById(questionID);
     if(!question)
       throw new Error(`Cannot find Question ID ${questionID}.`);
-    question.views = question.views + 1;
-    await question.save()
+    if(view) {
+      question.views = question.views + 1;
+      await question.save();
+    }
     return question;
   },
 

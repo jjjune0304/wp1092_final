@@ -16,3 +16,9 @@ export const CHATBOX_SUBSCRIPTION = gql`
     }
   }
 `;
+
+export const FEEDBACK_SUBSCRIPTION = gql`
+  subscription {
+    feedback
+  }
+`

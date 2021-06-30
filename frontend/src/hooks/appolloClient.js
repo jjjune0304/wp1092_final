@@ -4,20 +4,36 @@ import { split } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 
-// Create an http link:
-const httpLink = new HttpLink({
-    uri: 'http://localhost:5000/graphql'
-})
-
-// Create a WebSocket link:
-const wsLink = new WebSocketLink({
-    uri: `ws://localhost:5000/graphql`,
-    options: { reconnect: true }
-})
 
 // new Appollo Client Object (with token?)
 const newAppolloClient = (token="") => {
+    // Create a WebSocket link:
+    const wsLink = new WebSocketLink({
+        // uri: `wss://13.213.47.0/graphql`,
+        uri: `ws://localhost:4000/graphql`,
+        // uri: `wss://epistemologyplus.com/ws`,
+        options: { 
+            reconnect: true,
+            timeout: 20000,
+            lazy: true,
+            connectionParams: {
+                authorization: token
+            }
+        }
+    })
 
+    // window.addEventListener('beforeunload', () => {
+    //     // @ts-ignore - the function is private in typescript
+    //     wsLink.subscriptionClient.close();
+    // });
+    
+    // Create an http link:
+    const httpLink = new HttpLink({
+        // uri: 'https://epistemologyplus.com/api'
+        uri: `http://localhost:4000/`,
+    })
+
+    // auth http link
     const authLink = setContext((_, { headers }) => {
 
         if ( token==="" )

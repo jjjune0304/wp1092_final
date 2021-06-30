@@ -4,7 +4,7 @@ type Query {
   latest(num: Int!): [Question!]!
   hottest(num: Int!): [Question!]!
   valuable(num: Int!): [Question!]!
-  question(questionID: String!): Question!
+  question(questionID: String!, view: Boolean): Question!
   search(keyword: String!): [Question!]
 }
 
@@ -22,6 +22,7 @@ type Mutation {
 
 type Subscription {
   inbox: InBoxPayload!
+  feedback: Int!
 }
 
 type Token {
@@ -32,6 +33,7 @@ type User {
   id: ID!
   username: String!
   points: Int!
+  feedback: Int!
   email: String!
   avatar: String
   createdAt: String!

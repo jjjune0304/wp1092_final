@@ -1,9 +1,12 @@
 import { Link  } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import { gql, useQuery, useMutation } from '@apollo/client';
-import { List, Avatar, Space, Popover, Button, Tag, Spin, Image, BackTop, Col, Typography } from 'antd';
-import { MessageOutlined, LikeOutlined, StarOutlined, EyeOutlined, QuestionOutlined, AntDesignOutlined, ApartmentOutlined } from '@ant-design/icons';
-
+import { List, Avatar, Space, Popover, Button, Tag, Spin, Image, BackTop, Col, Typography, Tooltip } from 'antd';
+import { DollarOutlined, MessageOutlined, LikeOutlined, StarOutlined, EyeOutlined, QuestionOutlined, AntDesignOutlined, ApartmentOutlined } from '@ant-design/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { far } from '@fortawesome/free-regular-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
 
 import { LATEST_QUESTIONS_QUERY } from '../../graphql'
 import { avatars, standardAvatar, isNull, makeShorter, getMoment } from '../../utils'
@@ -30,11 +33,13 @@ const QuestionsPage = () => {
     </Space>
   );
 
-  const IconText = ({ icon, text }) => (
+  const IconText = ({ icon, text, tip }) => (
+    <Tooltip placement="top" title={tip}>
     <Space>
       {React.createElement(icon)}
       {text}
     </Space>
+    </Tooltip>
   );
 
   return (
@@ -59,11 +64,19 @@ const QuestionsPage = () => {
             style={{textAlign:"left"}}
             actions={[
               <Text style={{color:"gray", minWidth:"16vw"}}>created {item.createdAt===null? "-" : getMoment(item.createdAt)}</Text>,
-              // <IconText icon={LikeOutlined} text={isNull(item.like, 0)} key={"like"+item.id} />,
-              <IconText icon={EyeOutlined} text={isNull(item.views, 0)} key={"view"+item.id} />,
-              <IconText icon={MessageOutlined} text={(<CommentCount questionID={item.id}/>)} key={"comments"+item.id} />,
-              <IconText icon={ApartmentOutlined} text={(<AnswerCount questionID={item.id}/>)} key={"answers"+item.id} />,
-              <Space>🤑{isNull(item.reward, "-")}</Space>,
+              // view 
+              <IconText icon={EyeOutlined} tip="view" text={isNull(item.views, 0)} key={"view"+item.id} />,
+              // comments
+              <IconText icon={MessageOutlined} tip="comments" text={(<CommentCount questionID={item.id}/>)} key={"comments"+item.id} />,
+              // answers
+              <IconText icon={ApartmentOutlined} tip="answers" text={(<AnswerCount questionID={item.id}/>)} key={"answers"+item.id} />,
+              // reward
+              <IconText icon={DollarOutlined} tip="reward" text={isNull(item.reward, "-")} key={"reward"+item.id} />,
+              // <Tooltip placement="top" title="reward" >
+              //     <Space>
+              //        <FontAwesomeIcon style={{color:"orange"}} icon={fas.faMoneyBillWave} />{isNull(item.reward, "-")}
+              //     </Space>
+              // </Tooltip>,
               <Link to={item.href} >
                 <IconLink
                   src="https://gw.alipayobjects.com/zos/rmsportal/MjEImQtenlyueSmVEfUD.svg"

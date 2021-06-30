@@ -52,12 +52,14 @@ const LoginPanel = ({setToken, setActiveKey}) => {
     if ( tokenData && userData ) {
       const token = tokenData.login.token;
 
-      localStorage.setItem('userProfile', JSON.stringify({
-        email:userData.user.email, 
-        username:userData.user.username,
-        points:userData.user.points,
-        avatar:userData.user.avatar
-      }))
+      localStorage.setItem('userProfile', JSON.stringify(userData.user));
+      // {
+      //   userData.user 
+      //   email:userData.user.email, 
+      //   username:userData.user.username,
+      //   points:userData.user.points,
+      //   avatar:userData.user.avatar
+      // }))
 
       localStorage.setItem('token', token);
       localStorage.setItem('Epistemology_token_timestamp', new Date().getTime());
