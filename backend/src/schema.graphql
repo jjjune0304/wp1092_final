@@ -4,7 +4,7 @@ type Query {
   latest(num: Int!): [Question!]!
   hottest(num: Int!): [Question!]!
   valuable(num: Int!): [Question!]!
-  question(questionID: String!): Question!
+  question(questionID: String!, view: Boolean): Question!
   search(keyword: String!): [Question!]
 }
 
