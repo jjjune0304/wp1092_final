@@ -1,5 +1,5 @@
 # [109-2] Web Programming Final
-#### (Group 16) ![](https://i.imgur.com/PYUCCUL.png =32x32) Epistemology+ 
+#### (Group 16) <img src="https://i.imgur.com/PYUCCUL.png" width="32" height="32" /> Epistemology+ 
 
 ## Team Members
 R09921099 蔡冠偉
@@ -53,7 +53,7 @@ https://epistemologyplus.com
 ## Features
 
 ### Home Page
-![](https://i.imgur.com/WCUh6nA.png =600x)
+<img src="https://i.imgur.com/WCUh6nA.png" width="600" height="auto" />
 
 1. LOGO: 我們自己設計的
 2. Epistemology+:網站名稱，點下後會回到首頁
@@ -67,7 +67,7 @@ https://epistemologyplus.com
 10. 預覽： 可預覽前兩則回答內容
 
 ### Ask Page
-![](https://i.imgur.com/3fdKSdD.png =600x)
+<img src="https://i.imgur.com/3fdKSdD.png" width="600" height="auto" />
 
 1. 設定此篇文章要給予最佳回答多少獎勵，不能超出你的財產
 2. 寫好文章
@@ -75,7 +75,7 @@ https://epistemologyplus.com
 4. 按下Submit送出，會自動跳轉到此文章頁面
 
 ### Question Page
-![](https://i.imgur.com/dBeNTjm.png =650x)
+<img src="https://i.imgur.com/dBeNTjm.png.png" width="650" height="auto" />
 
 1. 包含文章內容與文章資訊
 2. 以下操作僅限登入的使用者:
