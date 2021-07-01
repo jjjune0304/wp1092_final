@@ -1,9 +1,11 @@
 # [109-2] Web Programming Final
-#### (Group 16) <img src="https://i.imgur.com/PYUCCUL.png" width="32" height="32" /> Epistemology+ 
+#### (Group 16) ![](https://i.imgur.com/PYUCCUL.png) Epistemology+ 
 
 ## Team Members
 R09921099 蔡冠偉
+
 R08921040 徐均筑
+
 R08942087 吳彬睿
 
 ## Setup 
@@ -38,7 +40,9 @@ R08942087 吳彬睿
     ```
 ## Introduction
 2021/5/4，yahoo!關閉了Yahoo奇摩知識+。同年6月，再度傳出stackoverflow被收購的消息，這些消息令我們感到非常悲慟。因此想藉由此次的期末專題報告來做一個類似的發問求知論壇。
+
 我們的論壇叫 epistemologyplus，這個名字取自哲學中的 epistemology，而這個詞由希臘語中的 "episteme" 及 "logos" 所衍生，前者有 "knowledge" 或 "understanding" 的意涵，後者則可理解為 "reason"。
+
 而我們論壇是希望能成為幫助使用者學習新知的工具(epistemology)，並且永遠不會滿足於目前的境界(plus)，綜合以上我們賦予 epistemologyplus 這個名字。
 
 ## 服務內容
@@ -53,7 +57,7 @@ https://epistemologyplus.com
 ## Features
 
 ### Home Page
-<img src="https://i.imgur.com/WCUh6nA.png" width="600" height="auto" />
+![](https://i.imgur.com/WCUh6nA.png)
 
 1. LOGO: 我們自己設計的
 2. Epistemology+:網站名稱，點下後會回到首頁
@@ -67,7 +71,7 @@ https://epistemologyplus.com
 10. 預覽： 可預覽前兩則回答內容
 
 ### Ask Page
-<img src="https://i.imgur.com/3fdKSdD.png" width="600" height="auto" />
+![](https://i.imgur.com/3fdKSdD.png)
 
 1. 設定此篇文章要給予最佳回答多少獎勵，不能超出你的財產
 2. 寫好文章
@@ -75,7 +79,9 @@ https://epistemologyplus.com
 4. 按下Submit送出，會自動跳轉到此文章頁面
 
 ### Question Page
-<img src="https://i.imgur.com/dBeNTjm.png.png" width="650" height="auto" />
+<!-- ![](https://i.imgur.com/2owOJRK.png =600x)
+![](https://i.imgur.com/xtBShgk.png =600x) -->
+![](https://i.imgur.com/dBeNTjm.png)
 
 1. 包含文章內容與文章資訊
 2. 以下操作僅限登入的使用者:
@@ -85,8 +91,11 @@ https://epistemologyplus.com
 
 ## 使用與參考之框架/模組/原始碼
 > **Frontend**: react, antd, fontawesome, braft-editor, react-router-dom, graphql, apollo-client
+> 
 > **Backend**: graphql, apollo-server, jsonwebtoken, bcrypt, nodemon, dotenv, mongoose
+> 
 > **Database**: MongoDB
+> 
 > **Deployment**: AWS EC2, Nginx, SSL for free
 
 ## 每位組員之負責項目
@@ -95,6 +104,7 @@ https://epistemologyplus.com
     * 錄影片
 * 吳彬睿
     * Frontend
+    * 買零食、泡茶。
 * 徐均筑
     * Backend (graphql api, mongoose, authentication)
     * AWS Deployment
