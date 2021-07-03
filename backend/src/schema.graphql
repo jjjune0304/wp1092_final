@@ -17,7 +17,6 @@ type Mutation {
   createComment(text: String!, postID: String!, postType: String!): Comment!
   updateUser(avatar: String!): User!
   likeAnswer(aID: String!): Int!
-  reset: Boolean
 }
 
 type Subscription {

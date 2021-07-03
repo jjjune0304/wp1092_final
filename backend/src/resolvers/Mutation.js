@@ -1,11 +1,31 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import isAuthenticated from '../authentication';
+import Joi from 'joi';
 
 // 定義 bcrypt 加密所需 saltRounds 次數
 const SALT_ROUNDS = 2;
 // 定義 jwt 所需 secret (隨意)
 const SECRET = 'epistemologyet';
+
+// content validator
+const schema = Joi.object({
+  username: Joi.string()
+      .pattern(new RegExp('^[a-zA-Z0-9]*'))
+      .min(3)
+      .max(30),
+
+  password: Joi.string()
+      .pattern(new RegExp('^[a-zA-Z0-9]*'))
+      .min(3)
+      .max(30),
+
+  email: Joi.string()
+      .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+  
+  title: Joi.string()
+      .pattern(/^(?![%&?!.@])[\u4e00-\u9fa5_a-zA-Z0-9_%&?!.@]+$/u),
+})
 
 /* -------------------------------------------------------------------------- */
 /*                                  UTILITIES                                 */
@@ -30,6 +50,11 @@ const Mutation = {
   signup: async (parent, { username, password, email }, { db }, info) => {
     if (!username || !password || !email)
       throw new Error("Missing some information for sign up");
+    try {
+        await schema.validateAsync({ email, password });
+    } catch (err) {
+        throw new Error(`${err.message}`);
+    }  
     const existing = await db.UserModel.findOne({ email });
     if (existing) throw new Error(`Email account ${email} has been registered.`);
 
@@ -41,7 +66,11 @@ const Mutation = {
   login: async (parent, { email, password }, { db }, info) => {
     if (!password || !email)
       throw new Error("Missing some information for log in");
-    
+    try {
+        await schema.validateAsync({ email, password });
+    } catch (err) {
+        throw new Error(`${err.message}`);
+    }  
     const user = await db.UserModel.findOne({ email });
     if (!user)
       throw new Error(`Please sign up for email account ${email}`);
@@ -61,6 +90,12 @@ const Mutation = {
     if (!title || !body || !reward)
       throw new Error("Missing some information for a valid question");
     const author = user;
+    try {
+        await schema.validateAsync({ title });
+        await Joi.number().integer().max(user.points).validateAsync(reward);
+    } catch (err) {
+        throw new Error(`${err.message}`);
+    }  
     const newQuestion = new db.QuestionModel({ 
       title, body, author, reward,
       views: 0,
@@ -205,19 +240,19 @@ const Mutation = {
     return answer.like;
   }),
 
-  reset: async(parent, args, { db }) => {
-    try {
-      await db.UserModel.deleteMany();
-      await db.QuestionModel.deleteMany();
-      await db.AnswerModel.deleteMany();
-      await db.CommentModel.deleteMany();
-      console.log('All Data successfully deleted');
-      return true;
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-  }
+  // reset: async(parent, args, { db }) => {
+  //   try {
+  //     await db.UserModel.deleteMany();
+  //     await db.QuestionModel.deleteMany();
+  //     await db.AnswerModel.deleteMany();
+  //     await db.CommentModel.deleteMany();
+  //     console.log('All Data successfully deleted');
+  //     return true;
+  //   } catch (e) {
+  //     console.log(e);
+  //     return false;
+  //   }
+  // }
 };
 
 export { Mutation as default };
