@@ -2,7 +2,8 @@ import React from 'react';
 import { useParams, useHistory } from "react-router-dom";
 import { Link  } from "react-router-dom";
 import { List, Avatar, Space, Popover, Button, Tag, Spin, Image, BackTop, Row, Col, Typography, Divider, Tooltip } from 'antd';
-import { MessageOutlined, LikeOutlined, StarOutlined, EyeOutlined, QuestionOutlined, AntDesignOutlined, ApartmentOutlined } from '@ant-design/icons';
+import { MessageOutlined, LikeOutlined, StarOutlined, EyeOutlined, QuestionOutlined, 
+         AntDesignOutlined, ApartmentOutlined, DollarOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
@@ -97,9 +98,7 @@ const SearchPage = ({ token, setToken, activeKey, setActiveKey, authClient, user
                       // answers
                       <IconText icon={ApartmentOutlined} tip="answers" text={(<AnswerCount questionID={item.id}/>)} key={"answers"+item.id} />,
                       // reward
-                      <Tooltip placement="top" title="reward" >
-                        <Space><FontAwesomeIcon style={{color:"orange"}} icon={fas.faMoneyBillWave} />{isNull(item.reward, "-")}</Space>
-                      </Tooltip>,
+                      <IconText icon={DollarOutlined} tip="rewards" text={isNull(item.reward, "-")} key={"rewards"+item.id} />,
                       <Link to={item.href} >
                         <IconLink
                           src="https://gw.alipayobjects.com/zos/rmsportal/MjEImQtenlyueSmVEfUD.svg"
@@ -109,7 +108,7 @@ const SearchPage = ({ token, setToken, activeKey, setActiveKey, authClient, user
                     ]}
                     extra={
                       <Col span={3}>
-                            <PopoverAnswer questionID={item.id} />
+                          <PopoverAnswer questionID={item.id} />
                       </Col>
                     }
                     className="Shadow"

@@ -12,12 +12,13 @@ const userSchema = new Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
   username: { type: String, required: true },
+  avatar: { type: String },
   points: {type: Number, default: 100},
   feedback: {type: Number, default: 0},
   questions: [{ type: mongoose.Types.ObjectId, ref: 'Question' }],
   answers: [{ type: mongoose.Types.ObjectId, ref: 'Answer' }],
   comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
-  avatar: { type: String },
+  inbox: [{ type: mongoose.Types.ObjectId, ref: 'Mail' }]
 }, schemaOptions);
 
 const questionSchema = new Schema({
@@ -47,16 +48,26 @@ const commentSchema = new Schema({
   text: { type: String, required: true },
 }, schemaOptions);
 
+const mailSchema = new Schema({
+  type: { type: String, required: true },
+  message: { type: String, required: true },
+  time: { type: String },
+  qID: { type: String },
+  refID: { type: String }, // comment/answer id
+}, schemaOptions);
+
 const UserModel = mongoose.model('User', userSchema);
 const QuestionModel = mongoose.model('Question', questionSchema);
 const AnswerModel = mongoose.model('Answer', answerSchema);
 const CommentModel = mongoose.model('Comment', commentSchema);
+const MailModel = mongoose.model('Mail', mailSchema);
 
 const db = {
   UserModel,
   QuestionModel,
   AnswerModel,
-  CommentModel
+  CommentModel,
+  MailModel
 };
 
 export { db as default };

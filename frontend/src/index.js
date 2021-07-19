@@ -7,7 +7,7 @@ import newAppolloClient, { ApolloProvider } from './hooks/appolloClient.js'
 
 import './index.css';
 
-const client = newAppolloClient();
+const client = newAppolloClient({token:""});
 
 ReactDOM.render(
     <ApolloProvider client={client}>

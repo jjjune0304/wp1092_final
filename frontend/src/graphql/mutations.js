@@ -79,6 +79,12 @@ export const CREATE_QUESTION_MUTATION = gql`
   }
 `;
 
+export const LOGOUT_MUTATION = gql`
+  mutation Logout {
+    logout
+  }
+`;
+
 export const LOGIN_MUTATION = gql`
   mutation Login( 
       $email: String!, 

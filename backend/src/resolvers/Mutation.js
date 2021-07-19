@@ -42,6 +42,14 @@ const createToken = ({ _id, email, username }) => {
   return jwt.sign({ id, email, username }, SECRET, { expiresIn: '1d' });
 };
 
+const addMail = async ({ db, type, message, time, refID }) => {
+  return new db.MailModel({ type, message, time, refID }).save();
+}
+
+const delMail = async({ db, id }) => {
+  return db.MailModel.deleteOne({id});
+}
+
 /* -------------------------------------------------------------------------- */
 /*                                  MUTATION                                  */
 /* -------------------------------------------------------------------------- */
@@ -106,14 +114,26 @@ const Mutation = {
     author.questions.push(newQuestion);
     await author.save();
 
+    /////////////////////// Inbox ///////////////////////
+
+    const mailPayload = {
+      type: 'ASK', 
+      message: `You just asked a question: ${newQuestion.title}`,
+      time: newQuestion.createdAt.toISOString(),
+      qID: newQuestion._id,
+      // refID: newQuestion._id,
+    };
+
     pubsub.publish(`user ${author._id}`, {
-      inbox: {
-        type: 'ASK', 
-        message: `You just asked a question: ${newQuestion.title}`,
-        time: newQuestion.createdAt.toISOString(),
-        refID: newQuestion._id,
-      },
+      inbox: mailPayload,
     });
+
+    const newMail = new db.MailModel(mailPayload);
+    await newMail.save();
+
+    author.inbox.push(newMail);
+    await author.save();
+
     return newQuestion;
   }),
 
@@ -137,27 +157,49 @@ const Mutation = {
     }
     await question.save();
     
+    /////////////////////// Inbox ///////////////////////
+
     // author
-    pubsub.publish(`user ${author._id}`, {
-      inbox: {
-        type: 'ANSWER',
-        message: `You just answered the question: ${question.title}`,
-        time: newAnswer.createdAt.toISOString(),
-        refID: question._id,
-      },
-    });
+    const mailPayload = {
+      type: 'ANSWER',
+      message: `You answered a question: ${question.title}`,
+      time: newAnswer.createdAt.toISOString(),
+      qID: question._id,
+      refID: newAnswer._id,
+    }
+    
+    const newMail = new db.MailModel(mailPayload);
+    await newMail.save();
+
+    author.inbox.push(newMail);
+    await author.save();
+    
+    pubsub.publish(`user ${author._id}`, {inbox: mailPayload});
 
     // subscriber
-    question.subscribers.forEach(sub => {
-      if (!author._id.equals(sub._id))
+    question.subscribers.forEach(async sub => {
+      if (!author._id.equals(sub._id)) {
+
+        const subscriber = await db.UserModel.findById(sub._id);
+
+        const mailPayload = {
+          type: 'NOTIFICATION', 
+          message: `@${author.username} answered the question: ${question.title}`,
+          time: newAnswer.createdAt.toISOString(),
+          qID: question._id,
+          refID: newAnswer._id,
+        };       
+        
+        const newMail = new db.MailModel(mailPayload);
+        await newMail.save();
+
+        subscriber.inbox.push(newMail);
+        await subscriber.save();
+
         pubsub.publish(`user ${sub._id}`, {
-          inbox: {
-            type: 'NOTIFICATION', 
-            message: `Somebody just answered the question: ${question.title}`,
-            time: newAnswer.createdAt.toISOString(),
-            refID: question._id,
-          },
+          inbox: mailPayload,
         });
+      }
     });
 
     return newAnswer;
@@ -192,27 +234,51 @@ const Mutation = {
       await question.save();
     }
 
+    /////////////////////// Inbox ///////////////////////
+
     // author
-    pubsub.publish(`user ${author._id}`, {
-      inbox: {
-        type: 'REPLY',
-        message: `You just replied a question: ${question.title}`,
+    const mailPayload = {
+        type: 'COMMENT',
+        message: `You commented a question: ${question.title}`,
         time: newComment.createdAt.toISOString(),
-        refID: question._id,
-      },
+        qID: question._id,
+        refID: newComment._id
+    };
+
+    const newMail = new db.MailModel(mailPayload);
+    await newMail.save();
+
+    author.inbox.push(newMail);
+    await author.save();
+
+    pubsub.publish(`user ${author._id}`, {
+      inbox: mailPayload,
     });
     
     // subscriber
-    question.subscribers.forEach(sub => {
-      if (!author._id.equals(sub._id))
-        pubsub.publish(`user ${sub._id}`, {
-          inbox: {
+    question.subscribers.forEach(async sub => {
+      if (!author._id.equals(sub._id)) {
+
+        const subscriber = await db.UserModel.findById(sub._id);
+
+        const mailPayload = {
             type: 'NOTIFICATION', 
-            message: `Somebody just replied the question: ${question.title}`,
+            message: `@${author.username} commented the question: ${question.title}`,
             time: newComment.createdAt.toISOString(),
-            refID: question._id,
-          },
+            qID: question._id,
+            refID: newComment._id
+        };
+        
+        const newMail = new db.MailModel(mailPayload);
+        await newMail.save();
+
+        subscriber.inbox.push(newMail);
+        await subscriber.save();
+
+        pubsub.publish(`user ${sub._id}`, {
+          inbox: mailPayload
         });
+      }
     });
 
     return newComment;
@@ -238,6 +304,12 @@ const Mutation = {
     pubsub.publish(`userfeedback ${author._id}`, { feedback: author.feedback });
 
     return answer.like;
+  }),
+
+  deleteMail: isAuthenticated(async (parent, { mID }, { db, user }) => {
+    await user.inbox.pull(mID, function(error, docs){if(error) console.log(error); return false;});
+    await db.MailModel.findOneAndDelete(mID, function(error, docs){if(error) console.log(error); return false;});
+    return true;
   }),
 
   // reset: async(parent, args, { db }) => {

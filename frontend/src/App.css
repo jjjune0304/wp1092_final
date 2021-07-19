@@ -50,3 +50,22 @@
   border-radius: 80%;
   box-shadow: 15px 5px 5px rgba(0.1,0.1,0.1,0.8);
 }
+
+.modified-item {
+  border-bottom: 0px;
+  border-bottom-style: none !important;
+  opacity: 0;
+}
+
+.modified-item:hover {
+  border-bottom: 0px;
+  border-bottom-style: none !important;
+  opacity: 0;
+  /*border-bottom: 2px solid transparent !important;*/
+  /*color: inherit !important;*/
+}
+
+.modified-item.ant-menu-submenu-active{ 
+  border-bottom: 2px solid transparent !important; 
+  color: inherit !important; 
+}

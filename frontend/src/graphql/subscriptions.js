@@ -21,4 +21,16 @@ export const FEEDBACK_SUBSCRIPTION = gql`
   subscription {
     feedback
   }
-`
+`;
+
+export const INBOX_SUBSCRIPTION = gql`
+  subscription {
+    inbox {
+      type
+      message
+      qID
+      refID
+      time 
+    }
+  }
+`;

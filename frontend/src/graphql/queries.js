@@ -236,7 +236,7 @@ export const QUESTION_COMMENTS_COUNT_QUERY = gql`
       }
     }
   }
-`
+`;
 
 export const POPOVER_QUESTION_ANSWERS_QUERY = gql`
   query question(
@@ -255,6 +255,22 @@ export const POPOVER_QUESTION_ANSWERS_QUERY = gql`
         }
         createdAt
         updatedAt
+      }
+    }
+  }
+`;
+
+export const INBOX_ME_QUERY = gql`
+  query me {
+    me {
+      username
+      inbox {
+        id
+        type
+        message
+        qID
+        refID
+        time
       }
     }
   }

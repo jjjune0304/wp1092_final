@@ -22,6 +22,13 @@ const User = {
       db.AnswerModel.findById(aId)),
     );
   },
+  inbox(parent, args, { db }) {
+    if(!parent.inbox) return [];
+    return Promise.all(
+      parent.inbox.map((mID) => 
+      db.MailModel.findById(mID)),
+    );
+  }
 };
 
 export { User as default };

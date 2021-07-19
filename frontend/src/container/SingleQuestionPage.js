@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import { useParams, Link, useHistory } from "react-router-dom";
 import { Layout, Menu, Input, Image, Button, Empty, Row, Col, Divider, message } from 'antd';
@@ -23,7 +23,7 @@ const { Header, Content, Footer, Sider } = Layout;
 
 const onSearch = value => console.log(value);
 
-const MyComment = ({id, author, avatar, content, timeString}) => {
+const MyComment = ({id, author, avatar, content, timeString, refID, viewRef}) => {
 
     const [like, setLike] = useState(false);
 
@@ -38,18 +38,23 @@ const MyComment = ({id, author, avatar, content, timeString}) => {
                 content={(<p>{content}</p>)}
                 actions={actions}
                 datetime={(<span>{getMoment(timeString)}</span>)}
-            />);
+            >
+
+                {/*create viewRef*/}
+                {(refID && refID===id)?(<div ref={viewRef} style={{color:'orange'}}><strong> ☝ Here ! </strong></div>):(<></>)}
+            
+            </Comment>);
 }
 
 
-const MyAnswer = ({id, author, avatar, content, _likeCount, timeString, _childrenComments, authClient, makeComment, userProfile}) => {
+const MyAnswer = ({id, author, avatar, content, _likeCount, timeString, _childrenComments, authClient, makeComment, userProfile, refID, viewRef}) => {
 
     const [like, setLike] = useState(false);
     const [likeCount, setLikeCount] = useState(_likeCount?_likeCount:0);
     const [makingCommentVisible, setMakingCommentVisible] = useState(false);
     const [childrenComments, setChildrenComments] = useState(_childrenComments);
 
-    const [likeAnswer, {loading:likeAnswerLoading, error:likeAnswerError}] = useMutation(LIKE_ANSWER_MUTATION);
+    const [likeAnswer, {loading:likeAnswerLoading, error:likeAnswerError}] = useMutation(LIKE_ANSWER_MUTATION, {client: authClient});
 
     const actions = [ 
         <span onClick={ async () => {
@@ -60,8 +65,7 @@ const MyAnswer = ({id, author, avatar, content, _likeCount, timeString, _childre
                 try {
                     setLikeCount(likeCount+1);
                     likeReturn = await likeAnswer({
-                        variables: {aID: id},
-                        client: authClient
+                        variables: {aID: id}
                     });
                     setLikeCount(likeReturn.data.likeAnswer);
                 } catch(error) {
@@ -76,7 +80,7 @@ const MyAnswer = ({id, author, avatar, content, _likeCount, timeString, _childre
         <span key={"comment-list-reply-to-"+id} onClick={()=>setMakingCommentVisible(!makingCommentVisible)}>Reply to</span>
     ]
 
-    return (<li key={"answer"+id}>
+    return (
                 <Comment
                     author={author}
                     avatar={avatar}
@@ -84,6 +88,10 @@ const MyAnswer = ({id, author, avatar, content, _likeCount, timeString, _childre
                     actions={actions}
                     datetime={(<span>{getMoment(timeString)}</span>)}
                 >
+
+                {/*create viewRef*/}
+                {(refID && refID===id)?(<div ref={viewRef} style={{color:'orange'}}><strong> ☝ Here !</strong></div>):(<></>)}
+
                 {childrenComments?
                     (childrenComments.map((item)=>(
                     <MyComment 
@@ -92,7 +100,9 @@ const MyAnswer = ({id, author, avatar, content, _likeCount, timeString, _childre
                             author={item.author.username} 
                             avatar={isNull(item.author.avatar, standardAvatar)} 
                             content={item.text} 
-                            timeString={item.createdAt} />))
+                            timeString={item.createdAt}
+                            refID={refID}
+                            viewRef={viewRef} />))
                     )
                     :
                     (<></>)
@@ -109,8 +119,9 @@ const MyAnswer = ({id, author, avatar, content, _likeCount, timeString, _childre
                     :
                     (<></>)
                 }
+
                 </Comment>
-            </li>);
+            );
 }
 
 const CommentEditor = ({ postID, postType, setVisible, authClient, makeComment, commentsData, setCommentsData, userProfile }) => {
@@ -125,15 +136,15 @@ const CommentEditor = ({ postID, postType, setVisible, authClient, makeComment, 
 
         try {
             await makeComment({
-                variables: {text:value, postID, postType},
-                client: authClient
+                variables: {text:value, postID, postType}
             })
         } catch (error) {
             setSubmitting(false);
             if (error.message.toString().includes('log in')) {
                 message.error("Please login first");
                 setTimeout(()=>window.open("/login", "_blank"), 500);
-            }
+            } else 
+                console.log(error);
             return;
         }
 
@@ -177,8 +188,7 @@ const AnswerEditor = ({ questionID, authClient, makeAnswer, answersData, setAnsw
         
         try { 
             newAnswer = await makeAnswer({
-                variables: {body: value, postID: questionID},
-                client: authClient
+                variables: {body: value, postID: questionID}
             });
             
             console.log(newAnswer);
@@ -222,9 +232,13 @@ const AnswerEditor = ({ questionID, authClient, makeAnswer, answersData, setAnsw
 
 let firsttime=0;
 
+
+
+//                     <a href="#60f01337495a287af856d2a4">tag</a>
+
 const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClient, userProfile, logout }) => {
 
-    let { id } = useParams();
+    let { qID, refID } = useParams();
 
     const history = useHistory();
 
@@ -238,10 +252,10 @@ const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClien
     const [answersData, setAnswersData] = useState(null);
     const [commentsData, setCommentsData] = useState();
 
-    const {loading: questionLoading, error: questionError, data: questionDataQ} = useQuery(QUESTION_QUERY, {variables:{questionID:id}});
-    const {loading: authorLoading, error: authorError, data: authorDataQ} = useQuery(QUESTION_AUTHOR_QUERY, {variables:{questionID:id}});
-    const {loading: answersLoading, error: answersError, data: answersDataQ} = useQuery(QUESTION_ANSWERS_QUERY, {variables:{questionID:id}});
-    const {loading: commentsLoading, error: commentsError, data: commentsDataQ} = useQuery(QUESTION_COMMENTS_QUERY, {variables:{questionID:id}})
+    const {loading: questionLoading, error: questionError, data: questionDataQ} = useQuery(QUESTION_QUERY, {variables:{questionID:qID}});
+    const {loading: authorLoading, error: authorError, data: authorDataQ} = useQuery(QUESTION_AUTHOR_QUERY, {variables:{questionID:qID}});
+    const {loading: answersLoading, error: answersError, data: answersDataQ} = useQuery(QUESTION_ANSWERS_QUERY, {variables:{questionID:qID}});
+    const {loading: commentsLoading, error: commentsError, data: commentsDataQ} = useQuery(QUESTION_COMMENTS_QUERY, {variables:{questionID:qID}})
 
     useEffect(()=>{if(!questionLoading)setQuestionData(questionDataQ.question)}, [questionDataQ]);
     // useEffect(()=>{if(!authorLoading)setQuestionData(authorDataQ.question.author)}, [authorDataQ]); 
@@ -249,8 +263,8 @@ const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClien
     useEffect(()=>{if(!commentsLoading)setCommentsData(commentsDataQ.question.comments)}, [commentsDataQ])
 
     // create answer, comment mutations
-    const [makeComment, {loading:makeCommentLoading, error:makeCommentError}] = useMutation(CREATE_COMMENT_MUTATION);
-    const [makeAnswer, {loading:makeAnswerLoading, error:makeAnswerError}] = useMutation(CREATE_ANSWER_MUTATION);
+    const [makeComment, {loading:makeCommentLoading, error:makeCommentError}] = useMutation(CREATE_COMMENT_MUTATION, {client: authClient});
+    const [makeAnswer, {loading:makeAnswerLoading, error:makeAnswerError}] = useMutation(CREATE_ANSWER_MUTATION, {client: authClient});
 
     // make comment Input bar visibility
     const [makingCommentVisible, setMakingCommentVisible] = useState(false);
@@ -258,8 +272,18 @@ const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClien
     const questionRoutes = [
       { path: 'home', breadcrumbName: 'home' },
       { path: '/questions', breadcrumbName: 'questions' },
-      { path: '/question'+id, breadcrumbName: id }
+      { path: '/question'+qID, breadcrumbName: qID }
     ];
+
+    // scroll ref into view
+    const viewRef = useRef(null);
+    const [firstScroll, setFirstScroll] = useState(true);
+    const scrollToViewRef = () => {
+        if (firstScroll && refID && viewRef.current && questionDataQ && answersDataQ && commentsDataQ) {
+            try { viewRef.current.scrollIntoView({behavior: 'smooth', block: "nearest"}); setFirstScroll(false); } catch(error) {}
+        }
+    }
+    useEffect(scrollToViewRef);
 
     const IconLink = ({ src, text }) => (
       <a className="example-link">
@@ -295,7 +319,7 @@ const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClien
         <div style={{backgroundColor:"#EEEEEE", height:"100%", minHeight:"100vh", padding:"15px 0px"}}>
             {/* Header */}
             <EplusHeader token={token} setToken={setToken} activeKey={activeKey} setActiveKey={setActiveKey} 
-                         userProfile={userProfile} logout={logout} position="fixed"/>
+                         authClient={authClient} userProfile={userProfile} logout={logout} position="fixed"/>
 
             {(questionData) ? (<>
 
@@ -321,7 +345,9 @@ const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClien
             >
 
                 {/* Question title */}
-                <h2>
+                <h2 onClick={()=>viewRef.current.scrollIntoView({behavior: "smooth",
+      block: "nearest",
+      inline: "start"})}>
                     <strong>Question:</strong> {questionData.title}
                 </h2>
 
@@ -331,9 +357,7 @@ const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClien
                 </p>
 
                 {/* Question content */}
-                <Content
-                    
-                >
+                <Content>
                     {questionContents}
                 </Content>
 
@@ -354,7 +378,10 @@ const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClien
                                                author={item.author.username} 
                                                avatar={isNull(item.author.avatar ,standardAvatar)} 
                                                content={item.text} 
-                                               timeString={item.createdAt} />
+                                               timeString={item.createdAt}
+                                               refID={refID}
+                                               viewRef={viewRef} />
+
                                 </li>
                             ))}
                         </List>
@@ -375,7 +402,7 @@ const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClien
                 <Button type="text" style={{color:"gray", backgroundColor:"#FAFAFA"}} onClick={()=>setMakingCommentVisible(!makingCommentVisible)}>Comment to question</Button>                        
                 {makingCommentVisible?
                     (<> <br></br><br></br>
-                        <CommentEditor postID={id} 
+                        <CommentEditor postID={qID} 
                                     postType="question" 
                                     setVisible={setMakingCommentVisible} 
                                     authClient={authClient} 
@@ -398,26 +425,30 @@ const SingleQustionPage = ({ token, setToken, activeKey, setActiveKey, authClien
                             itemLayout="horizontal"
                         >
                             {answersData.map((item)=>(
-                                <MyAnswer 
-                                    key={item.id}
-                                    id={item.id}
-                                    author={item.author.username}
-                                    avatar={isNull(item.author.avatar, standardAvatar)}
-                                    content={item.body}
-                                    _likeCount={item.like}
-                                    timeString={item.createdAt}
-                                    _childrenComments={item.comments}
-                                    authClient={authClient}
-                                    makeComment={makeComment}
-                                    userProfile={userProfile}
-                                />
+                                <li key={"answer"+item.id} id={item.id}>
+                                    <MyAnswer 
+                                        key={item.id}
+                                        id={item.id}
+                                        author={item.author.username}
+                                        avatar={isNull(item.author.avatar, standardAvatar)}
+                                        content={item.body}
+                                        _likeCount={item.like}
+                                        timeString={item.createdAt}
+                                        _childrenComments={item.comments}
+                                        authClient={authClient}
+                                        makeComment={makeComment}
+                                        userProfile={userProfile}
+                                        refID={refID}
+                                        viewRef={viewRef}
+                                    />
+                                </li>
                             ))}
                         </List>
                     </>)
                     :
                     (<><Divider plain><strong>0 Answers :</strong></Divider></>)
                 }
-                <AnswerEditor questionID={id} 
+                <AnswerEditor questionID={qID} 
                               authClient={authClient} 
                               makeAnswer={makeAnswer} 
                               answersData={answersData} 

@@ -23,7 +23,7 @@ const Ask = ({ userProfile, authClient}) => {
     if (meLoading)
         return (<Spin tip="Loading..." size="large"></Spin>);
 
-    console.log(meData);
+    // console.log(meData);
     const points = (!meError)?meData.me.points:0;
 
     const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link', 'separator']
@@ -45,7 +45,7 @@ const Ask = ({ userProfile, authClient}) => {
                     body: outputHTML,
                     reward: reward,
                 },
-                client: authClient
+                // client: authClient
             });
             console.log(newQuestion);
             window.scroll({top: 0, behavior: 'smooth' })

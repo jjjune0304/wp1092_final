@@ -17,6 +17,7 @@ type Mutation {
   createComment(text: String!, postID: String!, postType: String!): Comment!
   updateUser(avatar: String!): User!
   likeAnswer(aID: String!): Int!
+  deleteMail(mID: String!): Boolean!
 }
 
 type Subscription {
@@ -39,6 +40,7 @@ type User {
   updatedAt: String!
   questions: [Question!]
   answers: [Answer!]
+  inbox: [Mail!]
 }
 
 type Question {
@@ -76,9 +78,21 @@ type Comment {
   updatedAt: String!
 }
 
+type Mail {
+  id: ID!
+  type: String!
+  message: String!
+  qID: String
+  refID: String
+  time: String
+  createdAt: String!
+  updatedAt: String!
+}
+
 enum MessageType {
   ASK
   ANSWER
+  COMMENT
   REPLY
   NOTIFICATION
 }
@@ -87,5 +101,6 @@ type InBoxPayload {
   type: MessageType!
   message: String!
   time: String!
+  qID: ID!
   refID: ID!
 }

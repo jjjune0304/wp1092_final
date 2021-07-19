@@ -49,10 +49,10 @@ const LoginPanel = ({setToken, setActiveKey}) => {
     }
 
     // get token success (Success Login)
-    if ( tokenData && userData ) {
+    if ( tokenData ){// && userData ) {
       const token = tokenData.login.token;
 
-      localStorage.setItem('userProfile', JSON.stringify(userData.user));
+      // localStorage.setItem('userProfile', JSON.stringify(userData.user));
       // {
       //   userData.user 
       //   email:userData.user.email, 
@@ -61,7 +61,7 @@ const LoginPanel = ({setToken, setActiveKey}) => {
       //   avatar:userData.user.avatar
       // }))
 
-      localStorage.setItem('token', token);
+      localStorage.setItem('Epistemology_token', token);
       localStorage.setItem('Epistemology_token_timestamp', new Date().getTime());
       setActiveKey('home');
 
@@ -81,7 +81,7 @@ const LoginPanel = ({setToken, setActiveKey}) => {
 
     // get login token
     try {
-      await getUserData({variables: { email: values.email } })
+      // await getUserData({variables: { email: values.email } })
       await getToken({ variables: { email: values.email, password: values.password } });
     } catch(error) {}
 

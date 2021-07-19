@@ -48,8 +48,8 @@ const EplusSider = () => {
     if (hottestQuestionsLoading || valuableQuestionsLoading)
         return (<></>);
     let itemKey = 1;
-    let hottestQuestions = hottestQuestionsData.hottest.map((q, index)=> <Link key={'hot_'+index} to={"/question/"+q.id}><Menu.Item key={'hotItem_'+index}>{makeShorter(q.title, 20)}</Menu.Item></Link>)
-    let valuableQuestions = valuableQuestionsData.valuable.map((q, index)=> <Link key={'value_'+index} to={"/question/"+q.id}><Menu.Item key={'valueItem_'+index}>{makeShorter(q.title, 20)}</Menu.Item></Link>)
+    let hottestQuestions = hottestQuestionsData.hottest.map((q, index)=> <Link key={'hot_'+index} to={"/question/"+q.id}><Menu.Item key={'hotItem_'+q.id}><strong>Q</strong> : {makeShorter(q.title, 20)}</Menu.Item></Link>)
+    let valuableQuestions = valuableQuestionsData.valuable.map((q, index)=> <Link key={'value_'+index} to={"/question/"+q.id}><Menu.Item key={'valueItem_'+q.id}><strong>Q</strong> : {makeShorter(q.title, 20)}</Menu.Item></Link>)
 
     setTimeout(()=>{if(refreshCount<2)setLeftSliderCollapsed(false); refreshCount+=1;}, 300);
 

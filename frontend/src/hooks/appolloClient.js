@@ -6,7 +6,11 @@ import { getMainDefinition } from 'apollo-utilities'
 
 
 // new Appollo Client Object (with token?)
-const newAppolloClient = (token="") => {
+const newAppolloClient = ({token}) => {
+
+    if ( !token )
+        token = localStorage.getItem('Epistemology_token');
+
     // Create a WebSocket link:
     const wsLink = new WebSocketLink({
         // uri: `wss://13.213.47.0/graphql`,
@@ -14,8 +18,8 @@ const newAppolloClient = (token="") => {
         // uri: `wss://epistemologyplus.com/ws`,
         options: { 
             reconnect: true,
-            timeout: 20000,
-            lazy: true,
+            // timeout: 20,
+            // lazy: true,
             connectionParams: {
                 authorization: token
             }
@@ -35,9 +39,6 @@ const newAppolloClient = (token="") => {
 
     // auth http link
     const authLink = setContext((_, { headers }) => {
-
-        if ( token==="" )
-            token = localStorage.getItem('token');
         
         return {
             headers: {

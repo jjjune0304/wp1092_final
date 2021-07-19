@@ -32,7 +32,7 @@ const Home = ({ token, setToken, activeKey, setActiveKey, userProfile, logout, a
             <Layout className="site-layout" style={{padding: '0px 0px 0px 0px', width:'100%'}}>
 
                 {/* Header */}
-                <EplusHeader token={token} setToken={setToken} activeKey={activeKey} setActiveKey={setActiveKey} 
+                <EplusHeader token={token} setToken={setToken} activeKey={activeKey} setActiveKey={setActiveKey} authClient={authClient}
                              userProfile={userProfile} logout={logout}/>
                 
                 {/* Main Panel */}
