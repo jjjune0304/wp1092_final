@@ -17,11 +17,12 @@ type Mutation {
   createComment(text: String!, postID: String!, postType: String!): Comment!
   updateUser(avatar: String!): User!
   likeAnswer(aID: String!): Int!
+  readMail(mID: String): Int!
   deleteMail(mID: String!): Boolean!
 }
 
 type Subscription {
-  inbox: InBoxPayload!
+  inbox: Mail!
   feedback: Int!
 }
 
@@ -68,7 +69,6 @@ type Answer {
   like: Int!
 }
 
-
 type Comment {
   id: ID!
   author: User!
@@ -80,7 +80,8 @@ type Comment {
 
 type Mail {
   id: ID!
-  type: String!
+  type: MessageType!
+  unread: Boolean!
   message: String!
   qID: String
   refID: String
@@ -97,10 +98,11 @@ enum MessageType {
   NOTIFICATION
 }
 
-type InBoxPayload {
-  type: MessageType!
-  message: String!
-  time: String!
-  qID: ID!
-  refID: ID!
-}
+# type InBoxPayload {
+#   type: MessageType!
+#   unread: Boolean!
+#   message: String!
+#   time: String!
+#   qID: ID!
+#   refID: ID!
+# }

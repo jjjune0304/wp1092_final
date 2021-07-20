@@ -35,7 +35,7 @@ const MyComment = ({id, author, avatar, content, timeString, refID, viewRef}) =>
     return (<Comment
                 author={author}
                 avatar={avatar}
-                content={(<p>{content}</p>)}
+                content={(<span>{content}</span>)}
                 actions={actions}
                 datetime={(<span>{getMoment(timeString)}</span>)}
             >
@@ -84,7 +84,7 @@ const MyAnswer = ({id, author, avatar, content, _likeCount, timeString, _childre
                 <Comment
                     author={author}
                     avatar={avatar}
-                    content={(<p>{content}</p>)}
+                    content={(<span>{content}</span>)}
                     actions={actions}
                     datetime={(<span>{getMoment(timeString)}</span>)}
                 >

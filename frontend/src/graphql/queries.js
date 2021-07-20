@@ -3,6 +3,7 @@ import { gql } from '@apollo/client';
 export const ME_QUERY = gql`
   query me {
     me {
+      id
       email
       username
       avatar
@@ -19,6 +20,7 @@ export const USER_QUERY = gql`
     user (
       email: $email
     ) {
+      id
       email
       username
       avatar
@@ -263,9 +265,11 @@ export const POPOVER_QUESTION_ANSWERS_QUERY = gql`
 export const INBOX_ME_QUERY = gql`
   query me {
     me {
+      id
       username
       inbox {
         id
+        unread
         type
         message
         qID

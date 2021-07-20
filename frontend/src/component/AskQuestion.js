@@ -1,7 +1,7 @@
 import 'braft-editor/dist/index.css'
 import React, { useState } from "react";
 import BraftEditor from 'braft-editor'
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { ME_QUERY } from '../graphql'
 import { CREATE_QUESTION_MUTATION } from '../graphql'
 import { Form, Button, Spin, Input, InputNumber, Space, Divider, message, Typography } from 'antd'
@@ -62,7 +62,7 @@ const Ask = ({ userProfile, authClient}) => {
             return;
         }
 
-        message.success("Success ask question");
+        message.success("Your question was sent successfully.");
     }
 
     return (
@@ -74,7 +74,7 @@ const Ask = ({ userProfile, authClient}) => {
             <Form style={{border: '3px dashed gray', padding: '20px', borderRadius: "10px 100px / 120px"}} name="nest-messages" onFinish={onFinish} >
                 <Form.Item>
                     <Space style={{fontSize:"16px", float:"left"}}>
-                    <Text> Your assets</Text><Text>💰 : {points} </Text>
+                    <Text >Your assets 💰 : {points} </Text>
                     </Space>
                 </Form.Item>
                 <Form.Item
@@ -83,7 +83,7 @@ const Ask = ({ userProfile, authClient}) => {
                     ]}
                 >
                     <Space style={{fontSize:"16px", float:"left"}}>
-                    <Text mark> Set reward</Text><Text>🤑 : </Text>
+                    <Text mark> Set Reward</Text><Text>🤑 : </Text>
                     <InputNumber 
                             defaultValue={Math.min(20,points)}
                             placeholder={'0~'+points}

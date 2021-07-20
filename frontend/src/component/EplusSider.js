@@ -48,8 +48,8 @@ const EplusSider = () => {
     if (hottestQuestionsLoading || valuableQuestionsLoading)
         return (<></>);
     let itemKey = 1;
-    let hottestQuestions = hottestQuestionsData.hottest.map((q, index)=> <Link key={'hot_'+index} to={"/question/"+q.id}><Menu.Item key={'hotItem_'+q.id}><strong>Q</strong> : {makeShorter(q.title, 20)}</Menu.Item></Link>)
-    let valuableQuestions = valuableQuestionsData.valuable.map((q, index)=> <Link key={'value_'+index} to={"/question/"+q.id}><Menu.Item key={'valueItem_'+q.id}><strong>Q</strong> : {makeShorter(q.title, 20)}</Menu.Item></Link>)
+    let hottestQuestions = hottestQuestionsData.hottest.map((q, index)=> <Menu.Item key={'hotItem_'+q.id}><Link to={"/question/"+q.id}><strong>Q</strong> : {makeShorter(q.title, 20)}</Link></Menu.Item>)
+    let valuableQuestions = valuableQuestionsData.valuable.map((q, index)=> <Menu.Item key={'valueItem_'+q.id}><Link to={"/question/"+q.id}><strong>Q</strong> : {makeShorter(q.title, 20)}</Link></Menu.Item>)
 
     setTimeout(()=>{if(refreshCount<2)setLeftSliderCollapsed(false); refreshCount+=1;}, 300);
 
@@ -58,6 +58,7 @@ const EplusSider = () => {
     return (<>
         <Sider collapsible collapsed={leftSliderCollapsed} onCollapse={()=>{setLeftSliderCollapsed(!leftSliderCollapsed); setAutoHide(!leftSliderCollapsed);}}
                     // onMouseLeave={()=>setTimeout(()=>setLeftSliderCollapsed(autoHide&&true),1000)}
+                    collapsedWidth="70px"
                     scrollable="true"
                     style={{overflow: 'auto'}}
                     >
@@ -68,7 +69,7 @@ const EplusSider = () => {
                         <img
                             height={"auto"}
                             width={"70px"}
-                            preview={false}
+                            preview="false"
                             // src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
                             // src="https://www.educarepk.com/wp-content/uploads/2020/07/Epistemology.png"
                             // src="http://lab.wubinray.com/eplus/logo.png"

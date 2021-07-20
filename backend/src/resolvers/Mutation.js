@@ -125,7 +125,7 @@ const Mutation = {
     };
 
     pubsub.publish(`user ${author._id}`, {
-      inbox: mailPayload,
+      inbox: newMail,
     });
 
     const newMail = new db.MailModel(mailPayload);
@@ -174,7 +174,9 @@ const Mutation = {
     author.inbox.push(newMail);
     await author.save();
     
-    pubsub.publish(`user ${author._id}`, {inbox: mailPayload});
+    pubsub.publish(`user ${author._id}`, {
+      inbox: newMail,
+    });
 
     // subscriber
     question.subscribers.forEach(async sub => {
@@ -197,7 +199,7 @@ const Mutation = {
         await subscriber.save();
 
         pubsub.publish(`user ${sub._id}`, {
-          inbox: mailPayload,
+          inbox: newMail,
         });
       }
     });
@@ -252,7 +254,7 @@ const Mutation = {
     await author.save();
 
     pubsub.publish(`user ${author._id}`, {
-      inbox: mailPayload,
+      inbox: newMail,
     });
     
     // subscriber
@@ -276,7 +278,7 @@ const Mutation = {
         await subscriber.save();
 
         pubsub.publish(`user ${sub._id}`, {
-          inbox: mailPayload
+          inbox: newMail,
         });
       }
     });
@@ -306,9 +308,23 @@ const Mutation = {
     return answer.like;
   }),
 
+  readMail: isAuthenticated(async (parent, { mID }, { db, user }) => {
+    if (mID) {
+      await db.MailModel.findByIdAndUpdate(mID, { $set: { unread: false }}, function(err, res){
+        if(err) console.log(err); return 0;});
+    } else {
+      // read all mails if not specified
+      await db.MailModel.updateMany(
+        {_id: user.inbox},
+        {$set: {unread: false}},
+        function(err, res){ if(err) console.log(err); return 0; });
+    }
+    return user.inbox.filter(m => m.unread).length;
+  }),
+
   deleteMail: isAuthenticated(async (parent, { mID }, { db, user }) => {
-    await user.inbox.pull(mID, function(error, docs){if(error) console.log(error); return false;});
-    await db.MailModel.findOneAndDelete(mID, function(error, docs){if(error) console.log(error); return false;});
+    await user.inbox.pull(mID, function(err, docs){if(err) console.log(err); return false;});
+    await db.MailModel.findOneAndDelete(mID, function(err, docs){if(err) console.log(err); return false;});
     return true;
   }),
 

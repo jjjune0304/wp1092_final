@@ -39,7 +39,7 @@ const Home = ({ token, setToken, activeKey, setActiveKey, userProfile, logout, a
                 <Content style={{padding: '0px 0px 0px 0px', minHeight: "100vh"}}>
                     <Row>
                         {/* Center Content */}
-                        <Col span={18} style={{padding: "20px 10px 20px 20px"}} >
+                        <Col xl={20} lg={20} md={20} sm={18} xs={18} style={{padding: "20px 10px 20px 20px"}} >
                             <Switch>
 
                                 {/* Questions content */}
@@ -52,7 +52,7 @@ const Home = ({ token, setToken, activeKey, setActiveKey, userProfile, logout, a
                         </Col>
 
                         {/* Right Content */}
-                        <Col span={6} style={{padding: "20px 20px 20px 10px"}}>
+                        <Col xl={4} lg={4} md={4} sm={6} xs={6} style={{padding: "20px 20px 20px 10px"}}>
                             <EplusRightContent userProfile={userProfile} authClient={authClient} />
                         </Col>
                     </Row>

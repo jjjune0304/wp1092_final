@@ -28,7 +28,7 @@ function App() {
     const [getMe, { data:dataMe }] = useLazyQuery(ME_QUERY, {client: authClient});
 
     useEffect( () => { setAuthClient(newAppolloClient({token})); }, [token]);
-    useEffect( () => { getMe(); }, [authClient]);
+    useEffect( () => { getMe(); }, [authClient, getMe]);
     useEffect( () => { setUserProfile(dataMe?dataMe.me:userProfile); }, [dataMe] );
 
     // checkToken (如果其他分頁地方有登入)

@@ -4,6 +4,6 @@ export { QUESTION_AUTHOR_QUERY_LITE, QUESTION_ANSWERS_COUNT_QUERY, QUESTION_COMM
 export { INBOX_ME_QUERY } from './queries';
 export { SIGNUP_MUTATION, LOGIN_MUTATION, CREATE_QUESTION_MUTATION, LIKE_ANSWER_MUTATION } from './mutations';
 export { CREATE_ANSWER_MUTATION, CREATE_COMMENT_MUTATION } from './mutations';
-export { CHATBOX_SUBSCRIPTION } from './subscriptions';
+export { READ_MAIL_MUTATION } from './mutations';
 export { FEEDBACK_SUBSCRIPTION } from './subscriptions';
 export { INBOX_SUBSCRIPTION } from './subscriptions';

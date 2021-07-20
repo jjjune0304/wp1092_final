@@ -14,6 +14,7 @@ import User from './resolvers/User';
 import Question from './resolvers/Question';
 import Answer from './resolvers/Answer';
 import Comment from './resolvers/Comment';
+import Mail from './resolvers/Mail';
 
 // 定義 jwt 所需 secret (隨意)
 const SECRET = 'epistemologyet';
@@ -31,7 +32,8 @@ const server = new ApolloServer({
     User,
     Question,
     Answer,
-    Comment
+    Comment,
+    Mail
   },
   playground: true,
   introspection: true,	

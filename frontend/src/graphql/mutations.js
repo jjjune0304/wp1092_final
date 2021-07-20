@@ -1,5 +1,15 @@
 import { gql } from '@apollo/client';
 
+export const READ_MAIL_MUTATION = gql`
+  mutation readMail(
+    $mID: String
+  ) {
+    readMail(
+      mID: $mID
+    )
+  }
+`;
+
 export const LIKE_ANSWER_MUTATION = gql`
   mutation LikeAnswer(
     $aID: String!

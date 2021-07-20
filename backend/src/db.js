@@ -51,6 +51,7 @@ const commentSchema = new Schema({
 const mailSchema = new Schema({
   type: { type: String, required: true },
   message: { type: String, required: true },
+  unread: {type: Boolean, default: true},
   time: { type: String },
   qID: { type: String },
   refID: { type: String }, // comment/answer id
