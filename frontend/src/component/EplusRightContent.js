@@ -10,20 +10,24 @@ const EplusRightContent = ({userProfile, authClient}) => {
     const { data: userData, loading: userLoading, error: userError, subscribeToMore } = useQuery(ME_QUERY, {client: authClient});
 
     const subscribeToMoreFeedback = () => {
-        subscribeToMore({
+        const unsubscribe = subscribeToMore({
             document: FEEDBACK_SUBSCRIPTION,
-            // client: authClient,
+            client: authClient,
             updateQuery: (prev, { subscriptionData }) => {
                 if (!subscriptionData.data) return prev;
+                console.log("SubFeedBack", subscriptionData.data.feedback)
                 return {
                     me: {feedback: subscriptionData.data.feedback}
                 }
             }
         });
+        return unsubscribe;
     }
 
     useEffect(() => {
-        subscribeToMoreFeedback();
+        console.log("SubFeedBack")
+        const unsubscribe = subscribeToMoreFeedback();
+        return () => unsubscribe(); // clean up
     },[]);
    
     return (

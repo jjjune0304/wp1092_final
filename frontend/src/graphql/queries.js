@@ -108,6 +108,7 @@ export const QUESTION_QUERY = gql`
       title
       body
       author {
+        id
         username
         avatar
         points
@@ -127,6 +128,7 @@ export const QUESTION_AUTHOR_QUERY = gql`
     ){
       id
       author {
+        id
         username
         avatar
         points
@@ -149,6 +151,7 @@ export const QUESTION_AUTHOR_QUERY_LITE = gql`
     ){
       id
       author {
+        id
         username
         avatar
       }
@@ -168,6 +171,7 @@ export const QUESTION_COMMENTS_QUERY = gql`
         id
         text
         author {
+          id
           username
           avatar
         }
@@ -191,12 +195,15 @@ export const QUESTION_ANSWERS_QUERY = gql`
         body
         like
         author {
+          id
           username
           avatar
         }
         comments {
+          id
           text
           author {
+            id
             username
             avatar
           }
@@ -249,9 +256,11 @@ export const POPOVER_QUESTION_ANSWERS_QUERY = gql`
     ){
       id
       answers {
+        id
         body
         like
         author {
+          id
           username
           avatar
         }

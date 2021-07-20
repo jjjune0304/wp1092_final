@@ -60,7 +60,7 @@ const InboxAvatar = ({username, avatar, authClient}) => {
             updateQuery: (prev, { subscriptionData }) => {
                 if (!subscriptionData.data) return prev;
                 const newMail = subscriptionData.data.inbox;
-                // console.log("newMail", newMail)
+                // console.log("newMail", newMail.message)
                 openNotification({ message: newMail.message });
                 setUnreadCount(unreadCount+1);
                 return {
@@ -69,7 +69,7 @@ const InboxAvatar = ({username, avatar, authClient}) => {
                 };
             },
           });
-        //   return () => unsubscribe(); // clean up
+          return () => unsubscribe(); // clean up
         } catch (e) { console.log(e); }
     }, [unreadCount]);
 
@@ -136,7 +136,7 @@ const InboxAvatar = ({username, avatar, authClient}) => {
                 closable={false}
                 onClose={onClose}
                 visible={inboxVisible}
-                width="45%"
+                width="30%"
             >
                 {(loadingInbox||errorInbox)?
                     (<>
@@ -208,12 +208,12 @@ const EplusHeader = ({token, setToken, activeKey, setActiveKey, authClient, user
             {/* Header */}
             <Header style={{ width:'100%', zIndex:100, position:position, top:0}}>
                 {/* Grid: total 24 columns */}
-                <Row justify="space-between" gutter={{ xl: 48, lg: 32, md: 8, sm: 8,xs: 8 }}> 
+                <Row justify="space-between"  gutter={{ xl: 48, lg: 32, md: 8, sm: 8,xs: 8 }}> 
                     {/* Logo */}
                     <Col span={4}>
                         <Button style={{background:'transparent', border:'none', padding:0, width:"100%"}}>
                             <Link to="/" >
-                                <Title ellipsis={true} level={4} style={{ padding:0, width:"100%", color: '#00CCCC'}} className="Bigger">
+                                <Title ellipsis={true} level={4} style={{ verticalAlign: 'middle',padding:0, width:"100%", color: '#00CCCC'}} className="Bigger">
                                     Epistemology+
                                 </Title>
                                 {/* <img className="Bigger" style={{border:'none', padding:0, width:"100%"}} src={process.env.PUBLIC_URL+"/logo-text.png"}/> */}
@@ -302,105 +302,6 @@ const EplusHeader = ({token, setToken, activeKey, setActiveKey, authClient, user
                 </Row>
             </Header>
     </>);
-    // return (<>
-    //     {/* Header */}
-    //     <Header style={{ width:'100%', zIndex:100, position:position, top:0}}>
-    //         <Menu theme="dark" mode="horizontal" style={{ width:'100%', height:'100%'}} selectedKeys={[]} >
-    //             {/* Logo */}
-    //             <Menu.Item key="logo" style={{backgroundColor: '#001529', padding:0}} >
-    //                 <Link to="/" >
-    //                     <Button style={{backgroundColor:'transparent', border:'none', padding:0}}>
-    //                         <h2 style={{ color: '#00CCCC' }} className="Bigger">
-    //                             Epistemology+
-    //                         </h2>
-    //                     </Button>
-    //                 </Link>
-    //             </Menu.Item>
-
-    //             {/* Ask */}
-    //             <Menu.Item key="ask" style={{backgroundColor: '#001529'}}>
-    //                 <Button type="primary" shape="round" style={{ color: 'white' }} className="AskButton" 
-    //                         onClick={()=>{history.push('/ask')}}>
-    //                     Ask
-    //                 </Button>
-    //             </Menu.Item>
-
-    //             {/* Search */}
-    //             <Menu.Item key="search" style={{backgroundColor: '#001529', padding:'0px 24px 0px 0px'}}>
-    //                 <Search
-    //                     placeholder="search"
-    //                     allowClear
-    //                     enterButton
-    //                     size="large"
-    //                     onSearch={onSearch}
-    //                     style={{ padding: '12px 0px' }}
-    //                 />
-    //             </Menu.Item>
-    //             {token==='' ?
-    //                 <Menu.SubMenu theme="dark" title={
-    //                         <Link to="/login" >
-    //                             <Button type="text" style={{backgroundColor: '#001529', color: 'white' }} onClick={()=>{setActiveKey('login')}} className="Bigger">
-    //                                 <LoginOutlined/>Login | SignUp<UsergroupAddOutlined/>
-    //                             </Button>
-    //                         </Link>
-    //                     } key="login_signup" style={{ float: "right", backgroundColor: '#001529'}}>
-    //                     <Menu.Item key="login" >
-    //                         <Link to="/login">
-    //                             <Button type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('login')}} className="Bigger">
-    //                                 <LoginOutlined/>Log in
-    //                             </Button> 
-    //                         </Link>
-    //                     </Menu.Item>
-    //                     <Menu.Divider/>
-    //                     <Menu.Item key="signup">
-    //                         <Link to="/login">
-    //                             <Button type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('signup')}} className="Bigger">
-    //                                 <UsergroupAddOutlined/>Sign up
-    //                             </Button> 
-    //                         </Link>
-    //                     </Menu.Item>
-    //                 </Menu.SubMenu>
-    //                 : 
-    //                 <>  
-    //                     <Menu.Item key="user" style={{ float: "right", backgroundColor: '#001529', padding:0}}>
-    //                         {/* Hi, name */}
-    //                         <Text style={{ color: 'white' }}>
-    //                             Hi, {userProfile?makeShorter(userProfile.username,10):"yo~"}
-    //                         </Text>
-                            
-    //                         {/* Avatar */}
-    //                         <Text style={{ color: 'white' }} className="Bigger">
-    //                             &ensp;
-    //                             <InboxAvatar
-    //                                 username={userProfile?makeShorter(userProfile.username, 30):"yo~"}
-    //                                 avatar={userProfile?isNull(userProfile.avatar, standardAvatar):standardAvatar}
-    //                                 authClient={authClient}
-    //                             />
-    //                             &ensp; &ensp;
-    //                         </Text>
-
-    //                     </Menu.Item>
-
-    //                     <Menu.Item key="logout" style={{ float: "right", backgroundColor: '#001529', padding:0}}>
-    //                         {/* points */}
-    //                         <Text style={{ color: 'white' }}>
-    //                             | 💰 {userProfile?userProfile.points:0}
-    //                         </Text>
-                            
-    //                         {/* log out */}
-    //                         <Text style={{ color: 'white' }}>
-    //                             <Link to="/home">
-    //                                 <Button type="text" style={{ color: 'white' }} onClick={()=>{logout();}} className="Bigger">
-    //                                     |<LogoutOutlined />Log out
-    //                                 </Button>
-    //                             </Link>
-    //                         </Text>
-    //                     </Menu.Item>
-    //                 </>
-    //             }
-    //         </Menu>
-    //     </Header>
-    // </>);
 } 
 
 export default EplusHeader;

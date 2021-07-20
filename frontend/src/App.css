@@ -46,8 +46,8 @@
 }
 
 .ask-button:hover {
-  /* transform: scale(1.2); */
-  /* border-radius: 80%; */
+  transform: scale(1.1);
+  border-radius: 90%;
   /* box-shadow: 15px 5px 5px rgba(0.1,0.1,0.1,0.8); */
   border: #00ADB5;
   background: #00ADB5;
