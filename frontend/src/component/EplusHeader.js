@@ -208,7 +208,7 @@ const EplusHeader = ({token, setToken, activeKey, setActiveKey, authClient, user
             {/* Header */}
             <Header style={{ width:'100%', zIndex:100, position:position, top:0}}>
                 {/* Grid: total 24 columns */}
-                <Row justify="space-between"  gutter={{ xl: 48, lg: 32, md: 8, sm: 8,xs: 8 }}> 
+                <Row > 
                     {/* Logo */}
                     <Col span={4}>
                         <Button style={{background:'transparent', border:'none', padding:0, width:"100%"}}>
@@ -230,17 +230,17 @@ const EplusHeader = ({token, setToken, activeKey, setActiveKey, authClient, user
                     </Col>
 
                     {/* Search */}
-                    <Col span={9} >
+                    <Col span={6} >
                         <Search
                             placeholder="Search..."
                             allowClear
                             enterButton
                             size="large"
                             onSearch={onSearch}
-                            style={{ padding: '12px 0px', width:"100%" }}
+                            style={{ padding: '12px 0px', width:200 }}
                         />
                     </Col>
-                    <Col span={6} xl={{offset:3}} lg={{offset:3}}>
+                    <Col span={8} offset={4}>
                         <Menu theme="dark" mode="horizontal" style={{ width:'100%', height:'100%', padding:0}} selectedKeys={[]}>
                         {
                         token==='' ?
