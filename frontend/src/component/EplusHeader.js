@@ -206,7 +206,7 @@ const EplusHeader = ({token, setToken, activeKey, setActiveKey, authClient, user
 
     return (<>
             {/* Header */}
-            <Header style={{ width:'100%', zIndex:100, position:position, top:0}}>
+            <Header style={{ width:'100%', zIndex:100, position:position, top:0, padding:0}}>
                 {/* Grid: total 24 columns */}
                 <Row > 
                     {/* Logo */}
@@ -223,7 +223,7 @@ const EplusHeader = ({token, setToken, activeKey, setActiveKey, authClient, user
 
                     {/* Ask */}
                     <Col span={2}>
-                        <Button type="primary" shape="round" style={{ padding:0, width:"70%"}}
+                        <Button type="primary" shape="round" style={{ padding:0, width:"60%"}}
                             className="ask-button" onClick={()=>{history.push('/ask')}}>
                             <Text ellipsis={true} style={{ color: 'white', textAlign: "left"}}>Ask</Text>
                         </Button>
@@ -237,7 +237,7 @@ const EplusHeader = ({token, setToken, activeKey, setActiveKey, authClient, user
                             enterButton
                             size="large"
                             onSearch={onSearch}
-                            style={{ padding: '12px 0px', width:200 }}
+                            style={{ padding: '12px 0px', maxWidth:300 }}
                         />
                     </Col>
                     <Col span={8} offset={4}>
@@ -245,14 +245,14 @@ const EplusHeader = ({token, setToken, activeKey, setActiveKey, authClient, user
                         {
                         token==='' ?
                             <>
-                            <Menu.Item key="login" >
+                            <Menu.Item key="login" style={{ backgroundColor: '#001529', padding:0}}>
                                 <Link to="/login">
                                     <Button type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('login')}} className="Bigger">
                                         <LoginOutlined/>Log in
                                     </Button> 
                                 </Link>
                             </Menu.Item>
-                            <Menu.Item key="signup">
+                            <Menu.Item key="signup" style={{ backgroundColor: '#001529', padding:0}}>
                                 <Link to="/login">
                                     <Button type="text" style={{ color: 'white' }} onClick={()=>{setActiveKey('signup')}} className="Bigger">
                                         <UsergroupAddOutlined/>Sign up
@@ -278,22 +278,20 @@ const EplusHeader = ({token, setToken, activeKey, setActiveKey, authClient, user
                                         />
                                         &ensp; &ensp;
                                     </Text>
-                                </Menu.Item>
 
-                                <Menu.Item key="logout" style={{ float: "right", backgroundColor: '#001529', padding:0}}>
                                     {/* points */}
                                     <Text style={{ color: 'white' }}>
                                         | 💰 {userProfile?userProfile.points:0}
                                     </Text>
-                                    
-                                    {/* log out */}
-                                    <Text style={{ color: 'white' }}>
+                                </Menu.Item>
+
+                                {/* log out */}
+                                <Menu.Item key="logout" style={{ float: "right", backgroundColor: '#001529', padding:0}}>
                                         <Link to="/home">
                                             <Button type="text" style={{ color: 'white' }} onClick={()=>{logout();}} className="Bigger">
                                                 |<LogoutOutlined />Log out
                                             </Button>
                                         </Link>
-                                    </Text>
                                 </Menu.Item>
                             </>
                         }
